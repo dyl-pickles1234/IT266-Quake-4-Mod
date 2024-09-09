@@ -45,11 +45,11 @@ public:
 	int						mEndLine;
 
 	rvSingleTiming();
-	rvSingleTiming( idStr &newName );
+	rvSingleTiming(idStr& newName);
 
 	void 					Clear();
-	void 					OutputDataToFile( idFile *file, int framesRecorded );
-	void 					OutputInfoToFile( idFile *file );
+	void 					OutputDataToFile(idFile* file, int framesRecorded);
+	void 					OutputInfoToFile(idFile* file);
 };
 
 class rvTimingCollection
@@ -66,18 +66,18 @@ protected:
 	int						mCurrentlyUpdating;
 	int						mFramesRecorded;
 
-	rvSingleTiming			*GetTiming( idStr &timingName );
-	void					DisplayTimingValues( void );
-	void					OutputToFile( void );
+	rvSingleTiming* GetTiming(idStr& timingName);
+	void					DisplayTimingValues(void);
+	void					OutputToFile(void);
 
 public:
 	rvTimingCollection();
 
-	void					InitFrame( bool inUse, bool displayText, bool outputFileWhenDone );
-	void					_TimingStart( const char *timingName, const char *fileName, const int lineNum );
-	void					_TimingStop( double msecLimit, const char *fileName, const int lineNum );
-	void					AppendToDict( idDict* dict );
-	void					Clear( void );
+	void					InitFrame(bool inUse, bool displayText, bool outputFileWhenDone);
+	void					_TimingStart(const char* timingName, const char* fileName, const int lineNum);
+	void					_TimingStop(double msecLimit, const char* fileName, const int lineNum);
+	void					AppendToDict(idDict* dict);
+	void					Clear(void);
 };
 
 #else
@@ -86,13 +86,13 @@ class rvTimingCollection
 {
 protected:
 public:
-	rvTimingCollection(){}
+	rvTimingCollection() {}
 
-	void					InitFrame( bool inUse, bool displayText, bool outputFileWhenDone ){}
-	void					_TimingStart( const char *timingName, const char *fileName, const int lineNum ){}
-	void					_TimingStop( double msecLimit, const char *fileName, const int lineNum ){}
-	void					AppendToDict( idDict* dict ){}
-	void					Clear( void ){}
+	void					InitFrame(bool inUse, bool displayText, bool outputFileWhenDone) {}
+	void					_TimingStart(const char* timingName, const char* fileName, const int lineNum) {}
+	void					_TimingStop(double msecLimit, const char* fileName, const int lineNum) {}
+	void					AppendToDict(idDict* dict) {}
+	void					Clear(void) {}
 };
 
 #endif

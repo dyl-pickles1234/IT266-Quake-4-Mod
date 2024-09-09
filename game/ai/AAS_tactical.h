@@ -25,15 +25,15 @@ struct rvAASTacticalSensor
 	// Regular Update Function
 	///////////////////////////////////////////////////////////////////////
 	virtual void			Update() = 0;
-	virtual void			Save(idSaveGame *savefile) = 0;
-	virtual void			Restore(idRestoreGame *savefile) = 0;
+	virtual void			Save(idSaveGame* savefile) = 0;
+	virtual void			Restore(idRestoreGame* savefile) = 0;
 	virtual void			Clear() = 0;
 
 	// Search
 	///////////////////////////////////////////////////////////////////////
-	virtual void			SearchRadius(const idVec3& origin=vec3_origin, float rangeMin=0.0f, float rangeMax=1.0f) = 0;
-	virtual void			SearchCover(float rangeMin=0.0f, float rangeMax=1.0f) = 0;
-	virtual void			SearchHide(idEntity* from=0) = 0;
+	virtual void			SearchRadius(const idVec3& origin = vec3_origin, float rangeMin = 0.0f, float rangeMax = 1.0f) = 0;
+	virtual void			SearchCover(float rangeMin = 0.0f, float rangeMax = 1.0f) = 0;
+	virtual void			SearchHide(idEntity* from = 0) = 0;
 	virtual void			SearchFlank() = 0;
 	virtual void			SearchAdvance() = 0;
 	virtual void			SearchRetreat() = 0;
@@ -43,7 +43,7 @@ struct rvAASTacticalSensor
 	// Feature Testing
 	///////////////////////////////////////////////////////////////////////
 	virtual bool			TestValid(aasFeature_t* f, float walkDistanceToFeature) = 0;
-	virtual bool			TestValidWithCurrentState(aasFeature_t* f=0) = 0;
+	virtual bool			TestValidWithCurrentState(aasFeature_t* f = 0) = 0;
 
 	// Feature Reservation
 	///////////////////////////////////////////////////////////////////////
@@ -52,17 +52,17 @@ struct rvAASTacticalSensor
 	// Access To Results
 	///////////////////////////////////////////////////////////////////////
 	virtual int				FeatureCount() = 0;
-	virtual aasFeature_t*	Feature(int i) = 0;
-	virtual aasFeature_t*	Near() const = 0;
-	virtual aasFeature_t*	Look() const = 0;
-	virtual aasFeature_t*	Reserved() const = 0;
-	virtual const idVec3&	ReservedOrigin() const = 0;
+	virtual aasFeature_t* Feature(int i) = 0;
+	virtual aasFeature_t* Near() const = 0;
+	virtual aasFeature_t* Look() const = 0;
+	virtual aasFeature_t* Reserved() const = 0;
+	virtual const idVec3& ReservedOrigin() const = 0;
 
 
 
 	// STATIC SYSTEM FUNCTIONS
 	///////////////////////////////////////////////////////////////////////
-	static rvAASTacticalSensor*		CREATE_SENSOR(idActor* owner);
+	static rvAASTacticalSensor* CREATE_SENSOR(idActor* owner);
 };
 
 

@@ -66,17 +66,17 @@
 ///////////////////////////////////////////////////////////////////////////////////
 // Global::CONTANER SIZES AND OTHER LIMITS
 ///////////////////////////////////////////////////////////////////////////////////
-const int							MAX_FEATURE_LIST	= 20;
-const int							MAX_AREAS_TOUCHED	= 450;
+const int							MAX_FEATURE_LIST = 20;
+const int							MAX_AREAS_TOUCHED = 450;
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Global::FEATURE TESTING DISTANCES
 ///////////////////////////////////////////////////////////////////////////////////
-const float							MAX_DISTANCE		= 650.0f;
-const float							MIN_DISTANCE		= 72.0f;
-const float							MIN_NEAR_DISTANCE	= 112.0f;
-const float							FROM_ENEMY_PROJECT	= 350.0f;
-const float							TEST_TEAMMATE_DIST	= 150.0f;
+const float							MAX_DISTANCE = 650.0f;
+const float							MIN_DISTANCE = 72.0f;
+const float							MIN_NEAR_DISTANCE = 112.0f;
+const float							FROM_ENEMY_PROJECT = 350.0f;
+const float							TEST_TEAMMATE_DIST = 150.0f;
 
 
 
@@ -84,9 +84,9 @@ const float							TEST_TEAMMATE_DIST	= 150.0f;
 ///////////////////////////////////////////////////////////////////////////////
 // aasFeature_s::Normal
 ///////////////////////////////////////////////////////////////////////////////
-idVec3&	aasFeature_s::Normal()
+idVec3& aasFeature_s::Normal()
 {
-	static idVec3 n(0,0,0);
+	static idVec3 n(0, 0, 0);
 	n[0] = ((float)(normalx) / 127.0f) - 1.0f;
 	n[1] = ((float)(normaly) / 127.0f) - 1.0f;
 	return n;
@@ -105,37 +105,37 @@ idVec3& aasFeature_s::Origin()
 ///////////////////////////////////////////////////////////////////////////////
 // aasFeature_s::GetLookPos()
 ///////////////////////////////////////////////////////////////////////////////
-int aasFeature_s::GetLookPos( idVec3& lookPos,  const idVec3& aimAtOrigin, const float leanDistance )
+int aasFeature_s::GetLookPos(idVec3& lookPos, const idVec3& aimAtOrigin, const float leanDistance)
 {
-	static idVec3		up(0.0f,0.0f,1.0f);
+	static idVec3		up(0.0f, 0.0f, 1.0f);
 	static idVec3		direction;
 	static idVec3		right;
 	static float		rightDot;
 	static float		distance;
 
-	lookPos		 = Origin();
-	lookPos[2]	+= height - leanDistance;
-	direction	 = aimAtOrigin - lookPos;
-	distance	 = direction.NormalizeFast();
-	right		 = Normal().Cross(up);	
-	rightDot	 = right * direction;
+	lookPos = Origin();
+	lookPos[2] += height - leanDistance;
+	direction = aimAtOrigin - lookPos;
+	distance = direction.NormalizeFast();
+	right = Normal().Cross(up);
+	rightDot = right * direction;
 
 
 	// Check For Optimal Conditions
 	//------------------------------
-	if (flags&FEATURE_LOOK_OVER && fabsf(rightDot)<0.2f) 
+	if (flags & FEATURE_LOOK_OVER && fabsf(rightDot) < 0.2f)
 	{
-		lookPos[2] += leanDistance*2.0f;				// CDR_TODO: Hard coded numbers make me sad
+		lookPos[2] += leanDistance * 2.0f;				// CDR_TODO: Hard coded numbers make me sad
 		return FEATURE_LOOK_OVER;
 	}
 
-	if (flags&FEATURE_LOOK_RIGHT && rightDot>0.0f) 
+	if (flags & FEATURE_LOOK_RIGHT && rightDot > 0.0f)
 	{
 		lookPos += right * leanDistance;
 		return FEATURE_LOOK_RIGHT;
 	}
 
-	if (flags&FEATURE_LOOK_LEFT && rightDot<0.0f) 
+	if (flags & FEATURE_LOOK_LEFT && rightDot < 0.0f)
 	{
 		lookPos -= right * leanDistance;
 		return FEATURE_LOOK_LEFT;
@@ -144,19 +144,19 @@ int aasFeature_s::GetLookPos( idVec3& lookPos,  const idVec3& aimAtOrigin, const
 
 	// So Nothing Matches Perfectly, Let's Try Fallback Cases In This Order
 	//----------------------------------------------------------------------
-	if (flags&FEATURE_LOOK_OVER)
+	if (flags & FEATURE_LOOK_OVER)
 	{
-		lookPos[2] += leanDistance*2.0f;				// CDR_TODO: Hard coded numbers make me sad
+		lookPos[2] += leanDistance * 2.0f;				// CDR_TODO: Hard coded numbers make me sad
 		return FEATURE_LOOK_OVER;
 	}
 
-	if (flags&FEATURE_LOOK_RIGHT)
+	if (flags & FEATURE_LOOK_RIGHT)
 	{
 		lookPos += right * leanDistance;
 		return FEATURE_LOOK_RIGHT;
 	}
 
-	if (flags&FEATURE_LOOK_LEFT)
+	if (flags & FEATURE_LOOK_LEFT)
 	{
 		lookPos -= right * leanDistance;
 		return FEATURE_LOOK_LEFT;
@@ -178,12 +178,12 @@ int aasFeature_s::GetLookPos( idVec3& lookPos,  const idVec3& aimAtOrigin, const
 struct rvSortReach
 {
 	int				mAreaNum;
-	idReachability*	mReach;
+	idReachability* mReach;
 	float			mDistance;
 
 	bool		operator<(const rvSortReach& r) const
 	{
-		return (mDistance>r.mDistance);
+		return (mDistance > r.mDistance);
 	}
 };
 
@@ -202,7 +202,7 @@ struct rvTest
 	///////////////////////////////////////////////////////////////////////////
 	// Save
 	///////////////////////////////////////////////////////////////////////////
-	void			Save(idSaveGame *savefile)
+	void			Save(idSaveGame* savefile)
 	{
 		savefile->WriteFloat(mMin);
 		savefile->WriteFloat(mMax);
@@ -212,7 +212,7 @@ struct rvTest
 	///////////////////////////////////////////////////////////////////////////
 	// Restore
 	///////////////////////////////////////////////////////////////////////////
-	void			Restore(idRestoreGame *savefile)
+	void			Restore(idRestoreGame* savefile)
 	{
 		savefile->ReadFloat(mMin);
 		savefile->ReadFloat(mMax);
@@ -224,10 +224,10 @@ struct rvTest
 	///////////////////////////////////////////////////////////////////////////
 	void			Reset()
 	{
-		mMax	=  1.0f;
-		mMin	= -1.0f;
-		mWeight	=  0.0f;
-		mValue	=  0.0f;
+		mMax = 1.0f;
+		mMin = -1.0f;
+		mWeight = 0.0f;
+		mValue = 0.0f;
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -241,17 +241,17 @@ struct rvTest
 	///////////////////////////////////////////////////////////////////////////
 	// Test - Records the value out of the range and returns true if succeeded
 	///////////////////////////////////////////////////////////////////////////
-	bool			Test(float Value, float MaxScale=1.0f)	
+	bool			Test(float Value, float MaxScale = 1.0f)
 	{
-		if (mMin>-1.0f || mMax<1.0f || mWeight!=0.0f)
+		if (mMin > -1.0f || mMax < 1.0f || mWeight != 0.0f)
 		{
 			mValue = Value;
-			if (MaxScale!=1.0f)
+			if (MaxScale != 1.0f)
 			{
 				mValue /= MaxScale;
 			}
-			mValue = (mValue-mMin) / (mMax-mMin);	// Now Scale It [0.0, 1.0] Of Min And Max
-			return (mValue>=0.0f && mValue<=1.0f);	// If Not In [0.0, 1.0], Test Fails
+			mValue = (mValue - mMin) / (mMax - mMin);	// Now Scale It [0.0, 1.0] Of Min And Max
+			return (mValue >= 0.0f && mValue <= 1.0f);	// If Not In [0.0, 1.0], Test Fails
 		}
 		return true;	// Test Is Not Active
 	}
@@ -261,7 +261,7 @@ struct rvTest
 	///////////////////////////////////////////////////////////////////////////
 	float			WeightRange(float& negatives)
 	{
-		if (mWeight<0.0f)
+		if (mWeight < 0.0f)
 		{
 			negatives += mWeight;
 		}
@@ -296,15 +296,15 @@ struct rvTestSet
 	///////////////////////////////////////////////////////////////////////////
 	// Constructor
 	///////////////////////////////////////////////////////////////////////////
-	rvTestSet( void )
-		: mOrigin(0,0,0), mFacing(0,0,0), mProjectOrigin(false)
+	rvTestSet(void)
+		: mOrigin(0, 0, 0), mFacing(0, 0, 0), mProjectOrigin(false)
 	{
 	}
 
 	///////////////////////////////////////////////////////////////////////////
 	// Save
 	///////////////////////////////////////////////////////////////////////////
-	void			Save(idSaveGame *savefile)
+	void			Save(idSaveGame* savefile)
 	{
 		savefile->WriteBool(mProjectOrigin);
 		savefile->WriteVec3(mOrigin);
@@ -317,7 +317,7 @@ struct rvTestSet
 	///////////////////////////////////////////////////////////////////////////
 	// Restore
 	///////////////////////////////////////////////////////////////////////////
-	void			Restore(idRestoreGame *savefile)
+	void			Restore(idRestoreGame* savefile)
 	{
 		savefile->ReadBool(mProjectOrigin);
 		savefile->ReadVec3(mOrigin);
@@ -333,12 +333,12 @@ struct rvTestSet
 	///////////////////////////////////////////////////////////////////////////
 	void			Reset()
 	{
-		mProjectOrigin	= false;
+		mProjectOrigin = false;
 		mDirectionDot.Reset();
 		mFacingDot.Reset();
 		mDistance.Reset();
-// bdube: Had to comment this out becaue it would break the test function which checks for non defaults 
-//		mDistance.mMin = 0.0f;	// special case (default would be -1.0f because all others are dot products)
+		// bdube: Had to comment this out becaue it would break the test function which checks for non defaults 
+		//		mDistance.mMin = 0.0f;	// special case (default would be -1.0f because all others are dot products)
 	}
 
 	///////////////////////////////////////////////////////////////////////////
@@ -360,19 +360,19 @@ struct rvTestSet
 	///////////////////////////////////////////////////////////////////////////
 	// Test - This is the actuall feature test
 	///////////////////////////////////////////////////////////////////////////
-	bool			Test(aasFeature_t* f, float distance=0.0f)
+	bool			Test(aasFeature_t* f, float distance = 0.0f)
 	{
 		// First Compute The Direction
 		//-----------------------------
-		mDirection		= f->Origin() - mOrigin;
+		mDirection = f->Origin() - mOrigin;
 
 		// If Project Origin Is True, Then Move Origin Along Facing Vector
 		//-----------------------------------------------------------------
 		if (mProjectOrigin)
 		{
 			mDirection.ProjectOntoVector(mFacing);
-			mOrigin	   += mDirection;
-			mDirection	= f->Origin() - mOrigin;
+			mOrigin += mDirection;
+			mDirection = f->Origin() - mOrigin;
 		}
 
 		// If No Override On Distance, Compute It By Normalizing The Direction
@@ -396,39 +396,39 @@ struct rvTestSet
 
 		// THE FACING TEST
 		//-----------------
-		if (!mFacingDot.Test(f->Normal()*mFacing))
+		if (!mFacingDot.Test(f->Normal() * mFacing))
 		{
 			return false;
 		}
 
 		// THE DIRECTION TEST
 		//--------------------
-		if (!mDirectionDot.Test(f->Normal()*mDirection))
+		if (!mDirectionDot.Test(f->Normal() * mDirection))
 		{
 			return false;
 		}
 		return true;
-	}		
+	}
 
 	///////////////////////////////////////////////////////////////////////////
 	// SetupOriginAndFacing - Called For Each Test Set
 	///////////////////////////////////////////////////////////////////////////
-	void			SetupOriginAndFacing(const idEntity* ent, const idVec3* originOverride=0, const idVec3* facingOverride=0)
+	void			SetupOriginAndFacing(const idEntity* ent, const idVec3* originOverride = 0, const idVec3* facingOverride = 0)
 	{
 		if (!ent)
 		{
-			mOrigin		= (originOverride)?(*originOverride):(vec3_origin);
-			mFacing		= (facingOverride)?(*facingOverride):(vec3_origin);
-		} 
-		else 
+			mOrigin = (originOverride) ? (*originOverride) : (vec3_origin);
+			mFacing = (facingOverride) ? (*facingOverride) : (vec3_origin);
+		}
+		else
 		{
 			const idActor* entActor = dynamic_cast<const idActor*>(ent);	// bleh.  Base entity class should properly return origin, angles, and forward vector
 
-			mOrigin		= (originOverride)?(*originOverride):(ent->GetPhysics()->GetOrigin());
-			mFacing		= (facingOverride)?(*facingOverride):(entActor?entActor->viewAxis[0]:ent->GetPhysics()->GetAxis(0)[0]);
+			mOrigin = (originOverride) ? (*originOverride) : (ent->GetPhysics()->GetOrigin());
+			mFacing = (facingOverride) ? (*facingOverride) : (entActor ? entActor->viewAxis[0] : ent->GetPhysics()->GetAxis(0)[0]);
 		}
-			
-		mFacing[2]	= 0;
+
+		mFacing[2] = 0;
 		mFacing.Normalize();
 	}
 
@@ -436,20 +436,20 @@ struct rvTestSet
 	// ProjectOriginForward - Used By Several Setup Options To Project Origin
 	//   Along Facing Direction Some
 	///////////////////////////////////////////////////////////////////////////
-	void			ProjectOriginForward(float distance, float xyRange=0.0f, bool randomFacing=0.0f)
+	void			ProjectOriginForward(float distance, float xyRange = 0.0f, bool randomFacing = 0.0f)
 	{
-		mOrigin			+= (mFacing * distance);
+		mOrigin += (mFacing * distance);
 		if (xyRange)
 		{
-			mOrigin[0]		+= rvRandom::flrand(-xyRange, xyRange);
-			mOrigin[1]		+= rvRandom::flrand(-xyRange, xyRange);
+			mOrigin[0] += rvRandom::flrand(-xyRange, xyRange);
+			mOrigin[1] += rvRandom::flrand(-xyRange, xyRange);
 		}
 		if (randomFacing)
 		{
-			mFacing[0]		 = rvRandom::flrand(-1.0f, 1.0f);
-			mFacing[1]		 = rvRandom::flrand(-1.0f, 1.0f);
+			mFacing[0] = rvRandom::flrand(-1.0f, 1.0f);
+			mFacing[1] = rvRandom::flrand(-1.0f, 1.0f);
 		}
-		mFacing[2]		 = 0.0f;
+		mFacing[2] = 0.0f;
 		mFacing.Normalize();
 	}
 
@@ -471,8 +471,8 @@ struct rvAASTacticalSensorLocal : rvAASTacticalSensor
 {
 	// Owner
 	///////////////////////////////////////////////////////////////////////////////
-	idActor*				mOwner;					// Owner Of The Sensor
-	idAI*					mOwnerAI;				// Owner As Already Cast To AI Type
+	idActor* mOwner;					// Owner Of The Sensor
+	idAI* mOwnerAI;				// Owner As Already Cast To AI Type
 
 	// Search Parameters
 	///////////////////////////////////////////////////////////////////////////////
@@ -488,7 +488,7 @@ struct rvAASTacticalSensorLocal : rvAASTacticalSensor
 	rvTestSet				mFromPath;				// Test Set For Path Relation
 	rvTest					mAdvance;				// Single Test For Advance / Retreat
 	rvTest					mAssignment;			// Single Test For Assignment Direction Dot Product
- 	rvTest					mLeanNormal;			// Single Test For Lean Normal Biasing
+	rvTest					mLeanNormal;			// Single Test For Lean Normal Biasing
 	idVec3					mAssignmentDirection;	// Used By Assignment Test
 	bool					mAssignmentValid;		// Turns On And Off The Assignment Test
 	idEntityPtr<idEntity>	mEnemyOverride;			// Overrides Enemy Pointer To Any Entity
@@ -497,9 +497,9 @@ struct rvAASTacticalSensorLocal : rvAASTacticalSensor
 	///////////////////////////////////////////////////////////////////////////////
 	idList<aasFeature_t*>	mFeatures;				// The list of all features found in the most recent search
 	idVec3					mReservedOrigin;		// Origin of feature that is currently reserved
-	aasFeature_t*			mReserved;				// Which feature is currently reserved
-	aasFeature_t*			mNear;					// Which feature is closest
-	aasFeature_t*			mLook;					// Which feature to look down
+	aasFeature_t* mReserved;				// Which feature is currently reserved
+	aasFeature_t* mNear;					// Which feature is closest
+	aasFeature_t* mLook;					// Which feature to look down
 	int						mLookStartTime;
 	float					mLookStopDist;
 
@@ -512,18 +512,18 @@ struct rvAASTacticalSensorLocal : rvAASTacticalSensor
 	rvAASTacticalSensorLocal();
 	~rvAASTacticalSensorLocal();
 	void			Update();
-	void			Save(idSaveGame *savefile);
-	void			Restore(idRestoreGame *savefile);
+	void			Save(idSaveGame* savefile);
+	void			Restore(idRestoreGame* savefile);
 	void			Clear();
 	void			DrawDebugInfo();
 
 	// Search
 	///////////////////////////////////////////////////////////////////////////////
 	void			Search();
-	void			SearchReset(idEntity* enemyOverride=0, float ownerRangeMin=0.0f, float ownerRangeMax=1.0f);
-	void			SearchRadius(const idVec3& origin=vec3_origin, float rangeMin=0.0f, float rangeMax=1.0f);
-	void			SearchCover(float rangeMin=0.0f, float rangeMax=1.0f);
-	void			SearchHide(idEntity* from=0);
+	void			SearchReset(idEntity* enemyOverride = 0, float ownerRangeMin = 0.0f, float ownerRangeMax = 1.0f);
+	void			SearchRadius(const idVec3& origin = vec3_origin, float rangeMin = 0.0f, float rangeMax = 1.0f);
+	void			SearchCover(float rangeMin = 0.0f, float rangeMax = 1.0f);
+	void			SearchHide(idEntity* from = 0);
 	void			SearchFlank();
 	void			SearchAdvance();
 	void			SearchRetreat();
@@ -536,7 +536,7 @@ struct rvAASTacticalSensorLocal : rvAASTacticalSensor
 	///////////////////////////////////////////////////////////////////////////////
 	void			TestSetupCurrentValues();
 	bool			TestValid(aasFeature_t* f, float walkDistanceToFeature);
-	bool			TestValidWithCurrentState(aasFeature_t* f=0);
+	bool			TestValidWithCurrentState(aasFeature_t* f = 0);
 
 	// Feature Reservation
 	///////////////////////////////////////////////////////////////////////////////
@@ -544,25 +544,25 @@ struct rvAASTacticalSensorLocal : rvAASTacticalSensor
 
 	// Access To Results
 	///////////////////////////////////////////////////////////////////////////////
-	int				FeatureCount()			{return mFeatures.Num();}
-	aasFeature_t*	Feature(int i)			{return mFeatures[i];}
-	aasFeature_t*	Near() const			{return mNear;}
-	aasFeature_t*	Look() const			{return mLook;}
-	aasFeature_t*	Reserved() const		{return mReserved;}
-	const idVec3&	ReservedOrigin() const	{return mReservedOrigin;}
+	int				FeatureCount() { return mFeatures.Num(); }
+	aasFeature_t* Feature(int i) { return mFeatures[i]; }
+	aasFeature_t* Near() const { return mNear; }
+	aasFeature_t* Look() const { return mLook; }
+	aasFeature_t* Reserved() const { return mReserved; }
+	const idVec3& ReservedOrigin() const { return mReservedOrigin; }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // Global::Objects
 ///////////////////////////////////////////////////////////////////////////////
-rvAASTacticalSensorLocal*			mSensor;
+rvAASTacticalSensorLocal* mSensor;
 float								mDebugRadius;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Global::Typedefines
 ///////////////////////////////////////////////////////////////////////////////
 typedef	idEntityPtr<idEntity>		TEntPtr;
-typedef	aasFeature_t*				TFeaturePtr;
+typedef	aasFeature_t* TFeaturePtr;
 
 
 
@@ -572,8 +572,8 @@ typedef	aasFeature_t*				TFeaturePtr;
 rvAASTacticalSensor* rvAASTacticalSensor::CREATE_SENSOR(idActor* owner)
 {
 	rvAASTacticalSensorLocal* nSensor = new rvAASTacticalSensorLocal();
-	nSensor->mOwner		= owner;
-	nSensor->mOwnerAI	= dynamic_cast<idAI*>(owner);
+	nSensor->mOwner = owner;
+	nSensor->mOwnerAI = dynamic_cast<idAI*>(owner);
 	return nSensor;
 }
 
@@ -582,8 +582,8 @@ rvAASTacticalSensor* rvAASTacticalSensor::CREATE_SENSOR(idActor* owner)
 ///////////////////////////////////////////////////////////////////////////////
 rvAASTacticalSensorLocal::rvAASTacticalSensorLocal()
 {
-	mOwner					= 0;
-	mOwnerAI				= 0;
+	mOwner = 0;
+	mOwnerAI = 0;
 	Clear();
 }
 
@@ -600,17 +600,17 @@ rvAASTacticalSensorLocal::~rvAASTacticalSensorLocal()
 ///////////////////////////////////////////////////////////////////////////////
 void			rvAASTacticalSensorLocal::Clear()
 {
-	mReserved				= 0;
-	mNear					= 0;
-	mLook					= 0;
-	mSearchName				= "";
+	mReserved = 0;
+	mNear = 0;
+	mLook = 0;
+	mSearchName = "";
 	mFeatures.Clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // rvAASTacticalSensorLocal::Save
 ///////////////////////////////////////////////////////////////////////////////
-void	rvAASTacticalSensorLocal::Save(idSaveGame *savefile)
+void	rvAASTacticalSensorLocal::Save(idSaveGame* savefile)
 {
 	savefile->WriteString(mSearchName);
 	savefile->WriteInt(mFlagsMatchAny);
@@ -629,12 +629,12 @@ void	rvAASTacticalSensorLocal::Save(idSaveGame *savefile)
 	savefile->WriteBool(mAssignmentValid);
 	mEnemyOverride.Save(savefile);
 
-// cnicholson: NOTE: The following 4 vars are set to 0 / cleared in the restore, so don't save them.
-	// NOSAVE: idList<aasFeature_t*>	mFeatures;
-	// NOSAVE: savefile->WriteVec3(mFeatures);
-	// NOSAVE: aasFeature_t*			mReserved;
-	// NOSAVE: aasFeature_t*			mNear;
-	// NOSAVE: aasFeature_t*			mLook;
+	// cnicholson: NOTE: The following 4 vars are set to 0 / cleared in the restore, so don't save them.
+		// NOSAVE: idList<aasFeature_t*>	mFeatures;
+		// NOSAVE: savefile->WriteVec3(mFeatures);
+		// NOSAVE: aasFeature_t*			mReserved;
+		// NOSAVE: aasFeature_t*			mNear;
+		// NOSAVE: aasFeature_t*			mLook;
 	savefile->WriteInt(mLookStartTime);	// cnicholson: Added unsaved var
 	savefile->WriteFloat(mLookStopDist);// cnicholson: Added unsaved var
 }
@@ -642,14 +642,14 @@ void	rvAASTacticalSensorLocal::Save(idSaveGame *savefile)
 ///////////////////////////////////////////////////////////////////////////////
 // rvAASTacticalSensorLocal::Restore
 ///////////////////////////////////////////////////////////////////////////////
-void	rvAASTacticalSensorLocal::Restore(idRestoreGame *savefile)
+void	rvAASTacticalSensorLocal::Restore(idRestoreGame* savefile)
 {
 	// Clear Old Data
 	//----------------
 	mFeatures.Clear();
-	mNear		= 0;
-	mLook		= 0;
-	mReserved	= 0;
+	mNear = 0;
+	mLook = 0;
+	mReserved = 0;
 
 	// Read The Save File Search Parameters
 	//--------------------------------------
@@ -669,7 +669,7 @@ void	rvAASTacticalSensorLocal::Restore(idRestoreGame *savefile)
 	savefile->ReadVec3(mAssignmentDirection);
 	savefile->ReadBool(mAssignmentValid);
 	mEnemyOverride.Restore(savefile);
-//	Search();
+	//	Search();
 
 	savefile->ReadInt(mLookStartTime); // cnicholson: Added unrestored var
 	savefile->ReadFloat(mLookStopDist);// cnicholson: Added unrestored var
@@ -683,7 +683,7 @@ void	rvAASTacticalSensorLocal::Restore(idRestoreGame *savefile)
 ///////////////////////////////////////////////////////////////////////////////
 void	rvAASTacticalSensorLocal::Update()
 {
-	idAAS* aas = (mOwnerAI)?(mOwnerAI->aas):(gameLocal.GetAAS(0));
+	idAAS* aas = (mOwnerAI) ? (mOwnerAI->aas) : (gameLocal.GetAAS(0));
 	if (!aas || !aas->GetFile() || !aas->GetFile()->GetNumFeatures() || !mOwner || mOwner->IsHidden())
 	{
 		return;
@@ -691,17 +691,17 @@ void	rvAASTacticalSensorLocal::Update()
 
 	idAASFile* file = aas->GetFile();
 
-	idVec3			velocityFwd			= mOwner->GetPhysics()->GetLinearVelocity();
-	const idVec3&	ownerOrigin			= mOwner->GetPhysics()->GetOrigin();
-	int				ownerAreaNum		= mOwnerAI ? mOwnerAI->PointReachableAreaNum ( ownerOrigin ) : aas->PointReachableAreaNum(ownerOrigin, mOwner->GetPhysics()->GetBounds(), (AREA_REACHABLE_WALK|AREA_REACHABLE_FLY) );
-	aasFeature_t*	feature				= 0;
-	aasArea_t&		area				= file->GetArea(ownerAreaNum);
-	idActor*		teammate			= NULL;
-	float			featureDistance		= 0.0f;
-	float			featureDotLeft		= 0.0f;
-	float			featureDotDirection	= 0.0f;
-	float			teammateDistance	= 0.0f;
-	float			closestDistance		= 0.0f;
+	idVec3			velocityFwd = mOwner->GetPhysics()->GetLinearVelocity();
+	const idVec3& ownerOrigin = mOwner->GetPhysics()->GetOrigin();
+	int				ownerAreaNum = mOwnerAI ? mOwnerAI->PointReachableAreaNum(ownerOrigin) : aas->PointReachableAreaNum(ownerOrigin, mOwner->GetPhysics()->GetBounds(), (AREA_REACHABLE_WALK | AREA_REACHABLE_FLY));
+	aasFeature_t* feature = 0;
+	aasArea_t& area = file->GetArea(ownerAreaNum);
+	idActor* teammate = NULL;
+	float			featureDistance = 0.0f;
+	float			featureDotLeft = 0.0f;
+	float			featureDotDirection = 0.0f;
+	float			teammateDistance = 0.0f;
+	float			closestDistance = 0.0f;
 	idVec3			velocityLeft;
 	idVec3			velocityDown;
 	idVec3			featureDirection;
@@ -714,7 +714,7 @@ void	rvAASTacticalSensorLocal::Update()
 	if (mNear)
 	{
 		closestDistance = mNear->Origin().Dist(ownerOrigin);
-		if (closestDistance>MIN_NEAR_DISTANCE)
+		if (closestDistance > MIN_NEAR_DISTANCE)
 		{
 			mNear = 0;
 		}
@@ -725,25 +725,25 @@ void	rvAASTacticalSensorLocal::Update()
 	//-----------------------------------------------------------------
 	if (area.numFeatures)
 	{
-		for (int areaFeatureNum=0; areaFeatureNum<area.numFeatures; areaFeatureNum++)
+		for (int areaFeatureNum = 0; areaFeatureNum < area.numFeatures; areaFeatureNum++)
 		{
-			feature				 = & (file->GetFeature(file->GetFeatureIndex(area.firstFeature+areaFeatureNum)));
-			if (feature!=mNear)
+			feature = &(file->GetFeature(file->GetFeatureIndex(area.firstFeature + areaFeatureNum)));
+			if (feature != mNear)
 			{
-				featureDirection	 = feature->Origin();
-				featureDirection	-= ownerOrigin;
-				featureDistance		 = featureDirection.NormalizeFast();
+				featureDirection = feature->Origin();
+				featureDirection -= ownerOrigin;
+				featureDistance = featureDirection.NormalizeFast();
 
-				if (featureDistance<MIN_NEAR_DISTANCE && (!mNear || featureDistance<closestDistance))
+				if (featureDistance < MIN_NEAR_DISTANCE && (!mNear || featureDistance < closestDistance))
 				{
-					mNear			 = feature;
-					closestDistance	 = featureDistance;
+					mNear = feature;
+					closestDistance = featureDistance;
 				}
 			}
 		}
 	}
 
-	if (velocityFwd.LengthSqr()>1.0f)
+	if (velocityFwd.LengthSqr() > 1.0f)
 	{
 		// Compute Velocity Vectors
 		//--------------------------
@@ -760,23 +760,23 @@ void	rvAASTacticalSensorLocal::Update()
 
 			// Too Far?
 			//----------
-			if (featureOrigin.Dist(ownerOrigin)>mLookStopDist)
+			if (featureOrigin.Dist(ownerOrigin) > mLookStopDist)
 			{
 				mLook = 0;
 			}
 
 			// Check All Team Mates To See If This Look Points At Them
 			//---------------------------------------------------------
-			for (teammate = aiManager.GetAllyTeam ( (aiTeam_t)mOwner->team ); teammate; teammate = teammate->teamNode.Next())
+			for (teammate = aiManager.GetAllyTeam((aiTeam_t)mOwner->team); teammate; teammate = teammate->teamNode.Next())
 			{
-				if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0) 
+				if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0)
 				{
 					continue;
 				}
 
-				teammateDirection	= featureOrigin - teammate->GetPhysics()->GetOrigin();
-				teammateDistance	= teammateDirection.NormalizeFast();
-				if (teammateDistance<TEST_TEAMMATE_DIST && teammateDirection*featureNormal>0.85f)
+				teammateDirection = featureOrigin - teammate->GetPhysics()->GetOrigin();
+				teammateDistance = teammateDirection.NormalizeFast();
+				if (teammateDistance < TEST_TEAMMATE_DIST && teammateDirection * featureNormal>0.85f)
 				{
 					mLook = 0;
 					break;
@@ -787,48 +787,48 @@ void	rvAASTacticalSensorLocal::Update()
 
 		// And, If We Are Moving, Check The Near Feature To See If It Qualifies As A Look Feature
 		//----------------------------------------------------------------------------------------
-		if (mNear && mNear!=mLook && (gameLocal.GetTime() - mLookStartTime)>3000)
+		if (mNear && mNear != mLook && (gameLocal.GetTime() - mLookStartTime) > 3000)
 		{
 			const idVec3& featureOrigin = mNear->Origin();
 			const idVec3& featureNormal = mNear->Normal();
 
 			// Compute Feature Direction
 			//---------------------------
-			featureDirection	 = featureOrigin;
-			featureDirection	-= ownerOrigin;
-			featureDistance		 = featureDirection.NormalizeFast();
+			featureDirection = featureOrigin;
+			featureDirection -= ownerOrigin;
+			featureDistance = featureDirection.NormalizeFast();
 
 			// Must Be Behind Me (I've Alreay Walked Past It)
 			//------------------------------------------------
-			if (featureDistance>16.0f && featureDirection*velocityFwd<0.0f)
+			if (featureDistance > 16.0f && featureDirection * velocityFwd < 0.0f)
 			{
 				// Must Be Facing Away From Me
 				//-----------------------------
-				featureDotDirection = featureNormal*featureDirection;
-				if (featureDotDirection>-0.8f)
+				featureDotDirection = featureNormal * featureDirection;
+				if (featureDotDirection > -0.8f)
 				{
 					// Must Be Roughly Perpendicular To My Velocity (Within 45 Degrees)
 					//------------------------------------------------------------------
-					featureDotLeft = featureNormal*velocityLeft;
-					if (fabsf(featureDotLeft)>0.5f)
+					featureDotLeft = featureNormal * velocityLeft;
+					if (fabsf(featureDotLeft) > 0.5f)
 					{
 						// If On Left Of Me, Must Have A Right Lean, And Converse
 						//--------------------------------------------------------
-						if ((featureDotLeft>0.0f && mNear->flags&FEATURE_LOOK_RIGHT) || 
-							(featureDotLeft<0.0f && mNear->flags&FEATURE_LOOK_LEFT))
+						if ((featureDotLeft > 0.0f && mNear->flags & FEATURE_LOOK_RIGHT) ||
+							(featureDotLeft < 0.0f && mNear->flags & FEATURE_LOOK_LEFT))
 						{
 							// Check All Team Mates To See If This Look Points At Them
 							//---------------------------------------------------------
-							for (teammate = aiManager.GetAllyTeam ( (aiTeam_t)mOwner->team ); teammate; teammate = teammate->teamNode.Next())
+							for (teammate = aiManager.GetAllyTeam((aiTeam_t)mOwner->team); teammate; teammate = teammate->teamNode.Next())
 							{
-								if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0) 
+								if (teammate->fl.hidden || teammate == mOwner || teammate->health <= 0)
 								{
 									continue;
 								}
 
-								teammateDirection	= featureOrigin - teammate->GetPhysics()->GetOrigin();
-								teammateDistance	= teammateDirection.NormalizeFast();
-								if (teammateDistance<TEST_TEAMMATE_DIST && teammateDirection*featureNormal>0.85f)
+								teammateDirection = featureOrigin - teammate->GetPhysics()->GetOrigin();
+								teammateDistance = teammateDirection.NormalizeFast();
+								if (teammateDistance < TEST_TEAMMATE_DIST && teammateDirection * featureNormal>0.85f)
 								{
 									break;
 								}
@@ -836,9 +836,9 @@ void	rvAASTacticalSensorLocal::Update()
 
 							if (!teammate)
 							{
-								mLook			 = mNear;
-								mLookStartTime	 = gameLocal.GetTime();
-								mLookStopDist	 = rvRandom::flrand(48.0f, 80.0f);
+								mLook = mNear;
+								mLookStartTime = gameLocal.GetTime();
+								mLookStopDist = rvRandom::flrand(48.0f, 80.0f);
 							}
 						}
 					}
@@ -862,14 +862,14 @@ void	rvAASTacticalSensorLocal::Update()
 ///////////////////////////////////////////////////////////////////////////////
 void rvAASTacticalSensorLocal::Reserve(aasFeature_t* f)
 {
-	if (f!=mReserved && mOwner)
+	if (f != mReserved && mOwner)
 	{
 		mReserved = f;
-		
-		if ( f ) 
+
+		if (f)
 		{
-			mReservedOrigin = f->Origin ( );
-		}	
+			mReservedOrigin = f->Origin();
+		}
 	}
 }
 
@@ -913,17 +913,17 @@ void rvAASTacticalSensorLocal::TestSetupCurrentValues()
 
 	// Tether Test Set
 	//----------------
-	if (mOwnerAI && mOwnerAI->IsTethered ( ) )
+	if (mOwnerAI && mOwnerAI->IsTethered())
 	{
-		mFromTether.SetupOriginAndFacing(mOwnerAI->GetTether ( ));
+		mFromTether.SetupOriginAndFacing(mOwnerAI->GetTether());
 	}
 
 	// Path Test Set
 	//----------------
-	mFromPath.mProjectOrigin	= true;
-	mFromPath.mOrigin			= mFromOwner.mOrigin;
-	mFromPath.mFacing			= mFromEnemy.mOrigin - mFromOwner.mOrigin;
-	mFromPath.mFacing[2]		= 0;
+	mFromPath.mProjectOrigin = true;
+	mFromPath.mOrigin = mFromOwner.mOrigin;
+	mFromPath.mFacing = mFromEnemy.mOrigin - mFromOwner.mOrigin;
+	mFromPath.mFacing[2] = 0;
 	mFromPath.mFacing.Normalize();
 
 	// Advance Test Set
@@ -965,9 +965,9 @@ bool rvAASTacticalSensorLocal::TestValidWithCurrentState(aasFeature_t* f)
 ///////////////////////////////////////////////////////////////////////////////
 bool rvAASTacticalSensorLocal::TestValid(aasFeature_t* f, float walkDistanceToFeature)
 {
- 	static idVec3 LeanNormal;
- 	static idVec3 Up(0.0f,0.0f,1.0f);
- 	static float  LeanNormalDot;
+	static idVec3 LeanNormal;
+	static idVec3 Up(0.0f, 0.0f, 1.0f);
+	static float  LeanNormalDot;
 
 
 	// Is There A Feature At All
@@ -979,9 +979,9 @@ bool rvAASTacticalSensorLocal::TestValid(aasFeature_t* f, float walkDistanceToFe
 
 	// Does It Match The Flags?
 	//--------------------------
-	if (!(f->flags&mFlagsMatchAny) || 
-		((f->flags&mFlagsMatchAll)!=mFlagsMatchAll) || 
- 		 (f->flags&mFlagsMatchNone))
+	if (!(f->flags & mFlagsMatchAny) ||
+		((f->flags & mFlagsMatchAll) != mFlagsMatchAll) ||
+		(f->flags & mFlagsMatchNone))
 	{
 		return false;
 	}
@@ -992,37 +992,37 @@ bool rvAASTacticalSensorLocal::TestValid(aasFeature_t* f, float walkDistanceToFe
 		!mFromEnemy.Test(f) ||
 		!mFromTether.Test(f) ||
 		!mFromPath.Test(f) ||
-		!mAdvance.Test(mFromOwner.mDirection*mFromPath.mFacing) ||
-		!mAssignment.Test(mFromOwner.mDirection*mAssignmentDirection))
+		!mAdvance.Test(mFromOwner.mDirection * mFromPath.mFacing) ||
+		!mAssignment.Test(mFromOwner.mDirection * mAssignmentDirection))
 	{
 		return false;
 	}
 
 	// Make sure this cover point is vaild for the current tether
 	//------------------------------------------------------------
-	if ( mOwnerAI && mOwnerAI->IsTethered() && !mOwnerAI->GetTether()->ValidateDestination ( mOwnerAI, f->Origin() ) )
+	if (mOwnerAI && mOwnerAI->IsTethered() && !mOwnerAI->GetTether()->ValidateDestination(mOwnerAI, f->Origin()))
 	{
 		return false;
 	}
 
- 	// Does It Pass The Lean Normal Test?
- 	//------------------------------------
-	if (mOwnerAI && (mEnemyOverride||mOwnerAI->GetEnemy()))
+	// Does It Pass The Lean Normal Test?
+	//------------------------------------
+	if (mOwnerAI && (mEnemyOverride || mOwnerAI->GetEnemy()))
 	{//we have an enemy position to test against
 		mLeanNormal.mValue = 0.0f;
-		if (!(f->flags&FEATURE_LOOK_OVER) && ((f->flags&FEATURE_LOOK_RIGHT) || (f->flags&FEATURE_LOOK_LEFT)))
+		if (!(f->flags & FEATURE_LOOK_OVER) && ((f->flags & FEATURE_LOOK_RIGHT) || (f->flags & FEATURE_LOOK_LEFT)))
 		{
- 			LeanNormal		= f->Normal().Cross(Up);	// Start With Left
- 			LeanNormalDot	= LeanNormal * mFromEnemy.mDirection;
+			LeanNormal = f->Normal().Cross(Up);	// Start With Left
+			LeanNormalDot = LeanNormal * mFromEnemy.mDirection;
 
- 			if (!(f->flags&FEATURE_LOOK_LEFT) || ((f->flags&FEATURE_LOOK_RIGHT) && LeanNormalDot<0.0f))
- 			{
- 				LeanNormalDot *= -1.0f;					// Use The Right Normal
- 			}
+			if (!(f->flags & FEATURE_LOOK_LEFT) || ((f->flags & FEATURE_LOOK_RIGHT) && LeanNormalDot < 0.0f))
+			{
+				LeanNormalDot *= -1.0f;					// Use The Right Normal
+			}
 
- 			if (!mLeanNormal.Test(LeanNormalDot))
- 			{
- 				return false;
+			if (!mLeanNormal.Test(LeanNormalDot))
+			{
+				return false;
 			}
 		}
 	}
@@ -1030,7 +1030,7 @@ bool rvAASTacticalSensorLocal::TestValid(aasFeature_t* f, float walkDistanceToFe
 
 	// Is Anyone Else Going There?
 	//-----------------------------
-	if (mOwnerAI && !aiManager.ValidateDestination(mOwnerAI, f->Origin())) 
+	if (mOwnerAI && !aiManager.ValidateDestination(mOwnerAI, f->Origin()))
 	{
 		return false;
 	}
@@ -1070,28 +1070,28 @@ void rvAASTacticalSensorLocal::SearchReset(idEntity* enemyOverride, float ownerR
 
 	// Setup Base Search Parameters
 	//------------------------------
-	mFlagsMatchAll			= 0;															// Must Have All Of These
-	mFlagsMatchAny			= (FEATURE_LOOK_LEFT|FEATURE_LOOK_RIGHT|FEATURE_LOOK_OVER);		// Must Have At Least One Of These
-	mFlagsMatchNone			= (FEATURE_PINCH|FEATURE_VANTAGE);								// Don't Want Any Of These
-	mFeaturesSearchMax		= 100;
-	mFeaturesFinalMax		= 20;
-	mAssignmentValid		= false;					// TODO: Turn This Back On
-	mAssignmentDirection	= vec3_zero;
-	mEnemyOverride			= enemyOverride;
+	mFlagsMatchAll = 0;															// Must Have All Of These
+	mFlagsMatchAny = (FEATURE_LOOK_LEFT | FEATURE_LOOK_RIGHT | FEATURE_LOOK_OVER);		// Must Have At Least One Of These
+	mFlagsMatchNone = (FEATURE_PINCH | FEATURE_VANTAGE);								// Don't Want Any Of These
+	mFeaturesSearchMax = 100;
+	mFeaturesFinalMax = 20;
+	mAssignmentValid = false;					// TODO: Turn This Back On
+	mAssignmentDirection = vec3_zero;
+	mEnemyOverride = enemyOverride;
 
 
 	// Lean Normal Test
 	//------------------
 	mLeanNormal.Reset();
-	mLeanNormal.mMin							=-0.2f;		// Must Lean Toward Enemy
+	mLeanNormal.mMin = -0.2f;		// Must Lean Toward Enemy
 
 
 	// Owner Test Set Default Values
 	//-------------------------------
 	mFromOwner.Reset();
-	mFromOwner.mDistance.mMin				= ownerRangeMin;
-	mFromOwner.mDistance.mMax				= ownerRangeMax;
-	mFromOwner.mDistance.mWeight			=-1.0f;		// Prefer Close To Owner
+	mFromOwner.mDistance.mMin = ownerRangeMin;
+	mFromOwner.mDistance.mMax = ownerRangeMax;
+	mFromOwner.mDistance.mWeight = -1.0f;		// Prefer Close To Owner
 
 	// Enemy Test Set Default Values
 	//-------------------------------
@@ -1099,29 +1099,29 @@ void rvAASTacticalSensorLocal::SearchReset(idEntity* enemyOverride, float ownerR
 	//			use this info ASSUMING you have an enemy, your test will be totally
 	//			wrong!!!
 	mFromEnemy.Reset();
-	if ( mOwnerAI && mOwnerAI->enemy.ent )
+	if (mOwnerAI && mOwnerAI->enemy.ent)
 	{
-		mFromEnemy.mDistance.mMin				= mOwnerAI->combat.awareRange / MAX_DISTANCE;		// must be at least 100 units from enemy
-		mFromEnemy.mDistance.mMax				= 2.0f;		// don't care how far the distance is to the enemy, let it go over max (up to 1600)
-   		mFromEnemy.mDirectionDot.mMax			=-0.7f;		// Must Face Within 45 Degrees Of enemy
-   		mFromEnemy.mDirectionDot.mWeight		=-0.3f;		// Prefer To Face Toward Enemy
-		if (mOwnerAI && mOwnerAI->enemy.ent )
+		mFromEnemy.mDistance.mMin = mOwnerAI->combat.awareRange / MAX_DISTANCE;		// must be at least 100 units from enemy
+		mFromEnemy.mDistance.mMax = 2.0f;		// don't care how far the distance is to the enemy, let it go over max (up to 1600)
+		mFromEnemy.mDirectionDot.mMax = -0.7f;		// Must Face Within 45 Degrees Of enemy
+		mFromEnemy.mDirectionDot.mWeight = -0.3f;		// Prefer To Face Toward Enemy
+		if (mOwnerAI && mOwnerAI->enemy.ent)
 		{
 			// Cap Min And Max Distances To Attack Range, and Aware Range
 			//------------------------------------------------------------
-			mFromEnemy.mDistance.mMax			= mOwnerAI->combat.attackRange[1] / MAX_DISTANCE;
-			mFromEnemy.mDistance.mMin			= mOwnerAI->combat.attackRange[0] / MAX_DISTANCE;
+			mFromEnemy.mDistance.mMax = mOwnerAI->combat.attackRange[1] / MAX_DISTANCE;
+			mFromEnemy.mDistance.mMin = mOwnerAI->combat.attackRange[0] / MAX_DISTANCE;
 
-			if (mFromEnemy.mDistance.mMin <		 (mOwnerAI->combat.awareRange / MAX_DISTANCE))
+			if (mFromEnemy.mDistance.mMin < (mOwnerAI->combat.awareRange / MAX_DISTANCE))
 			{
-				mFromEnemy.mDistance.mMin		= mOwnerAI->combat.awareRange / MAX_DISTANCE;
+				mFromEnemy.mDistance.mMin = mOwnerAI->combat.awareRange / MAX_DISTANCE;
 			}
 
 			// If haven't seen enemy in a while, allow you to go right to his last known spot
 			//--------------------------------------------------------------------------------
-			if ( mOwnerAI->enemy.lastVisibleTime && (gameLocal.GetTime() - mOwnerAI->enemy.lastVisibleTime)>mOwnerAI->combat.maxLostVisTime/2.0f)
+			if (mOwnerAI->enemy.lastVisibleTime && (gameLocal.GetTime() - mOwnerAI->enemy.lastVisibleTime) > mOwnerAI->combat.maxLostVisTime / 2.0f)
 			{
-				mFromEnemy.mDistance.mMin		= 0.0f;
+				mFromEnemy.mDistance.mMin = 0.0f;
 			}
 		}
 	}
@@ -1130,14 +1130,14 @@ void rvAASTacticalSensorLocal::SearchReset(idEntity* enemyOverride, float ownerR
 	// Tether test set
 	//-------------------------------
 	mFromTether.Reset();
-	if (mOwnerAI && mOwnerAI->IsTethered ( ) ) 
+	if (mOwnerAI && mOwnerAI->IsTethered())
 	{
 		mFromTether.mFacingDot.mMin = 0.5f;
-		mFromTether.mFacingDot.mWeight = 0.3f; 
-		
+		mFromTether.mFacingDot.mWeight = 0.3f;
+
 		// Disable the owner distance test
-		mFromOwner.Reset();		
-	}	
+		mFromOwner.Reset();
+	}
 
 	// Other Test Sets
 	//-----------------
@@ -1145,7 +1145,7 @@ void rvAASTacticalSensorLocal::SearchReset(idEntity* enemyOverride, float ownerR
 	mAdvance.Reset();
 	mAssignment.Reset();
 
-	
+
 	// Default Test Values
 	//---------------------
 	TestSetupCurrentValues();
@@ -1170,9 +1170,9 @@ void rvAASTacticalSensorLocal::SearchDebug()
 void rvAASTacticalSensorLocal::SearchRadius(const idVec3& origin, float rangeMin, float rangeMax)
 {
 	SearchReset(0, rangeMin, rangeMax);
-	mSearchName							= "Radius";
+	mSearchName = "Radius";
 	mFromEnemy.Reset();								// Don't Care About Enemy At All
-	if ( origin != vec3_origin ) 
+	if (origin != vec3_origin)
 	{
 		mFromOwner.mOrigin = origin;				// Override the owner origin
 	}
@@ -1185,7 +1185,7 @@ void rvAASTacticalSensorLocal::SearchRadius(const idVec3& origin, float rangeMin
 void rvAASTacticalSensorLocal::SearchCover(float rangeMin, float rangeMax)
 {
 	SearchReset(0, rangeMin, rangeMax);
-	mSearchName							= "Cover";
+	mSearchName = "Cover";
 	Search();
 }
 
@@ -1195,11 +1195,11 @@ void rvAASTacticalSensorLocal::SearchCover(float rangeMin, float rangeMax)
 void rvAASTacticalSensorLocal::SearchHide(idEntity* from)
 {
 	SearchReset(from);
-	mSearchName							= "Hide";
-	mFlagsMatchNone						|= FEATURE_LOOK_OVER; // Want Full Height Walls Here
-   	mFromEnemy.mDirectionDot.mMax		= -0.8f;	// Must Almost Exactly At The Enemy
-	mFromOwner.mDistance.mMax			=  2.0f;	// Go as far as you need to - ignore tethering for hide
-	mFromOwner.mDistance.mMin			=  0.4f;	// Get A Good Distance Away
+	mSearchName = "Hide";
+	mFlagsMatchNone |= FEATURE_LOOK_OVER; // Want Full Height Walls Here
+	mFromEnemy.mDirectionDot.mMax = -0.8f;	// Must Almost Exactly At The Enemy
+	mFromOwner.mDistance.mMax = 2.0f;	// Go as far as you need to - ignore tethering for hide
+	mFromOwner.mDistance.mMin = 0.4f;	// Get A Good Distance Away
 	mFromOwner.mDirectionDot.Reset();				// Ignore any direction dot with the leader
 	Search();
 }
@@ -1210,11 +1210,11 @@ void rvAASTacticalSensorLocal::SearchHide(idEntity* from)
 void rvAASTacticalSensorLocal::SearchFlank()
 {
 	SearchReset();
-	mSearchName							= "Flank";
-	mFromOwner.mDistance.mMin			=  0.35f;	// Must Be A Good Distance From Where We Are
-	mFromEnemy.mFacingDot.mMin			= -0.2f;	// Must Be Behind Enemy
-	mAdvance.mMin						= -0.5f;	// In Front Of Owner
-	mAdvance.mMax						=  0.8f;	// But Not Directly Along Path
+	mSearchName = "Flank";
+	mFromOwner.mDistance.mMin = 0.35f;	// Must Be A Good Distance From Where We Are
+	mFromEnemy.mFacingDot.mMin = -0.2f;	// Must Be Behind Enemy
+	mAdvance.mMin = -0.5f;	// In Front Of Owner
+	mAdvance.mMax = 0.8f;	// But Not Directly Along Path
 	Search();
 }
 
@@ -1224,9 +1224,9 @@ void rvAASTacticalSensorLocal::SearchFlank()
 void rvAASTacticalSensorLocal::SearchAdvance()
 {
 	SearchReset();
-	mSearchName							= "Advance";
-	mFromOwner.mDistance.mMin			=  0.15f;	// Make Sure To Move Some
-	mAdvance.mMin						=  0.3f;	// Forward!
+	mSearchName = "Advance";
+	mFromOwner.mDistance.mMin = 0.15f;	// Make Sure To Move Some
+	mAdvance.mMin = 0.3f;	// Forward!
 	Search();
 }
 
@@ -1236,9 +1236,9 @@ void rvAASTacticalSensorLocal::SearchAdvance()
 void rvAASTacticalSensorLocal::SearchRetreat()
 {
 	SearchReset();
-	mSearchName							= "Retreat";
-	mFromOwner.mDistance.mMin			=  0.1f;	// Make Sure To Move Some
-	mAdvance.mMax						= -0.3f;	// Backward!
+	mSearchName = "Retreat";
+	mFromOwner.mDistance.mMin = 0.1f;	// Make Sure To Move Some
+	mAdvance.mMax = -0.3f;	// Backward!
 	Search();
 }
 
@@ -1248,11 +1248,11 @@ void rvAASTacticalSensorLocal::SearchRetreat()
 void rvAASTacticalSensorLocal::SearchAmbush()
 {
 	SearchReset();
-	mSearchName							= "Ambush";
-	mFromOwner.mDistance.mMin			=  0.35f;	// Must Be A Good Distance From Where We Are
-	mFromEnemy.mFacingDot.mMax			=  0.2f;	// Must Be In Front Of Enemy
-	mAdvance.mMin						= -0.5f;	// In Front Of Owner
-	mAdvance.mMax						=  0.8f;	// But Not Directly Along Path
+	mSearchName = "Ambush";
+	mFromOwner.mDistance.mMin = 0.35f;	// Must Be A Good Distance From Where We Are
+	mFromEnemy.mFacingDot.mMax = 0.2f;	// Must Be In Front Of Enemy
+	mAdvance.mMin = -0.5f;	// In Front Of Owner
+	mAdvance.mMax = 0.8f;	// But Not Directly Along Path
 	Search();
 }
 
@@ -1262,7 +1262,7 @@ void rvAASTacticalSensorLocal::SearchAmbush()
 
 
 
-	
+
 
 
 
@@ -1284,13 +1284,13 @@ void rvAASTacticalSensorLocal::SearchAmbush()
 ///////////////////////////////////////////////////////////////////////////
 float rvAASTacticalSensorLocal::SearchComputeWeightRange(float& rangeNegative)
 {
-	return (mFromOwner.WeightRange(rangeNegative) + 
-			mFromEnemy.WeightRange(rangeNegative) + 
-			mFromTether.WeightRange(rangeNegative) +
-			mFromPath.WeightRange(rangeNegative) + 
-			mAdvance.WeightRange(rangeNegative) + 
-			mLeanNormal.WeightRange(rangeNegative) +
-			mAssignment.WeightRange(rangeNegative));
+	return (mFromOwner.WeightRange(rangeNegative) +
+		mFromEnemy.WeightRange(rangeNegative) +
+		mFromTether.WeightRange(rangeNegative) +
+		mFromPath.WeightRange(rangeNegative) +
+		mAdvance.WeightRange(rangeNegative) +
+		mLeanNormal.WeightRange(rangeNegative) +
+		mAssignment.WeightRange(rangeNegative));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1300,19 +1300,19 @@ float rvAASTacticalSensorLocal::SearchComputeWeightRange(float& rangeNegative)
 ///////////////////////////////////////////////////////////////////////////////
 float rvAASTacticalSensorLocal::SearchComputeWeight()
 {
-	return (mFromOwner.Weight() + 
-			mFromEnemy.Weight() + 
-			mFromTether.Weight() +
-			mFromPath.Weight() + 
-			mAdvance.Weight() + 
-			mLeanNormal.Weight() +
-			mAssignment.Weight());
+	return (mFromOwner.Weight() +
+		mFromEnemy.Weight() +
+		mFromTether.Weight() +
+		mFromPath.Weight() +
+		mAdvance.Weight() +
+		mLeanNormal.Weight() +
+		mAssignment.Weight());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // SortFeature function (used by Search() below)
 ///////////////////////////////////////////////////////////////////////////////
-ID_INLINE int rvSortFeature( const TFeaturePtr *a, const TFeaturePtr *b )
+ID_INLINE int rvSortFeature(const TFeaturePtr* a, const TFeaturePtr* b)
 {
 	if ((*a)->weight > (*b)->weight)
 	{
@@ -1326,14 +1326,14 @@ ID_INLINE int rvSortFeature( const TFeaturePtr *a, const TFeaturePtr *b )
 ///////////////////////////////////////////////////////////////////////////////
 void rvAASTacticalSensorLocal::Search()
 {
-	idAAS* aas = (mOwnerAI)?(mOwnerAI->aas):(gameLocal.GetAAS(0));
+	idAAS* aas = (mOwnerAI) ? (mOwnerAI->aas) : (gameLocal.GetAAS(0));
 	if (!mOwner || !aas || !aas->GetFile() || !aas->GetFile()->GetNumFeatures())
 	{
 		return;
 	}
 
 
-	static idAASFile*			file;
+	static idAASFile* file;
 	static int					areaNum;
 	static int					areaNumOwner;
 	static rvBits<32000>		areaVisit;
@@ -1341,9 +1341,9 @@ void rvAASTacticalSensorLocal::Search()
 	static int					travelTime;
 	static int					areaFeatureNum;
 	static int					featureNum;
-	static aasFeature_t*		featurePtr;
+	static aasFeature_t* featurePtr;
 	static idVec3				featureOrigin;
-	static idReachability*		reach;
+	static idReachability* reach;
 	static idList<rvSortReach>	searchHeap;
 	static rvSortReach			sortReach;
 	static float				walkDistanceToFeature;
@@ -1357,12 +1357,12 @@ void rvAASTacticalSensorLocal::Search()
 
 
 
-//-----------------------------------------------------------------------------
-// SETUP
-//-----------------------------------------------------------------------------
-	file						= aas->GetFile();
-	weightRangeNegative			= 0.0f;
-	weightRangeTotal			= SearchComputeWeightRange(weightRangeNegative);
+	//-----------------------------------------------------------------------------
+	// SETUP
+	//-----------------------------------------------------------------------------
+	file = aas->GetFile();
+	weightRangeNegative = 0.0f;
+	weightRangeTotal = SearchComputeWeightRange(weightRangeNegative);
 
 	mFeatures.Clear();
 	searchHeap.Clear();
@@ -1375,33 +1375,33 @@ void rvAASTacticalSensorLocal::Search()
 
 
 
-//-----------------------------------------------------------------------------
-// PHASE I - POPULATE AREA QUEUE
-//-----------------------------------------------------------------------------
-	if ( mOwnerAI ) 
+	//-----------------------------------------------------------------------------
+	// PHASE I - POPULATE AREA QUEUE
+	//-----------------------------------------------------------------------------
+	if (mOwnerAI)
 	{
-		areaNumOwner = mOwnerAI->PointReachableAreaNum ( mFromOwner.mOrigin );
-	} 
-	else 
+		areaNumOwner = mOwnerAI->PointReachableAreaNum(mFromOwner.mOrigin);
+	}
+	else
 	{
 		areaNumOwner = aas->PointReachableAreaNum(mFromOwner.mOrigin, mOwner->GetPhysics()->GetBounds(), AREA_REACHABLE_WALK);
 	}
 
-	from			= mFromOwner.mOrigin;
-	areaNum			= areaNumOwner;
-	sortReach.mAreaNum	= areaNumOwner;
+	from = mFromOwner.mOrigin;
+	areaNum = areaNumOwner;
+	sortReach.mAreaNum = areaNumOwner;
 	sortReach.mDistance = 0.0f;
-	sortReach.mReach	= 0;
+	sortReach.mReach = 0;
 	searchHeap.Append(sortReach);
 
 
 
 
-//-----------------------------------------------------------------------------
-// PHASE II - BREADTH FIRST SEARCH NEIGHBORING AREAS FOR FEATURES THAT TEST OK
-//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// PHASE II - BREADTH FIRST SEARCH NEIGHBORING AREAS FOR FEATURES THAT TEST OK
+	//-----------------------------------------------------------------------------
 	areaVisitCount = 0;
- 	while (searchHeap.Num() && areaVisitCount<MAX_AREAS_TOUCHED && mFeatures.Num()<mFeaturesSearchMax)
+	while (searchHeap.Num() && areaVisitCount < MAX_AREAS_TOUCHED && mFeatures.Num() < mFeaturesSearchMax)
 	{
 		rvSortReach	sr = searchHeap[0];
 		searchHeap.HeapPop();
@@ -1410,7 +1410,7 @@ void rvAASTacticalSensorLocal::Search()
 			continue;
 		}
 		areaVisit.set(sr.mAreaNum);
-		areaVisitCount ++;
+		areaVisitCount++;
 
 
 		// Check For Features Here
@@ -1418,10 +1418,10 @@ void rvAASTacticalSensorLocal::Search()
 		const aasArea_t& area = file->GetArea(sr.mAreaNum);
 		if (area.numFeatures)
 		{
-			for (areaFeatureNum=0; areaFeatureNum<area.numFeatures; areaFeatureNum++)
+			for (areaFeatureNum = 0; areaFeatureNum < area.numFeatures; areaFeatureNum++)
 			{
-				featurePtr		= & (file->GetFeature(file->GetFeatureIndex(area.firstFeature+areaFeatureNum)));
-				featureOrigin	= featurePtr->Origin();
+				featurePtr = &(file->GetFeature(file->GetFeatureIndex(area.firstFeature + areaFeatureNum)));
+				featureOrigin = featurePtr->Origin();
 
 				// If Walk Path Is Valid, Allow From Owner Test To Use Computed Straight Line Distance
 				//-------------------------------------------------------------------------------------
@@ -1434,7 +1434,7 @@ void rvAASTacticalSensorLocal::Search()
 				//--------------------------------------------------------------------------------------------------------------------------------
 				else
 				{
-					walkDistanceToFeature = sr.mDistance + ((sr.mReach)?(sr.mReach->end.Dist(featureOrigin)):(mFromOwner.mOrigin.Dist(featureOrigin)));
+					walkDistanceToFeature = sr.mDistance + ((sr.mReach) ? (sr.mReach->end.Dist(featureOrigin)) : (mFromOwner.mOrigin.Dist(featureOrigin)));
 				}
 
 				// Test The Feature To See If It's Valid
@@ -1446,14 +1446,14 @@ void rvAASTacticalSensorLocal::Search()
 
 				// Compute The Weight 
 				//--------------------
-				if (weightRangeTotal>0.0f)
+				if (weightRangeTotal > 0.0f)
 				{
-					weight		= SearchComputeWeight();			// Compute Weight Sum
-					weight		-= weightRangeNegative;				// Bring it into a positive range
-					weight		/= weightRangeTotal;				// Scale down to 0.0 - 1.0
-	
-					assert(weight>0.0f && weight<255.0f);
-					featurePtr->weight = (char)(weight*255);
+					weight = SearchComputeWeight();			// Compute Weight Sum
+					weight -= weightRangeNegative;				// Bring it into a positive range
+					weight /= weightRangeTotal;				// Scale down to 0.0 - 1.0
+
+					assert(weight > 0.0f && weight < 255.0f);
+					featurePtr->weight = (char)(weight * 255);
 				}
 				else
 				{
@@ -1470,17 +1470,17 @@ void rvAASTacticalSensorLocal::Search()
 
 		// Add Neighboring Areas To Search
 		//---------------------------------
-		for (reach=area.reach; reach; reach=reach->next)
+		for (reach = area.reach; reach; reach = reach->next)
 		{
-			if ((reach->travelType&TFL_WALK))
+			if ((reach->travelType & TFL_WALK))
 			{
-				walkDistanceToFeature = sr.mDistance + ((sr.mReach)?(sr.mReach->end.Dist(reach->end)):(mFromOwner.mOrigin.Dist(reach->end)));
+				walkDistanceToFeature = sr.mDistance + ((sr.mReach) ? (sr.mReach->end.Dist(reach->end)) : (mFromOwner.mOrigin.Dist(reach->end)));
 
-				if (walkDistanceToFeature<MAX_DISTANCE)
+				if (walkDistanceToFeature < MAX_DISTANCE)
 				{
-					sortReach.mDistance		= walkDistanceToFeature;
-					sortReach.mAreaNum		= reach->toAreaNum;
-					sortReach.mReach		= reach;
+					sortReach.mDistance = walkDistanceToFeature;
+					sortReach.mAreaNum = reach->toAreaNum;
+					sortReach.mReach = reach;
 					searchHeap.HeapAdd(sortReach);
 				}
 			}
@@ -1490,14 +1490,14 @@ void rvAASTacticalSensorLocal::Search()
 
 
 
-//-----------------------------------------------------------------------------
-// PHASE III - SORT AND CLIP THE FEATURE LIST
-//-----------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------
+	// PHASE III - SORT AND CLIP THE FEATURE LIST
+	//-----------------------------------------------------------------------------
 	mFeatures.Sort(rvSortFeature);
 
 	// Now, Clip The Sorted List To The Max Size
 	//-------------------------------------------
-	if (mFeatures.Num()>MAX_FEATURE_LIST)
+	if (mFeatures.Num() > MAX_FEATURE_LIST)
 	{
 		mFeatures.Resize(MAX_FEATURE_LIST);
 	}
@@ -1509,9 +1509,9 @@ void rvAASTacticalSensorLocal::Search()
 
 	// Print Search Results
 	//----------------------
-	if (ai_showTacticalFeatures.GetInteger()==3)
+	if (ai_showTacticalFeatures.GetInteger() == 3)
 	{
-		common->Printf( "[%10d] Search%s Found %d Features For %s\n", gameLocal.GetTime(), mSearchName.c_str(), mFeatures.Num(), mOwner->GetName() );
+		common->Printf("[%10d] Search%s Found %d Features For %s\n", gameLocal.GetTime(), mSearchName.c_str(), mFeatures.Num(), mOwner->GetName());
 	}
 }
 
@@ -1530,7 +1530,7 @@ void rvAASTacticalSensorLocal::Search()
 ///////////////////////////////////////////////////////////////////////////////
 // aasFeature_t::DrawDebugInfo
 ///////////////////////////////////////////////////////////////////////////////
-void aasFeature_t::DrawDebugInfo( int index )
+void aasFeature_t::DrawDebugInfo(int index)
 {
 	static idVec3 Height;
 	static idVec3 Orig;
@@ -1539,63 +1539,63 @@ void aasFeature_t::DrawDebugInfo( int index )
 	static idVec4 color;
 	static idVec3 Left;
 
-	int lifetime	= 0;
+	int lifetime = 0;
 
-	color			= colorWhite;
+	color = colorWhite;
 
 	if (flags & FEATURE_COVER)
 	{
-		color		= colorGreen;
+		color = colorGreen;
 	}
 
-	Orig		= Origin();
-	Orig[2]		+= 1.0f;
+	Orig = Origin();
+	Orig[2] += 1.0f;
 
-	Height		= Orig;
-	Height[2]	+= height;
+	Height = Orig;
+	Height[2] += height;
 
-	Norm		= Orig;
-	Norm		+= Normal() * mDebugRadius;
-	Left		=  Normal().Cross(idVec3(0,0,-1)) * mDebugRadius;
+	Norm = Orig;
+	Norm += Normal() * mDebugRadius;
+	Left = Normal().Cross(idVec3(0, 0, -1)) * mDebugRadius;
 
-	gameRenderWorld->DebugLine( color,	Orig,	Height,	lifetime );
-	gameRenderWorld->DebugLine( color,  Orig,	Norm,	lifetime );
+	gameRenderWorld->DebugLine(color, Orig, Height, lifetime);
+	gameRenderWorld->DebugLine(color, Orig, Norm, lifetime);
 
-	if (index>=0)
+	if (index >= 0)
 	{
 		Text = (Origin() + Height) * 0.5f;
- 		gameRenderWorld->DrawText( va( "%d", index ), Text, 0.1f, colorWhite, gameLocal.GetLocalPlayer()->viewAxis, 1, lifetime );
+		gameRenderWorld->DrawText(va("%d", index), Text, 0.1f, colorWhite, gameLocal.GetLocalPlayer()->viewAxis, 1, lifetime);
 
 		Text[2] += 15.0f;
-		gameRenderWorld->DrawText( va( "%d", (int)weight ), Text, 0.1f, colorWhite, gameLocal.GetLocalPlayer()->viewAxis, 1, lifetime );
+		gameRenderWorld->DrawText(va("%d", (int)weight), Text, 0.1f, colorWhite, gameLocal.GetLocalPlayer()->viewAxis, 1, lifetime);
 	}
 
 	// Left Corner Is On The Ground
 	//------------------------------
 	if (flags & FEATURE_CORNER_LEFT)
 	{
-		gameRenderWorld->DebugLine( color, Orig,	Orig + Left, lifetime );
+		gameRenderWorld->DebugLine(color, Orig, Orig + Left, lifetime);
 	}
 
 	// Otherwise Windows Are At The Given Height
 	//-------------------------------------------
 	else if (flags & FEATURE_LOOK_LEFT)
 	{
-		gameRenderWorld->DebugLine( color, Height,	Height + Left, lifetime );
+		gameRenderWorld->DebugLine(color, Height, Height + Left, lifetime);
 	}
 
 	if (flags & FEATURE_CORNER_RIGHT)
 	{
-		gameRenderWorld->DebugLine( color, Orig,	Orig - Left, lifetime );
+		gameRenderWorld->DebugLine(color, Orig, Orig - Left, lifetime);
 	}
 	else if (flags & FEATURE_LOOK_RIGHT)
 	{
-		gameRenderWorld->DebugLine( color, Height,	Height - Left, lifetime );
+		gameRenderWorld->DebugLine(color, Height, Height - Left, lifetime);
 	}
 
 	if (flags & FEATURE_LOOK_OVER)
 	{
-		gameRenderWorld->DebugLine( color, Height,	Height + (Normal()*mDebugRadius), lifetime );
+		gameRenderWorld->DebugLine(color, Height, Height + (Normal() * mDebugRadius), lifetime);
 	}
 }
 
@@ -1613,12 +1613,12 @@ void			rvTest::DrawDebugInfo(const idVec4 color, const idVec3& origin, const idV
 ///////////////////////////////////////////////////////////////////////////
 void			rvTest::DrawDebugInfo(const idVec4 color, const idVec3& origin)
 {
-	static	idVec3	up(0.0f,0.0f,-1.0f);
- 	if (mMax<1.0f)
+	static	idVec3	up(0.0f, 0.0f, -1.0f);
+	if (mMax < 1.0f)
 	{
 		gameRenderWorld->DebugCircle(color, origin, up, (mMax * MAX_DISTANCE), 25);
 	}
-	if (mMin>0.0f)
+	if (mMin > 0.0f)
 	{
 		gameRenderWorld->DebugCircle(color, origin, up, (mMin * MAX_DISTANCE), 25);
 	}
@@ -1637,7 +1637,7 @@ void			rvTestSet::DrawDebugInfo(const idVec4& color, const idVec3& nonProjectedO
 		origin = nonProjectedOrigin;
 	}
 
-	gameRenderWorld->DebugArrow( color, origin,	origin+mFacing * 25.0f, 8, lifetime );
+	gameRenderWorld->DebugArrow(color, origin, origin + mFacing * 25.0f, 8, lifetime);
 	mFacingDot.DrawDebugInfo(color, origin, mFacing);
 	mDistance.DrawDebugInfo(color, origin);
 }
@@ -1645,10 +1645,10 @@ void			rvTestSet::DrawDebugInfo(const idVec4& color, const idVec3& nonProjectedO
 ///////////////////////////////////////////////////////////////////////////////
 // rvAASTacticalSensorLocal::DrawDebugInfo
 ///////////////////////////////////////////////////////////////////////////////
-void rvAASTacticalSensorLocal::DrawDebugInfo() 
+void rvAASTacticalSensorLocal::DrawDebugInfo()
 {
-	idAAS* aas = (mOwnerAI)?(mOwnerAI->aas):(gameLocal.GetAAS(0));
-	if (!aas || !aas->GetFile() || !aas->GetFile()->GetNumFeatures() || !mOwner || mOwner->IsHidden() || (ai_showTacticalFeatures.GetInteger()<2 && !mOwner->DebugFilter(ai_showTacticalFeatures) && !mOwner->DebugFilter(ai_debugTactical)))
+	idAAS* aas = (mOwnerAI) ? (mOwnerAI->aas) : (gameLocal.GetAAS(0));
+	if (!aas || !aas->GetFile() || !aas->GetFile()->GetNumFeatures() || !mOwner || mOwner->IsHidden() || (ai_showTacticalFeatures.GetInteger() < 2 && !mOwner->DebugFilter(ai_showTacticalFeatures) && !mOwner->DebugFilter(ai_debugTactical)))
 	{
 		return;
 	}
@@ -1664,42 +1664,42 @@ void rvAASTacticalSensorLocal::DrawDebugInfo()
 
 	// Draw Parameters
 	//-----------------
-	if (ai_showTacticalFeatures.GetInteger()==1)
+	if (ai_showTacticalFeatures.GetInteger() == 1)
 	{
 		if (!mSearchName.IsEmpty())
 		{
-			pos		= mFromOwner.mOrigin + mFromEnemy.mOrigin;
-			pos		*= 0.5f;
-			pos[2]	+= 25.0f;
-			gameRenderWorld->DrawText(mSearchName.c_str(), pos, 0.5f, colorWhite, gameLocal.GetLocalPlayer()->viewAxis, 1, 0 );
-			pos[2]	-= 25.0f;
+			pos = mFromOwner.mOrigin + mFromEnemy.mOrigin;
+			pos *= 0.5f;
+			pos[2] += 25.0f;
+			gameRenderWorld->DrawText(mSearchName.c_str(), pos, 0.5f, colorWhite, gameLocal.GetLocalPlayer()->viewAxis, 1, 0);
+			pos[2] -= 25.0f;
 
 			// Draw Tests
 			//------------
-			mFromEnemy.DrawDebugInfo(colorYellow,	pos);
-			mFromTether.DrawDebugInfo(colorOrange,  pos);
-			mFromOwner.DrawDebugInfo(colorMagenta,	pos);
-			mFromPath.DrawDebugInfo(colorCyan,		pos);
-			mAssignment.DrawDebugInfo(colorPink,	pos);
-			mAdvance.DrawDebugInfo(colorPurple,		mFromOwner.mOrigin, mFromPath.mFacing);
-			mLeanNormal.DrawDebugInfo(colorPurple,	pos);
+			mFromEnemy.DrawDebugInfo(colorYellow, pos);
+			mFromTether.DrawDebugInfo(colorOrange, pos);
+			mFromOwner.DrawDebugInfo(colorMagenta, pos);
+			mFromPath.DrawDebugInfo(colorCyan, pos);
+			mAssignment.DrawDebugInfo(colorPink, pos);
+			mAdvance.DrawDebugInfo(colorPurple, mFromOwner.mOrigin, mFromPath.mFacing);
+			mLeanNormal.DrawDebugInfo(colorPurple, pos);
 		}
 
 
 		// Draw Features
 		//---------------
-		for (int i=0; i<mFeatures.Num(); i++) 
+		for (int i = 0; i < mFeatures.Num(); i++)
 		{
 			mFeatures[i]->DrawDebugInfo(i);
-			if (mFeatures[i]==mReserved)
+			if (mFeatures[i] == mReserved)
 			{
 				reservedDrawn = true;
 			}
-			if (mFeatures[i]==mNear)
+			if (mFeatures[i] == mNear)
 			{
 				nearDrawn = true;
 			}
-			if (mFeatures[i]==mLook)
+			if (mFeatures[i] == mLook)
 			{
 				lookDrawn = true;
 			}
@@ -1708,13 +1708,13 @@ void rvAASTacticalSensorLocal::DrawDebugInfo()
 
 	// Draw All Neighboring Features If Player & CVar==2
 	//---------------------------------------------------
-	if (mOwner==gameLocal.GetLocalPlayer() && ai_showTacticalFeatures.GetInteger()>=2)
+	if (mOwner == gameLocal.GetLocalPlayer() && ai_showTacticalFeatures.GetInteger() >= 2)
 	{
 		idAASFile* file = aas->GetFile();
 		const idVec3& playerOrigin = gameLocal.GetLocalPlayer()->GetPhysics()->GetOrigin();
-		for (int i=0; i<file->GetNumFeatures(); i++)
+		for (int i = 0; i < file->GetNumFeatures(); i++)
 		{
-			if (file->GetFeature(i).Origin().Dist(playerOrigin)<600.0f)
+			if (file->GetFeature(i).Origin().Dist(playerOrigin) < 600.0f)
 			{
 				file->GetFeature(i).DrawDebugInfo();
 			}
@@ -1724,7 +1724,7 @@ void rvAASTacticalSensorLocal::DrawDebugInfo()
 
 	// Always Draw Reserved
 	//----------------------
- 	if (mReserved)
+	if (mReserved)
 	{
 		if (!reservedDrawn)
 		{
@@ -1735,7 +1735,7 @@ void rvAASTacticalSensorLocal::DrawDebugInfo()
 
 	// If Near Is Valid, Draw It
 	//---------------------------
-	if (mNear && (!mReserved || mNear!=mReserved))
+	if (mNear && (!mReserved || mNear != mReserved))
 	{
 		if (!nearDrawn)
 		{
@@ -1750,7 +1750,7 @@ void rvAASTacticalSensorLocal::DrawDebugInfo()
 	{
 		idVec3 n = mLook->Normal();
 		n *= 64.0f;
-		gameRenderWorld->DebugArrow(colorYellow, mOwner->GetPhysics()->GetOrigin() + idVec3(0,0,32), mOwner->GetPhysics()->GetOrigin() + idVec3(0,0,32) + n, 8);
+		gameRenderWorld->DebugArrow(colorYellow, mOwner->GetPhysics()->GetOrigin() + idVec3(0, 0, 32), mOwner->GetPhysics()->GetOrigin() + idVec3(0, 0, 32) + n, 8);
 	}
 }
 

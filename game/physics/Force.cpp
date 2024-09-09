@@ -4,7 +4,7 @@
 
 #include "../Game_local.h"
 
-CLASS_DECLARATION( idClass, idForce )
+CLASS_DECLARATION(idClass, idForce)
 END_CLASS
 
 idList<idForce*> idForce::forceList;
@@ -14,8 +14,8 @@ idList<idForce*> idForce::forceList;
 idForce::idForce
 ================
 */
-idForce::idForce( void ) {
-	forceList.Append( this );
+idForce::idForce(void) {
+	forceList.Append(this);
 }
 
 /*
@@ -23,8 +23,8 @@ idForce::idForce( void ) {
 idForce::~idForce
 ================
 */
-idForce::~idForce( void ) {
-	forceList.Remove( this );
+idForce::~idForce(void) {
+	forceList.Remove(this);
 }
 
 /*
@@ -32,11 +32,11 @@ idForce::~idForce( void ) {
 idForce::DeletePhysics
 ================
 */
-void idForce::DeletePhysics( const idPhysics *phys ) {
+void idForce::DeletePhysics(const idPhysics* phys) {
 	int i;
 
-	for ( i = 0; i < forceList.Num(); i++ ) {
-		forceList[i]->RemovePhysics( phys );
+	for (i = 0; i < forceList.Num(); i++) {
+		forceList[i]->RemovePhysics(phys);
 	}
 }
 
@@ -45,7 +45,7 @@ void idForce::DeletePhysics( const idPhysics *phys ) {
 idForce::ClearForceList
 ================
 */
-void idForce::ClearForceList( void ) {
+void idForce::ClearForceList(void) {
 	forceList.Clear();
 }
 
@@ -54,7 +54,7 @@ void idForce::ClearForceList( void ) {
 idForce::Evaluate
 ================
 */
-void idForce::Evaluate( int time ) {
+void idForce::Evaluate(int time) {
 }
 
 /*
@@ -62,5 +62,5 @@ void idForce::Evaluate( int time ) {
 idForce::RemovePhysics
 ================
 */
-void idForce::RemovePhysics( const idPhysics *phys ) {
+void idForce::RemovePhysics(const idPhysics* phys) {
 }

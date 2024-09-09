@@ -8,22 +8,22 @@
 class rvHealingStation : public idAnimatedEntity {
 public:
 
-	CLASS_PROTOTYPE( rvHealingStation );
+	CLASS_PROTOTYPE(rvHealingStation);
 
-	virtual void			Think						( void );
+	virtual void			Think(void);
 
-	void					Spawn						( void );
-	void					Save						( idSaveGame *savefile ) const;
-	void					Restore						( idRestoreGame *savefile );
-	
-	void					BeginHealing				( idEntity *toHeal );
-	void					EndHealing					( void );
+	void					Spawn(void);
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
+
+	void					BeginHealing(idEntity* toHeal);
+	void					EndHealing(void);
 
 protected:
 
-	void					CreateFrame					( float station_health );
+	void					CreateFrame(float station_health);
 
-	stateResult_t			State_Healing				( const stateParms_t& parms );
+	stateResult_t			State_Healing(const stateParms_t& parms);
 
 	rvStateThread			stateThread;
 	idEntityPtr<idEntity>	entityToHeal;
@@ -38,8 +38,8 @@ protected:
 
 private:
 
-	bool					IsPlaying					( void );
+	bool					IsPlaying(void);
 
-	CLASS_STATES_PROTOTYPE ( rvHealingStation );
+	CLASS_STATES_PROTOTYPE(rvHealingStation);
 };
 

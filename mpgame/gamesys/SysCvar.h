@@ -388,7 +388,7 @@ extern idCVar	si_captureLimit;
 extern idCVar	si_tourneyLimit;
 // RAVEN END
 
-extern const char *si_gameTypeArgs[];
+extern const char* si_gameTypeArgs[];
 
 extern idCVar	g_gamelog;
 extern idCVar	cl_showEntityInfo;

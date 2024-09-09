@@ -66,44 +66,44 @@ public:
 	int						lastAnimBlendFrames;		// allows override anims to blend based on the last transition time
 
 public:
-							idAnimState();
-							~idAnimState();
+	idAnimState();
+	~idAnimState();
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	void					Init( idEntity *owner, idAnimator *_animator, int animchannel );
-	void					Shutdown( void );
-	void					SetState		( const char *name, int blendFrames, int flags = 0 );
-	void					PostState		( const char* name, int blendFrames = 0, int delay = 0, int flags = 0 );
-	void					StopAnim( int frames );
-	void					PlayAnim( int anim );
-	void					CycleAnim( int anim );
-	void					BecomeIdle( void );
-	bool					UpdateState( void );
-	bool					Disabled( void ) const;
-	void					Enable( int blendFrames );
-	void					Disable( void );
-	bool					AnimDone( int blendFrames ) const;
-	bool					IsIdle( void ) const;
-	animFlags_t				GetAnimFlags( void ) const;
+	void					Init(idEntity* owner, idAnimator* _animator, int animchannel);
+	void					Shutdown(void);
+	void					SetState(const char* name, int blendFrames, int flags = 0);
+	void					PostState(const char* name, int blendFrames = 0, int delay = 0, int flags = 0);
+	void					StopAnim(int frames);
+	void					PlayAnim(int anim);
+	void					CycleAnim(int anim);
+	void					BecomeIdle(void);
+	bool					UpdateState(void);
+	bool					Disabled(void) const;
+	void					Enable(int blendFrames);
+	void					Disable(void);
+	bool					AnimDone(int blendFrames) const;
+	bool					IsIdle(void) const;
+	animFlags_t				GetAnimFlags(void) const;
 
-	rvStateThread&			GetStateThread	( void );
+	rvStateThread& GetStateThread(void);
 
-	idAnimator *			GetAnimator( void ) const {return animator;};
+	idAnimator* GetAnimator(void) const { return animator; };
 private:
-// RAVEN BEGIN
-// bdube: converted self to entity ptr so any entity can use it
-	idEntity *				self;
-// RAVEN END
-	idAnimator *			animator;
+	// RAVEN BEGIN
+	// bdube: converted self to entity ptr so any entity can use it
+	idEntity* self;
+	// RAVEN END
+	idAnimator* animator;
 	int						channel;
 	bool					disabled;
-	
+
 	rvStateThread			stateThread;
 };
 
-ID_INLINE rvStateThread& idAnimState::GetStateThread ( void ) {
+ID_INLINE rvStateThread& idAnimState::GetStateThread(void) {
 	return stateThread;
 }
 
@@ -115,7 +115,7 @@ public:
 
 class idActor : public idAFEntity_Gibbable {
 public:
-	CLASS_PROTOTYPE( idActor );
+	CLASS_PROTOTYPE(idActor);
 
 	int						team;
 	idLinkList<idActor>		teamNode;
@@ -126,134 +126,134 @@ public:
 	idLinkList<idActor>		enemyList;			// list of characters that have targeted the player as their enemy
 
 public:
-							idActor( void );
-	virtual					~idActor( void );
+	idActor(void);
+	virtual					~idActor(void);
 
-	void					Spawn( void );
-	virtual void			Restart( void );
+	void					Spawn(void);
+	virtual void			Restart(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	virtual void			Hide( void );
-	virtual void			Show( void );
-	virtual int				GetDefaultSurfaceType( void ) const;
-	virtual void			ProjectOverlay( const idVec3 &origin, const idVec3 &dir, float size, const char *material );
+	virtual void			Hide(void);
+	virtual void			Show(void);
+	virtual int				GetDefaultSurfaceType(void) const;
+	virtual void			ProjectOverlay(const idVec3& origin, const idVec3& dir, float size, const char* material);
 
-	virtual bool			LoadAF( const char* keyname = NULL, bool purgeAF = false );
-	void					SetupBody( void );
+	virtual bool			LoadAF(const char* keyname = NULL, bool purgeAF = false);
+	void					SetupBody(void);
 
-	virtual void			CheckBlink( void );
+	virtual void			CheckBlink(void);
 
-	virtual bool			GetPhysicsToVisualTransform( idVec3 &origin, idMat3 &axis );
-	virtual bool			GetPhysicsToSoundTransform( idVec3 &origin, idMat3 &axis );
+	virtual bool			GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis);
+	virtual bool			GetPhysicsToSoundTransform(idVec3& origin, idMat3& axis);
 
-							// script state management
-	void					ShutdownThreads		( void );
-	void					UpdateState			( void );
-	
-	virtual void			OnStateThreadClear ( const char *statename, int flags = 0 );
-	void					SetState		( const char *statename, int flags = 0 );
-	void					PostState		( const char* statename, int delay = 0, int flags = 0 );
-	void					InterruptState	( const char* statename, int delay = 0, int flags = 0 );
+	// script state management
+	void					ShutdownThreads(void);
+	void					UpdateState(void);
 
-							// vision testing
-	void					SetEyeHeight( float height );
-	void					SetChestHeight ( float height );
-	float					EyeHeight( void ) const;
+	virtual void			OnStateThreadClear(const char* statename, int flags = 0);
+	void					SetState(const char* statename, int flags = 0);
+	void					PostState(const char* statename, int delay = 0, int flags = 0);
+	void					InterruptState(const char* statename, int delay = 0, int flags = 0);
 
-	virtual idVec3			GetEyePosition( void ) const;
-	virtual idVec3			GetChestPosition ( void ) const;
-	idEntity*				GetGroundEntity ( void ) const;
-	virtual idEntity*		GetGroundElevator( idEntity* testElevator=NULL ) const;
+	// vision testing
+	void					SetEyeHeight(float height);
+	void					SetChestHeight(float height);
+	float					EyeHeight(void) const;
 
-	void					Present( void );
+	virtual idVec3			GetEyePosition(void) const;
+	virtual idVec3			GetChestPosition(void) const;
+	idEntity* GetGroundEntity(void) const;
+	virtual idEntity* GetGroundElevator(idEntity* testElevator = NULL) const;
 
-	virtual void			GetViewPos	( idVec3 &origin, idMat3 &axis ) const;
-	void					SetFOV		( float fov, float fovClose );
-	bool					CheckFOV	( const idVec3 &pos, float ang = -1.0f ) const;
-	virtual bool			HasFOV		( idEntity *ent );
-	virtual	bool			CanSee		( const idEntity *ent, bool useFOV ) const;
-	virtual	bool			CanSeeFrom	( const idVec3& from, const idEntity *ent, bool useFOV ) const;
-	virtual	bool			CanSeeFrom	( const idVec3& from, const idVec3& toPos, bool useFOV ) const;
+	void					Present(void);
 
-							// damage
-	void					SetupDamageGroups( void );
+	virtual void			GetViewPos(idVec3& origin, idMat3& axis) const;
+	void					SetFOV(float fov, float fovClose);
+	bool					CheckFOV(const idVec3& pos, float ang = -1.0f) const;
+	virtual bool			HasFOV(idEntity* ent);
+	virtual	bool			CanSee(const idEntity* ent, bool useFOV) const;
+	virtual	bool			CanSeeFrom(const idVec3& from, const idEntity* ent, bool useFOV) const;
+	virtual	bool			CanSeeFrom(const idVec3& from, const idVec3& toPos, bool useFOV) const;
 
-	virtual	void			Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
-// RAVEN BEGIN
-// nmckenzie: a final hook in the middle of the damage function
-	virtual void			AdjustHealthByDamage ( int inDamage ){health -= inDamage;}
-// RAVEN END
+	// damage
+	void					SetupDamageGroups(void);
 
-	virtual int				GetDamageForLocation( int damage, int location );
-	const char *			GetDamageGroup( int location );
-	void					ClearPain( void );
-	virtual bool			Pain( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
-	virtual void			AddDamageEffect( const trace_t &collision, const idVec3 &velocity, const char *damageDefName, idEntity* inflictor );
+	virtual	void			Damage(idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location);
+	// RAVEN BEGIN
+	// nmckenzie: a final hook in the middle of the damage function
+	virtual void			AdjustHealthByDamage(int inDamage) { health -= inDamage; }
+	// RAVEN END
 
-							// model/combat model/ragdoll
-	void					SetCombatModel( void );
-	idClipModel *			GetCombatModel( void ) const;
-	virtual void			LinkCombat( void );
-	virtual void			UnlinkCombat( void );
-	bool					StartRagdoll( void );
-	void					StopRagdoll( void );
-	virtual bool			UpdateAnimationControllers( void );
+	virtual int				GetDamageForLocation(int damage, int location);
+	const char* GetDamageGroup(int location);
+	void					ClearPain(void);
+	virtual bool			Pain(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
+	virtual void			AddDamageEffect(const trace_t& collision, const idVec3& velocity, const char* damageDefName, idEntity* inflictor);
 
-							// delta view angles to allow movers to rotate the view of the actor
-	const idAngles &		GetDeltaViewAngles( void ) const;
-	void					SetDeltaViewAngles( const idAngles &delta );
+	// model/combat model/ragdoll
+	void					SetCombatModel(void);
+	idClipModel* GetCombatModel(void) const;
+	virtual void			LinkCombat(void);
+	virtual void			UnlinkCombat(void);
+	bool					StartRagdoll(void);
+	void					StopRagdoll(void);
+	virtual bool			UpdateAnimationControllers(void);
 
-	bool					HasEnemies( void ) const;
-	idActor *				ClosestEnemyToPoint( const idVec3 &pos, float maxRange=0.0f, bool returnFirst=false, bool checkPVS=false );
-	idActor *				EnemyWithMostHealth();
+	// delta view angles to allow movers to rotate the view of the actor
+	const idAngles& GetDeltaViewAngles(void) const;
+	void					SetDeltaViewAngles(const idAngles& delta);
 
-	virtual bool			OnLadder			( void ) const;
-	virtual void			OnStateChange		( int channel );
-	virtual void			OnFriendlyFire		( idActor* attacker );
+	bool					HasEnemies(void) const;
+	idActor* ClosestEnemyToPoint(const idVec3& pos, float maxRange = 0.0f, bool returnFirst = false, bool checkPVS = false);
+	idActor* EnemyWithMostHealth();
 
-	virtual void			GetAASLocation( idAAS *aas, idVec3 &pos, int &areaNum ) const;
+	virtual bool			OnLadder(void) const;
+	virtual void			OnStateChange(int channel);
+	virtual void			OnFriendlyFire(idActor* attacker);
 
-	void					Attach( idEntity *ent );
-	idEntity*				FindAttachment( const char* attachmentName );
-	void					HideAttachment( const char* attachmentName );
-	void					ShowAttachment( const char* attachmentName );
-	idEntity*				GetHead() { return head; }
+	virtual void			GetAASLocation(idAAS* aas, idVec3& pos, int& areaNum) const;
 
-	virtual void			Teleport( const idVec3 &origin, const idAngles &angles, idEntity *destination );
+	void					Attach(idEntity* ent);
+	idEntity* FindAttachment(const char* attachmentName);
+	void					HideAttachment(const char* attachmentName);
+	void					ShowAttachment(const char* attachmentName);
+	idEntity* GetHead() { return head; }
 
-	virtual	renderView_t *	GetRenderView();	
+	virtual void			Teleport(const idVec3& origin, const idAngles& angles, idEntity* destination);
+
+	virtual	renderView_t* GetRenderView();
 
 	// Animation
-	int						PlayAnim				( int channel, const char *name, int blendFrames );
-	bool					PlayCycle				( int channel, const char *name, int blendFrames );
-	void					IdleAnim				( int channel, const char *name, int blendFrames );
-	void					OverrideAnim			( int channel );
-	bool					HasAnim					( int channel, const char *name, bool forcePrefix = false );
-	int						GetAnim					( int channel, const char *name, bool forcePrefix = false );
-	bool					AnimDone				( int channel, int blendFrames );
-	
+	int						PlayAnim(int channel, const char* name, int blendFrames);
+	bool					PlayCycle(int channel, const char* name, int blendFrames);
+	void					IdleAnim(int channel, const char* name, int blendFrames);
+	void					OverrideAnim(int channel);
+	bool					HasAnim(int channel, const char* name, bool forcePrefix = false);
+	int						GetAnim(int channel, const char* name, bool forcePrefix = false);
+	bool					AnimDone(int channel, int blendFrames);
+
 	// animation state control
-	void					UpdateAnimState			( void );
-	void					SetAnimState			( int channel, const char *name, int blendFrames = 0, int flags = 0 );
-	void					PostAnimState			( int channel, const char *name, int blendFrames = 0, int delay = 0, int flags = 0 );
-	void					StopAnimState			( int channel );
-	bool					InAnimState				( int channel, const char *name );
-	
-	virtual void			SpawnGibs( const idVec3 &dir, const char *damageDefName );
+	void					UpdateAnimState(void);
+	void					SetAnimState(int channel, const char* name, int blendFrames = 0, int flags = 0);
+	void					PostAnimState(int channel, const char* name, int blendFrames = 0, int delay = 0, int flags = 0);
+	void					StopAnimState(int channel);
+	bool					InAnimState(int channel, const char* name);
 
-// RAVEN BEGIN
-// bdube: added for vehicle
-	bool					IsInVehicle ( void ) const;
-	rvVehicleController&	GetVehicleController ( void );
-	virtual void			GuidedProjectileIncoming( idGuidedProjectile * projectile );
+	virtual void			SpawnGibs(const idVec3& dir, const char* damageDefName);
 
-	bool					DebugFilter	(const idCVar& test) const;
-// RAVEN END
-	virtual bool			IsCrouching				( void ) const {return false;};
+	// RAVEN BEGIN
+	// bdube: added for vehicle
+	bool					IsInVehicle(void) const;
+	rvVehicleController& GetVehicleController(void);
+	virtual void			GuidedProjectileIncoming(idGuidedProjectile* projectile);
 
-	virtual bool			SkipImpulse( idEntity* ent, int id );
+	bool					DebugFilter(const idCVar& test) const;
+	// RAVEN END
+	virtual bool			IsCrouching(void) const { return false; };
+
+	virtual bool			SkipImpulse(idEntity* ent, int id);
 
 	int						lightningNextTime;
 	int						lightningEffects;
@@ -278,7 +278,7 @@ protected:
 	bool					inDamageEvent;		// hacky-ass bool to prevent us from starting a new EV_DamageOverTime in our ::Damage
 
 	bool					use_combat_bbox;	// whether to use the bounding box for combat collision
-	
+
 	// joint handles
 	jointHandle_t			leftEyeJoint;
 	jointHandle_t			rightEyeJoint;
@@ -303,7 +303,7 @@ protected:
 	idAnimState				headAnim;
 	idAnimState				torsoAnim;
 	idAnimState				legsAnim;
-	
+
 	rvStateThread			stateThread;
 
 	idEntityPtr<idAFAttachment>	head;				// safe pointer to attached head
@@ -316,108 +316,108 @@ protected:
 
 	idList<idAttachInfo>	attachments;
 
-	virtual void			Gib( const idVec3 &dir, const char *damageDefName );
-	void					CheckDeathObjectives( void );
+	virtual void			Gib(const idVec3& dir, const char* damageDefName);
+	void					CheckDeathObjectives(void);
 
-// RAVEN BEGIN
-// bdube: vehicles
-	virtual bool			EnterVehicle ( idEntity* vehicle );
-	virtual bool			ExitVehicle	 ( bool force = false );
-// RAVEN END
+	// RAVEN BEGIN
+	// bdube: vehicles
+	virtual bool			EnterVehicle(idEntity* vehicle);
+	virtual bool			ExitVehicle(bool force = false);
+	// RAVEN END
 
-							// removes attachments with "remove" set for when character dies
-	void					RemoveAttachments( void );
-	
-// RAVEN BEGIN
-// bdube: vehicles
+								// removes attachments with "remove" set for when character dies
+	void					RemoveAttachments(void);
+
+	// RAVEN BEGIN
+	// bdube: vehicles
 	rvVehicleController		vehicleController;
-// bdube: flashlights
+	// bdube: flashlights
 	renderLight_t			flashlight;
 	int						flashlightHandle;
 	jointHandle_t			flashlightJoint;
 	idVec3					flashlightOffset;
 
-// bdube: death force
+	// bdube: death force
 	int						deathPushTime;
 	idVec3					deathPushForce;
 	jointHandle_t			deathPushJoint;
 
-	void					FlashlightUpdate	( bool forceOn = false );
-	void					InitDeathPush		( const idVec3& dir, int location, const idDict* damageDict, float pushScale = 1.0f );
-	void					DeathPush			( void );
+	void					FlashlightUpdate(bool forceOn = false);
+	void					InitDeathPush(const idVec3& dir, int location, const idDict* damageDict, float pushScale = 1.0f);
+	void					DeathPush(void);
 
 	// Add some dynamic externals for debugging
-	virtual void			GetDebugInfo		( debugInfoProc_t proc, void* userData );
-// RAVEN END	
+	virtual void			GetDebugInfo(debugInfoProc_t proc, void* userData);
+	// RAVEN END	
 
 protected:
 
-	virtual void			FootStep			( void );
-	virtual void			SetupHead( const char* headDefName = "", idVec3 headOffset = idVec3(0, 0, 0) );
+	virtual void			FootStep(void);
+	virtual void			SetupHead(const char* headDefName = "", idVec3 headOffset = idVec3(0, 0, 0));
 
 private:
-	void					SyncAnimChannels( int channel, int syncToChannel, int blendFrames );
-	void					FinishSetup( void );
-	
-	void					Event_EnableEyeFocus( void );
-	void					Event_DisableEyeFocus( void );
-	void					Event_EnableBlink( void );
-	void					Event_DisableBlink( void );
-	void					Event_Footstep( void );
-	void					Event_EnableWalkIK( void );
-	void					Event_DisableWalkIK( void );
-	void					Event_EnableLegIK( int num );
-	void					Event_DisableLegIK( int num );
-	void					Event_SetAnimPrefix( const char *name );
-	void					Event_LookAtEntity( idEntity *ent, float duration );
-	void					Event_PreventPain( float duration );
-	void					Event_DisablePain( void );
-	void					Event_EnablePain( void );
-	void					Event_StopAnim( int channel, int frames );
-	void					Event_PlayAnim( int channel, const char *name );
-	void					Event_PlayCycle( int channel, const char *name );
-	void					Event_IdleAnim( int channel, const char *name );
-	void					Event_SetSyncedAnimWeight( int channel, int anim, float weight );
-	void					Event_OverrideAnim( int channel );
-	void					Event_EnableAnim( int channel, int blendFrames );
-	void					Event_SetBlendFrames( int channel, int blendFrames );
-	void					Event_GetBlendFrames( int channel );
-	void					Event_HasEnemies( void );
-	void					Event_NextEnemy( idEntity *ent );
-	void					Event_ClosestEnemyToPoint( const idVec3 &pos );
-	void					Event_StopSound( int channel, int netsync );
-	void					Event_GetHead( void );
+	void					SyncAnimChannels(int channel, int syncToChannel, int blendFrames);
+	void					FinishSetup(void);
 
-	void					Event_Teleport		( idVec3 &newPos, idVec3 &newAngles );
-	void					Event_Flashlight	( bool enable );
-	void					Event_EnterVehicle	( idEntity* vehicle );
-	void					Event_ExitVehicle	( bool force );
-	void					Event_PreExitVehicle( bool force );
+	void					Event_EnableEyeFocus(void);
+	void					Event_DisableEyeFocus(void);
+	void					Event_EnableBlink(void);
+	void					Event_DisableBlink(void);
+	void					Event_Footstep(void);
+	void					Event_EnableWalkIK(void);
+	void					Event_DisableWalkIK(void);
+	void					Event_EnableLegIK(int num);
+	void					Event_DisableLegIK(int num);
+	void					Event_SetAnimPrefix(const char* name);
+	void					Event_LookAtEntity(idEntity* ent, float duration);
+	void					Event_PreventPain(float duration);
+	void					Event_DisablePain(void);
+	void					Event_EnablePain(void);
+	void					Event_StopAnim(int channel, int frames);
+	void					Event_PlayAnim(int channel, const char* name);
+	void					Event_PlayCycle(int channel, const char* name);
+	void					Event_IdleAnim(int channel, const char* name);
+	void					Event_SetSyncedAnimWeight(int channel, int anim, float weight);
+	void					Event_OverrideAnim(int channel);
+	void					Event_EnableAnim(int channel, int blendFrames);
+	void					Event_SetBlendFrames(int channel, int blendFrames);
+	void					Event_GetBlendFrames(int channel);
+	void					Event_HasEnemies(void);
+	void					Event_NextEnemy(idEntity* ent);
+	void					Event_ClosestEnemyToPoint(const idVec3& pos);
+	void					Event_StopSound(int channel, int netsync);
+	void					Event_GetHead(void);
 
-	void					Event_SetAnimRate	( float multiplier );
-	void					Event_DamageOverTime ( int endTime, int interval, idEntity *inflictor, idEntity *attacker, idVec3 &dir, const char *damageDefName, const float damageScale, int location );
-	virtual void			Event_DamageOverTimeEffect	( int endTime, int interval, const char *damageDefName );
-	void					Event_JointCrawlEffect ( const char *effectKeyName, float crawlSecs );
+	void					Event_Teleport(idVec3& newPos, idVec3& newAngles);
+	void					Event_Flashlight(bool enable);
+	void					Event_EnterVehicle(idEntity* vehicle);
+	void					Event_ExitVehicle(bool force);
+	void					Event_PreExitVehicle(bool force);
 
-	CLASS_STATES_PROTOTYPE ( idActor );
+	void					Event_SetAnimRate(float multiplier);
+	void					Event_DamageOverTime(int endTime, int interval, idEntity* inflictor, idEntity* attacker, idVec3& dir, const char* damageDefName, const float damageScale, int location);
+	virtual void			Event_DamageOverTimeEffect(int endTime, int interval, const char* damageDefName);
+	void					Event_JointCrawlEffect(const char* effectKeyName, float crawlSecs);
+
+	CLASS_STATES_PROTOTYPE(idActor);
 
 protected:
 
 	// Wait states
-	stateResult_t			State_Wait_LegsAnim		( const stateParms_t& parms );
-	stateResult_t			State_Wait_TorsoAnim	( const stateParms_t& parms );
-	stateResult_t			State_Wait_Frame		( const stateParms_t& parms );
+	stateResult_t			State_Wait_LegsAnim(const stateParms_t& parms);
+	stateResult_t			State_Wait_TorsoAnim(const stateParms_t& parms);
+	stateResult_t			State_Wait_Frame(const stateParms_t& parms);
 
-	void					DisableAnimState		( int channel );
-	void					EnableAnimState			( int channel );
-	idAnimState&			GetAnimState			( int channel );
+	void					DisableAnimState(int channel);
+	void					EnableAnimState(int channel);
+	idAnimState& GetAnimState(int channel);
 };
 
-ID_INLINE bool idActor::IsInVehicle( void ) const {
+ID_INLINE bool idActor::IsInVehicle(void) const {
 	return vehicleController.IsDriving();
 }
 
-ID_INLINE rvVehicleController& idActor::GetVehicleController( void ) {
+ID_INLINE rvVehicleController& idActor::GetVehicleController(void) {
 	return vehicleController;
 }
 

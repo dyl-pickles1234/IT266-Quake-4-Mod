@@ -7,21 +7,21 @@
 class rvGameLogLocal : public rvGameLog {
 public:
 
-	rvGameLogLocal ( void );
+	rvGameLogLocal(void);
 
-	virtual void		Init		( void );
-	virtual void		Shutdown	( void );
+	virtual void		Init(void);
+	virtual void		Shutdown(void);
 
-	virtual void		BeginFrame	( int time );
-	virtual void		EndFrame	( void );
+	virtual void		BeginFrame(int time);
+	virtual void		EndFrame(void);
 
-	virtual	void		Set			( const char* keyword, int value );
-	virtual void		Set			( const char* keyword, float value );
-	virtual void		Set			( const char* keyword, const char* value );
-	virtual void		Set			( const char* keyword, bool value );
-	
-	virtual void		Add			( const char* keyword, int value );
-	virtual void		Add			( const char* keyword, float value );
+	virtual	void		Set(const char* keyword, int value);
+	virtual void		Set(const char* keyword, float value);
+	virtual void		Set(const char* keyword, const char* value);
+	virtual void		Set(const char* keyword, bool value);
+
+	virtual void		Add(const char* keyword, int value);
+	virtual void		Add(const char* keyword, float value);
 
 protected:
 
@@ -30,7 +30,7 @@ protected:
 	idStrList	index;
 	idStrList	frame;
 	idStrList	oldframe;
-	idFile*		file;
+	idFile* file;
 	bool		initialized;
 	idTimer		timer_fps;
 };

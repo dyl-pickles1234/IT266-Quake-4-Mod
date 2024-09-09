@@ -19,30 +19,30 @@ extern const idEventDef EV_IsAtRest;
 
 class idMoveable : public idDamagable {
 public:
-	CLASS_PROTOTYPE( idMoveable );
+	CLASS_PROTOTYPE(idMoveable);
 
-							idMoveable( void );
-							~idMoveable( void );
+	idMoveable(void);
+	~idMoveable(void);
 
-	void					Spawn( void );
+	void					Spawn(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	virtual void			Think( void );
+	virtual void			Think(void);
 
-	virtual void			Hide( void );
-	virtual void			Show( void );
+	virtual void			Hide(void);
+	virtual void			Show(void);
 
-	bool					AllowStep( void ) const;
-	void					EnableDamage( bool enable, float duration );
-	virtual bool			Collide( const trace_t &collision, const idVec3 &velocity );
-	virtual void			Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, const char *damageDefName, const float damageScale, const int location );
-	virtual void			Killed( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
-	virtual void			WriteToSnapshot( idBitMsgDelta &msg ) const;
-	virtual void			ReadFromSnapshot( const idBitMsgDelta &msg );
+	bool					AllowStep(void) const;
+	void					EnableDamage(bool enable, float duration);
+	virtual bool			Collide(const trace_t& collision, const idVec3& velocity);
+	virtual void			Damage(idEntity* inflictor, idEntity* attacker, const idVec3& dir, const char* damageDefName, const float damageScale, const int location);
+	virtual void			Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
+	virtual void			WriteToSnapshot(idBitMsgDelta& msg) const;
+	virtual void			ReadFromSnapshot(const idBitMsgDelta& msg);
 
-	virtual void			AddDamageEffect( const trace_t &collision, const idVec3 &velocity, const char *damageDefName, idEntity* inflictor );
+	virtual void			AddDamageEffect(const trace_t& collision, const idVec3& velocity, const char* damageDefName, idEntity* inflictor);
 
 protected:
 
@@ -52,7 +52,7 @@ protected:
 	int						nextCollideFxTime;		// next time it is ok to spawn collision fx
 	float					minDamageVelocity;		// minimum velocity before moveable applies damage
 	float					maxDamageVelocity;		// velocity at which the maximum damage is applied
-	idCurve_Spline<idVec3> *initialSpline;			// initial spline path the moveable follows
+	idCurve_Spline<idVec3>* initialSpline;			// initial spline path the moveable follows
 	idVec3					initialSplineDir;		// initial relative direction along the spline path
 	bool					unbindOnDeath;			// unbind from master when health drops down to or below zero
 	bool					allowStep;				// allow monsters to step on the object
@@ -60,20 +60,20 @@ protected:
 
 	idEntityPtr<idEntity>	lastAttacker;
 
-	virtual void			ExecuteStage	( void );
+	virtual void			ExecuteStage(void);
 
-	const idMaterial *		GetRenderModelMaterial( void ) const;
-	void					BecomeNonSolid( void );
-	void					InitInitialSpline( int startTime );
-	bool					FollowInitialSplinePath( void );
+	const idMaterial* GetRenderModelMaterial(void) const;
+	void					BecomeNonSolid(void);
+	void					InitInitialSpline(int startTime);
+	bool					FollowInitialSplinePath(void);
 
-	void					Event_Activate( idEntity *activator );
-	void					Event_BecomeNonSolid( void );
-	void					Event_SetOwnerFromSpawnArgs( void );
-	void					Event_IsAtRest( void );
-	void					Event_CanDamage ( float enable );
-	void					Event_SetHealth ( float newHealth );
-	void					Event_RadiusDamage( idEntity *attacker, const char* splash );
+	void					Event_Activate(idEntity* activator);
+	void					Event_BecomeNonSolid(void);
+	void					Event_SetOwnerFromSpawnArgs(void);
+	void					Event_IsAtRest(void);
+	void					Event_CanDamage(float enable);
+	void					Event_SetHealth(float newHealth);
+	void					Event_RadiusDamage(idEntity* attacker, const char* splash);
 };
 
 
@@ -89,18 +89,18 @@ protected:
 class idBarrel : public idMoveable {
 
 public:
-	CLASS_PROTOTYPE( idBarrel );
-							idBarrel();
+	CLASS_PROTOTYPE(idBarrel);
+	idBarrel();
 
-	void					Spawn( void );
+	void					Spawn(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	void					BarrelThink( void );
-	virtual void			Think( void );
-	virtual bool			GetPhysicsToVisualTransform( idVec3 &origin, idMat3 &axis );
-	virtual void			ClientPredictionThink( void );
+	void					BarrelThink(void);
+	virtual void			Think(void);
+	virtual bool			GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis);
+	virtual void			ClientPredictionThink(void);
 
 private:
 	float					radius;					// radius of barrel
@@ -124,23 +124,23 @@ private:
 
 class idExplodingBarrel : public idBarrel {
 public:
-	CLASS_PROTOTYPE( idExplodingBarrel );
+	CLASS_PROTOTYPE(idExplodingBarrel);
 
-							idExplodingBarrel();
-							~idExplodingBarrel();
+	idExplodingBarrel();
+	~idExplodingBarrel();
 
-	void					Spawn( void );
+	void					Spawn(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	virtual void			Think( void );
-	virtual void			Damage( idEntity *inflictor, idEntity *attacker, const idVec3 &dir, 
-								const char *damageDefName, const float damageScale, const int location );
-	virtual void			Killed( idEntity *inflictor, idEntity *attacker, int damage, const idVec3 &dir, int location );
+	virtual void			Think(void);
+	virtual void			Damage(idEntity* inflictor, idEntity* attacker, const idVec3& dir,
+		const char* damageDefName, const float damageScale, const int location);
+	virtual void			Killed(idEntity* inflictor, idEntity* attacker, int damage, const idVec3& dir, int location);
 
-	virtual void			WriteToSnapshot( idBitMsgDelta &msg ) const;
-	virtual void			ReadFromSnapshot( const idBitMsgDelta &msg );
+	virtual void			WriteToSnapshot(idBitMsgDelta& msg) const;
+	virtual void			ReadFromSnapshot(const idBitMsgDelta& msg);
 
 private:
 	typedef enum {
@@ -164,11 +164,11 @@ private:
 
 	int						explodeFinishTime;
 
-	void					AddIPS( const char *name, bool burn );
-	void					AddLight( const char *name , bool burn );
-	void					ExplodingEffects( void );
+	void					AddIPS(const char* name, bool burn);
+	void					AddLight(const char* name, bool burn);
+	void					ExplodingEffects(void);
 
-	void					Event_Activate( idEntity *activator );
+	void					Event_Activate(idEntity* activator);
 	void					Event_Respawn();
 	void					Event_Explode();
 	void					Event_TriggerTargets();

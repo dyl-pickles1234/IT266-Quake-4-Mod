@@ -3,8 +3,8 @@
 
 AI_Move.h
 
-This file has all movement related typedefs, enums, flags, and structures.  It 
-and its sister CPP file were split from AI.h and AI.cpp in order to prevent 
+This file has all movement related typedefs, enums, flags, and structures.  It
+and its sister CPP file were split from AI.h and AI.cpp in order to prevent
 merge conflicts and to make further changes to the system possible.
 
 ===============================================================================
@@ -30,7 +30,7 @@ typedef enum {
 	MOVEDIR_RIGHT,
 	MOVEDIR_MAX
 } aiMoveDir_t;
-extern const char* aiMoveDirectionString [ MOVEDIR_MAX ];
+extern const char* aiMoveDirectionString[MOVEDIR_MAX];
 
 /*
 =====================
@@ -63,7 +63,7 @@ typedef enum {
 	NUM_NONMOVING_COMMANDS,
 
 	MOVE_TO_ENEMY = NUM_NONMOVING_COMMANDS,
-	MOVE_TO_ENTITY, 
+	MOVE_TO_ENTITY,
 	MOVE_TO_ATTACK,
 	MOVE_TO_HELPER,
 	MOVE_TO_TETHER,
@@ -76,7 +76,7 @@ typedef enum {
 	MOVE_WANDER,
 	MOVE_RV_PLAYBACK,
 	NUM_MOVE_COMMANDS
-	
+
 } aiMoveCommand_t;
 
 /*
@@ -100,7 +100,7 @@ typedef enum {
 	MOVE_STATUS_DISABLED,
 	NUM_MOVE_STATUS,
 } moveStatus_t;
-extern const char* aiMoveStatusString[ NUM_MOVE_STATUS ];
+extern const char* aiMoveStatusString[NUM_MOVE_STATUS];
 
 /*
 =====================
@@ -108,11 +108,11 @@ stopEvent_t - used by path prediction
 =====================
 */
 typedef enum {
-	SE_BLOCKED			= BIT(0),
-	SE_ENTER_LEDGE_AREA	= BIT(1),
-	SE_ENTER_OBSTACLE	= BIT(2),
-	SE_FALL				= BIT(3),
-	SE_LAND				= BIT(4)
+	SE_BLOCKED = BIT(0),
+	SE_ENTER_LEDGE_AREA = BIT(1),
+	SE_ENTER_OBSTACLE = BIT(2),
+	SE_FALL = BIT(3),
+	SE_LAND = BIT(4)
 } stopEvent_t;
 
 /*
@@ -122,11 +122,11 @@ obstaclePath_s
 */
 typedef struct obstaclePath_s {
 	idVec3				seekPos;					// seek position avoiding obstacles
-	idEntity *			firstObstacle;				// if != NULL the first obstacle along the path
+	idEntity* firstObstacle;				// if != NULL the first obstacle along the path
 	idVec3				startPosOutsideObstacles;	// start position outside obstacles
-	idEntity *			startPosObstacle;			// if != NULL the obstacle containing the start position 
+	idEntity* startPosObstacle;			// if != NULL the obstacle containing the start position 
 	idVec3				seekPosOutsideObstacles;	// seek position outside obstacles
-	idEntity *			seekPosObstacle;			// if != NULL the obstacle containing the seek position 
+	idEntity* seekPosObstacle;			// if != NULL the obstacle containing the seek position 
 	// RAVEN BEGIN
 	// cdr: Alternate Routes Bug
 	idList<idEntity*>	allObstacles;
@@ -144,7 +144,7 @@ typedef struct predictedPath_s {
 	idVec3				endNormal;					// normal of blocking surface
 	int					endTime;					// time predicted
 	int					endEvent;					// event that stopped the prediction
-	const idEntity *	blockingEntity;				// entity that blocks the movement
+	const idEntity* blockingEntity;				// entity that blocks the movement
 } predictedPath_t;
 
 
@@ -154,7 +154,7 @@ pathSeek_s
 =====================
 */
 typedef struct pathSeek_s {
-	idReachability*		reach;
+	idReachability* reach;
 	idVec3				seekPos;
 } pathSeek_t;
 
@@ -167,46 +167,46 @@ idMoveState
 */
 class idMoveState {
 public:
-							idMoveState();
+	idMoveState();
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
-	void					Spawn( idDict &spawnArgs );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
+	void					Spawn(idDict& spawnArgs);
 
 
 	struct movementFlags_s {
 
 		// current state
-		bool		done				:1;
-		bool		moving				:1;
-		bool		crouching			:1;		// is currently crouching?
-		bool		running				:1;		// is currently running?
-		bool		blocked				:1;
-		bool		obstacleInPath		:1;
-		bool		goalUnreachable		:1;
-		bool		onGround			:1;
-		bool		flyTurning			:1;		// lean into turns when flying
+		bool		done : 1;
+		bool		moving : 1;
+		bool		crouching : 1;		// is currently crouching?
+		bool		running : 1;		// is currently running?
+		bool		blocked : 1;
+		bool		obstacleInPath : 1;
+		bool		goalUnreachable : 1;
+		bool		onGround : 1;
+		bool		flyTurning : 1;		// lean into turns when flying
 
 		// ideal state
-		bool		idealRunning		:1;		// what we want running to be
+		bool		idealRunning : 1;		// what we want running to be
 
 
 		// various enable / disable flags
-		bool		disabled			:1;		// is movement disabled?  (this includes turning)
-		bool		ignoreObstacles		:1;		// don't check for obsticles in path
+		bool		disabled : 1;		// is movement disabled?  (this includes turning)
+		bool		ignoreObstacles : 1;		// don't check for obsticles in path
 
-		bool		allowDirectional	:1;		// allows directional movement (ie. running sideways, backwards)
-		bool		allowAnimMove		:1;		// allows any animation movement
-		bool		allowPrevAnimMove	:1;		// allows slide move if current animmove has no motion extraction on it (smooth transitions)
-		bool		allowHiddenMove		:1;		// allows character to still move around while hidden
-		bool		allowPushMovables	:1;		// allows the articulated figure to push moveable objects
-		bool		allowSlideToGoal	:1;		// allows the AI to excactly slide to the goal position if close enough
+		bool		allowDirectional : 1;		// allows directional movement (ie. running sideways, backwards)
+		bool		allowAnimMove : 1;		// allows any animation movement
+		bool		allowPrevAnimMove : 1;		// allows slide move if current animmove has no motion extraction on it (smooth transitions)
+		bool		allowHiddenMove : 1;		// allows character to still move around while hidden
+		bool		allowPushMovables : 1;		// allows the articulated figure to push moveable objects
+		bool		allowSlideToGoal : 1;		// allows the AI to excactly slide to the goal position if close enough
 
-		bool		noRun				:1;		// force the actor to walk
-		bool		noWalk				:1;		// force the actor to run
-		bool		noTurn				:1;		// can the ai turn?
-		bool		noGravity			:1;		// dont use gravity
-		bool		noRangedInterrupt	:1;		// dont stop halfway to attack position just because you have a clear shot
+		bool		noRun : 1;		// force the actor to walk
+		bool		noWalk : 1;		// force the actor to run
+		bool		noTurn : 1;		// can the ai turn?
+		bool		noGravity : 1;		// dont use gravity
+		bool		noRangedInterrupt : 1;		// dont stop halfway to attack position just because you have a clear shot
 	} fl;
 
 

@@ -26,9 +26,9 @@ void idLagometer::Draw()
 	const idVec4 colorRed(1.0f, 0.0f, 0.0f, 1.0f);
 	const idVec4 colorWhite(1.0f, 1.0f, 1.0f, 1.0f);
 
-	const idMaterial *whiteMaterial = declManager->FindMaterial("_white");
+	const idMaterial* whiteMaterial = declManager->FindMaterial("_white");
 
-	for (int x=0; x<LAGOMETER_HISTORY; x++)
+	for (int x = 0; x < LAGOMETER_HISTORY; x++)
 	{
 		int i = (frameIndex + 1 + x) % LAGOMETER_HISTORY;
 
@@ -52,8 +52,8 @@ void idLagometer::Update(int ahead, int dupe)
 {
 	frameIndex = (frameIndex + 1) % LAGOMETER_HISTORY;
 
-	aheadOfServer[frameIndex] = 2 * idMath::ClampInt(-10, 5, 
-									floorf( (float)ahead / net_clientLagOMeterResolution.GetInteger() ));
+	aheadOfServer[frameIndex] = 2 * idMath::ClampInt(-10, 5,
+		floorf((float)ahead / net_clientLagOMeterResolution.GetInteger()));
 
-	dupeUserCmds[frameIndex] = 2 * Min( 6, dupe );
-} 
+	dupeUserCmds[frameIndex] = 2 * Min(6, dupe);
+}

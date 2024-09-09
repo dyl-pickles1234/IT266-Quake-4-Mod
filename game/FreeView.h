@@ -11,28 +11,28 @@ public:
 	~idFreeView();
 
 	// start free flying from this client's current position
-	void SetFreeView( int clientNum );
+	void SetFreeView(int clientNum);
 
 	// pick a random spawn in the map
-	void PickRandomSpawn( void );
-	
+	void PickRandomSpawn(void);
+
 	// update view and position
-	void Fly( const usercmd_t &ucmd );
+	void Fly(const usercmd_t& ucmd);
 
-	void Draw( void );
+	void Draw(void);
 
-	bool Initialized( void ) const { return physics != NULL; }
+	bool Initialized(void) const { return physics != NULL; }
 
-	void Shutdown( void );
+	void Shutdown(void);
 
-	const idVec3 & GetOrigin( void );
+	const idVec3& GetOrigin(void);
 
 private:
 
-	void Setup( void );
+	void Setup(void);
 
 	renderView_t		view;
-	idPhysics_Player	*physics;
+	idPhysics_Player* physics;
 	idAngles			viewAngles;
 
 	bool				snapAngle;

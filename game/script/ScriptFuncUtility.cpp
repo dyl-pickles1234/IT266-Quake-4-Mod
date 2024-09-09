@@ -18,8 +18,8 @@ rvScriptFuncUtility::rvScriptFuncUtility() {
 rvScriptFuncUtility::rvScriptFuncUtility
 ================
 */
-rvScriptFuncUtility::rvScriptFuncUtility( const rvScriptFuncUtility* sfu ) {
-	Assign( sfu );
+rvScriptFuncUtility::rvScriptFuncUtility(const rvScriptFuncUtility* sfu) {
+	Assign(sfu);
 }
 
 /*
@@ -27,8 +27,8 @@ rvScriptFuncUtility::rvScriptFuncUtility( const rvScriptFuncUtility* sfu ) {
 rvScriptFuncUtility::rvScriptFuncUtility
 ================
 */
-rvScriptFuncUtility::rvScriptFuncUtility( const rvScriptFuncUtility& sfu ) {
-	Assign( &sfu );
+rvScriptFuncUtility::rvScriptFuncUtility(const rvScriptFuncUtility& sfu) {
+	Assign(&sfu);
 }
 
 /*
@@ -36,8 +36,8 @@ rvScriptFuncUtility::rvScriptFuncUtility( const rvScriptFuncUtility& sfu ) {
 rvScriptFuncUtility::rvScriptFuncUtility
 ================
 */
-rvScriptFuncUtility::rvScriptFuncUtility( const char* source ) {
-	Init( source );
+rvScriptFuncUtility::rvScriptFuncUtility(const char* source) {
+	Init(source);
 }
 
 /*
@@ -45,8 +45,8 @@ rvScriptFuncUtility::rvScriptFuncUtility( const char* source ) {
 rvScriptFuncUtility::rvScriptFuncUtility
 ================
 */
-rvScriptFuncUtility::rvScriptFuncUtility( const idCmdArgs& args ) {
-	Init( args );
+rvScriptFuncUtility::rvScriptFuncUtility(const idCmdArgs& args) {
+	Init(args);
 }
 
 /*
@@ -54,14 +54,14 @@ rvScriptFuncUtility::rvScriptFuncUtility( const idCmdArgs& args ) {
 rvScriptFuncUtility::Init
 ================
 */
-sfuReturnType rvScriptFuncUtility::Init( const char* source ) {
+sfuReturnType rvScriptFuncUtility::Init(const char* source) {
 	Clear();
 
-	if( !source || !source[0] ) {
+	if (!source || !source[0]) {
 		return SFU_NOFUNC;
 	}
 
-	idStr::Split( source, parms, ' ' );
+	idStr::Split(source, parms, ' ');
 	return Init();
 }
 
@@ -70,12 +70,12 @@ sfuReturnType rvScriptFuncUtility::Init( const char* source ) {
 rvScriptFuncUtility::Init
 ================
 */
-sfuReturnType rvScriptFuncUtility::Init( const idCmdArgs& args ) {
+sfuReturnType rvScriptFuncUtility::Init(const idCmdArgs& args) {
 	Clear();
 
 	//Start at index 1 so we ignore 'call'
-	for( int ix = 1; ix < args.Argc(); ++ix ) {
-		InsertString( args.Argv(ix), ix );
+	for (int ix = 1; ix < args.Argc(); ++ix) {
+		InsertString(args.Argv(ix), ix);
 	}
 
 	return Init();
@@ -87,19 +87,21 @@ rvScriptFuncUtility::Init
 ================
 */
 sfuReturnType rvScriptFuncUtility::Init() {
-	assert( parms.Num() );
+	assert(parms.Num());
 
-	func = FindFunction( GetParm(0) );
-	if( func ) {
-		RemoveIndex( 0 );// remove Function name
+	func = FindFunction(GetParm(0));
+	if (func) {
+		RemoveIndex(0);// remove Function name
 		returnKey.Clear();
-	} else if( parms.Num() >= 2 ) {
-		returnKey = GetParm( 0 );
-		RemoveIndex( 0 );// remove key name
-		func = FindFunction( GetParm(0) );
-		RemoveIndex( 0 );// remove Function name
-	} else {
-		gameLocal.Warning( "Unable to find function %s in rvScriptFuncUtility::Init\n", parms[0].c_str() );
+	}
+	else if (parms.Num() >= 2) {
+		returnKey = GetParm(0);
+		RemoveIndex(0);// remove key name
+		func = FindFunction(GetParm(0));
+		RemoveIndex(0);// remove Function name
+	}
+	else {
+		gameLocal.Warning("Unable to find function %s in rvScriptFuncUtility::Init\n", parms[0].c_str());
 	}
 
 	return func != NULL ? SFU_OK : SFU_ERROR;
@@ -120,20 +122,20 @@ void rvScriptFuncUtility::Clear() {
 rvScriptFuncUtility::Save
 ================
 */
-void rvScriptFuncUtility::Save( idSaveGame *savefile ) const {
+void rvScriptFuncUtility::Save(idSaveGame* savefile) const {
 	bool validFunc = GetFunc() != NULL;
-	savefile->WriteBool( validFunc );
-	if( !validFunc ) {
+	savefile->WriteBool(validFunc);
+	if (!validFunc) {
 		return;
 	}
-	
-	savefile->WriteString( GetReturnKey() );
 
-	savefile->WriteString( GetFunc()->Name() );
+	savefile->WriteString(GetReturnKey());
 
-	savefile->WriteInt( NumParms() );
-	for( int ix = 0; ix < NumParms(); ++ix ) {
-		savefile->WriteString( func->Name() );
+	savefile->WriteString(GetFunc()->Name());
+
+	savefile->WriteInt(NumParms());
+	for (int ix = 0; ix < NumParms(); ++ix) {
+		savefile->WriteString(func->Name());
 	}
 }
 
@@ -142,40 +144,40 @@ void rvScriptFuncUtility::Save( idSaveGame *savefile ) const {
 rvScriptFuncUtility::Restore
 ================
 */
-void rvScriptFuncUtility::Restore( idRestoreGame *savefile ) {
+void rvScriptFuncUtility::Restore(idRestoreGame* savefile) {
 	idStr value;
 	idStr element;
 	int numParms = 0;
 	bool validFunc = false;
 
-	savefile->ReadBool( validFunc );
-	if( !validFunc ) {
+	savefile->ReadBool(validFunc);
+	if (!validFunc) {
 		return;
 	}
 
-	savefile->ReadString( element );
-	if( element.Length() ) {
+	savefile->ReadString(element);
+	if (element.Length()) {
 		value += element;
 		value += ' ';
 	}
 
-	savefile->ReadString( element );
-	if( element.Length() ) {
+	savefile->ReadString(element);
+	if (element.Length()) {
 		value += element;
 		value += ' ';
 	}
 
-	savefile->ReadInt( numParms );
-	for( int ix = 0; ix < numParms; ++ix ) {
-		savefile->ReadString( element );
+	savefile->ReadInt(numParms);
+	for (int ix = 0; ix < numParms; ++ix) {
+		savefile->ReadString(element);
 		value += element;
 		value += ' ';
 	}
 
-	value.StripTrailing( ' ' );
+	value.StripTrailing(' ');
 	sfuReturnType status = Init(value.c_str());
-	if ( status != SFU_OK ) {
-		assert( 0 );
+	if (status != SFU_OK) {
+		assert(0);
 	}
 }
 
@@ -202,8 +204,8 @@ bool rvScriptFuncUtility::ReturnsAVal() const {
 rvScriptFuncUtility::GetParm
 ================
 */
-idTypeDef* rvScriptFuncUtility::GetParmType( int index ) const {
-	return (func && func->type) ? func->type->GetParmType( index ) : NULL;
+idTypeDef* rvScriptFuncUtility::GetParmType(int index) const {
+	return (func && func->type) ? func->type->GetParmType(index) : NULL;
 }
 
 /*
@@ -220,7 +222,7 @@ idTypeDef* rvScriptFuncUtility::GetReturnType() const {
 rvScriptFuncUtility::SetFunction
 ================
 */
-void rvScriptFuncUtility::SetFunction( const function_t* func ) {
+void rvScriptFuncUtility::SetFunction(const function_t* func) {
 	this->func = func;
 }
 
@@ -229,7 +231,7 @@ void rvScriptFuncUtility::SetFunction( const function_t* func ) {
 rvScriptFuncUtility::SetParms
 ================
 */
-void rvScriptFuncUtility::SetParms( const idList<idStr>& parms ) {
+void rvScriptFuncUtility::SetParms(const idList<idStr>& parms) {
 	this->parms = parms;
 }
 
@@ -238,8 +240,8 @@ void rvScriptFuncUtility::SetParms( const idList<idStr>& parms ) {
 rvScriptFuncUtility::GetParm
 ================
 */
-const char* rvScriptFuncUtility::GetParm( int index ) const {
-	return parms[ index ].c_str();
+const char* rvScriptFuncUtility::GetParm(int index) const {
+	return parms[index].c_str();
 }
 
 /*
@@ -248,7 +250,7 @@ rvScriptFuncUtility::GetFuncName
 ================
 */
 const char* rvScriptFuncUtility::GetFuncName() const {
-	if( !func ) {
+	if (!func) {
 		return NULL;
 	}
 
@@ -260,8 +262,8 @@ const char* rvScriptFuncUtility::GetFuncName() const {
 rvScriptFuncUtility::InsertInt
 ================
 */
-void rvScriptFuncUtility::InsertInt( int parm, int index ) {
-	InsertString( va("%d", parm), index );
+void rvScriptFuncUtility::InsertInt(int parm, int index) {
+	InsertString(va("%d", parm), index);
 }
 
 /*
@@ -269,8 +271,8 @@ void rvScriptFuncUtility::InsertInt( int parm, int index ) {
 rvScriptFuncUtility::InsertFloat
 ================
 */
-void rvScriptFuncUtility::InsertFloat( float parm, int index ) {
-	InsertString( va("%f", parm), index );
+void rvScriptFuncUtility::InsertFloat(float parm, int index) {
+	InsertString(va("%f", parm), index);
 }
 
 /*
@@ -278,8 +280,8 @@ void rvScriptFuncUtility::InsertFloat( float parm, int index ) {
 rvScriptFuncUtility::InsertVec3
 ================
 */
-void rvScriptFuncUtility::InsertVec3( const idVec3& parm, int index ) {
-	InsertString( parm.ToString(), index );
+void rvScriptFuncUtility::InsertVec3(const idVec3& parm, int index) {
+	InsertString(parm.ToString(), index);
 }
 
 /*
@@ -287,10 +289,10 @@ void rvScriptFuncUtility::InsertVec3( const idVec3& parm, int index ) {
 rvScriptFuncUtility::InsertEntity
 ================
 */
-void rvScriptFuncUtility::InsertEntity( const idEntity* parm, int index ) {
-	assert( parm );
+void rvScriptFuncUtility::InsertEntity(const idEntity* parm, int index) {
+	assert(parm);
 
-	InsertString( parm->GetName(), index );
+	InsertString(parm->GetName(), index);
 }
 
 /*
@@ -298,10 +300,10 @@ void rvScriptFuncUtility::InsertEntity( const idEntity* parm, int index ) {
 rvScriptFuncUtility::InsertString
 ================
 */
-void rvScriptFuncUtility::InsertString( const char* parm, int index ) {
-	assert( parm );
+void rvScriptFuncUtility::InsertString(const char* parm, int index) {
+	assert(parm);
 
-	parms.Insert( parm, index );
+	parms.Insert(parm, index);
 }
 
 /*
@@ -309,8 +311,8 @@ void rvScriptFuncUtility::InsertString( const char* parm, int index ) {
 rvScriptFuncUtility::InsertBool
 ================
 */
-void rvScriptFuncUtility::InsertBool( bool parm, int index ) {
-	InsertInt( (int)parm, index );
+void rvScriptFuncUtility::InsertBool(bool parm, int index) {
+	InsertInt((int)parm, index);
 }
 
 /*
@@ -318,8 +320,8 @@ void rvScriptFuncUtility::InsertBool( bool parm, int index ) {
 rvScriptFuncUtility::RemoveIndex
 ================
 */
-void rvScriptFuncUtility::RemoveIndex( int index ) {
-	parms.RemoveIndex( index );
+void rvScriptFuncUtility::RemoveIndex(int index) {
+	parms.RemoveIndex(index);
 }
 
 /*
@@ -327,14 +329,14 @@ void rvScriptFuncUtility::RemoveIndex( int index ) {
 rvScriptFuncUtility::FindFunction
 ================
 */
-const function_t* rvScriptFuncUtility::FindFunction( const char* name ) const {
-	idTypeDef* type = gameLocal.program.FindType( name );
-	if( type ) {//Find based on type
-		return gameLocal.program.FindFunction( name, type );
+const function_t* rvScriptFuncUtility::FindFunction(const char* name) const {
+	idTypeDef* type = gameLocal.program.FindType(name);
+	if (type) {//Find based on type
+		return gameLocal.program.FindFunction(name, type);
 	}
 
 	//Find based on scope
-	return gameLocal.program.FindFunction( name );
+	return gameLocal.program.FindFunction(name);
 }
 
 /*
@@ -342,28 +344,28 @@ const function_t* rvScriptFuncUtility::FindFunction( const char* name ) const {
 rvScriptFuncUtility::CallFunc
 ================
 */
-void rvScriptFuncUtility::CallFunc( idDict* returnDict ) const {
+void rvScriptFuncUtility::CallFunc(idDict* returnDict) const {
 	idTypeDef* type = NULL;
 
-	if( !Valid() ) {
+	if (!Valid()) {
 		return;
 	}
 
 	idThread* thread = new idThread();
-	if( !thread ) {
+	if (!thread) {
 		return;
 	}
 
 	thread->ClearStack();
-	for( int ix = 0; ix < NumParms(); ++ix ) {
-		type = GetParmType( ix );
-		type->PushOntoStack( thread, GetParm(ix) );
+	for (int ix = 0; ix < NumParms(); ++ix) {
+		type = GetParmType(ix);
+		type->PushOntoStack(thread, GetParm(ix));
 	}
 
-	thread->CallFunction( func, false );
+	thread->CallFunction(func, false);
 
-	if( thread->Execute() && returnDict && ReturnsAVal() ) {
-		returnDict->Set( GetReturnKey(), GetReturnType()->GetReturnedValAsString(gameLocal.program) );
+	if (thread->Execute() && returnDict && ReturnsAVal()) {
+		returnDict->Set(GetReturnKey(), GetReturnType()->GetReturnedValAsString(gameLocal.program));
 	}
 }
 
@@ -373,15 +375,15 @@ rvScriptFuncUtility::Valid
 ================
 */
 bool rvScriptFuncUtility::Valid() const {
-//#if _DEBUG
+	//#if _DEBUG
 	idTypeDef* type = NULL;
 
-	if( !GetFunc() ) {
+	if (!GetFunc()) {
 		return false;
 	}
 
-	if( GetFunc()->eventdef ) {
-		gameLocal.Warning( "Function, %s, is an event\n", GetFunc()->Name() );
+	if (GetFunc()->eventdef) {
+		gameLocal.Warning("Function, %s, is an event\n", GetFunc()->Name());
 		return false;
 	}
 
@@ -391,19 +393,19 @@ bool rvScriptFuncUtility::Valid() const {
 	//	return false;
 	//}
 
-	for( int ix = 0; ix < NumParms(); ++ix ) {
-		type = GetParmType( ix );
-		if( !type->IsValid( GetParm(ix) ) ) {
-			gameLocal.Warning( "(Func: %s) Parm '%s' doesn't match expected type '%s'\n", GetFunc()->Name(), GetParm(ix), type->Name() );
+	for (int ix = 0; ix < NumParms(); ++ix) {
+		type = GetParmType(ix);
+		if (!type->IsValid(GetParm(ix))) {
+			gameLocal.Warning("(Func: %s) Parm '%s' doesn't match expected type '%s'\n", GetFunc()->Name(), GetParm(ix), type->Name());
 			return false;
 		}
 	}
 
-	if( returnKey.Length() && !ReturnsAVal() ) {
-		gameLocal.Warning( "Expecting return val from function %s which doesn't return one\n", func->Name() );
+	if (returnKey.Length() && !ReturnsAVal()) {
+		gameLocal.Warning("Expecting return val from function %s which doesn't return one\n", func->Name());
 		return false;
 	}
-//#endif
+	//#endif
 
 	return true;
 }
@@ -413,8 +415,8 @@ bool rvScriptFuncUtility::Valid() const {
 rvScriptFuncUtility::Assign
 ================
 */
-rvScriptFuncUtility& rvScriptFuncUtility::Assign( const rvScriptFuncUtility* sfu ) {
-	assert( sfu );
+rvScriptFuncUtility& rvScriptFuncUtility::Assign(const rvScriptFuncUtility* sfu) {
+	assert(sfu);
 	func = sfu->func;
 	parms = sfu->parms;
 	returnKey = sfu->returnKey;
@@ -427,8 +429,8 @@ rvScriptFuncUtility& rvScriptFuncUtility::Assign( const rvScriptFuncUtility* sfu
 rvScriptFuncUtility::operator=
 ================
 */
-rvScriptFuncUtility& rvScriptFuncUtility::operator=( const rvScriptFuncUtility* sfu ) {
-	return Assign( sfu );
+rvScriptFuncUtility& rvScriptFuncUtility::operator=(const rvScriptFuncUtility* sfu) {
+	return Assign(sfu);
 }
 
 /*
@@ -436,8 +438,8 @@ rvScriptFuncUtility& rvScriptFuncUtility::operator=( const rvScriptFuncUtility* 
 rvScriptFuncUtility::operator=
 ================
 */
-rvScriptFuncUtility& rvScriptFuncUtility::operator=( const rvScriptFuncUtility& sfu ) {
-	return Assign( &sfu );
+rvScriptFuncUtility& rvScriptFuncUtility::operator=(const rvScriptFuncUtility& sfu) {
+	return Assign(&sfu);
 }
 
 /*
@@ -445,8 +447,8 @@ rvScriptFuncUtility& rvScriptFuncUtility::operator=( const rvScriptFuncUtility& 
 rvScriptFuncUtility::IsEqualTo
 ================
 */
-bool rvScriptFuncUtility::IsEqualTo( const rvScriptFuncUtility* sfu ) const {
-	assert( sfu );
+bool rvScriptFuncUtility::IsEqualTo(const rvScriptFuncUtility* sfu) const {
+	assert(sfu);
 	return GetFunc() == sfu->GetFunc();
 }
 
@@ -455,8 +457,8 @@ bool rvScriptFuncUtility::IsEqualTo( const rvScriptFuncUtility* sfu ) const {
 rvScriptFuncUtility::operator==
 ================
 */
-bool rvScriptFuncUtility::operator==( const rvScriptFuncUtility* sfu ) const {
-	return IsEqualTo( sfu );
+bool rvScriptFuncUtility::operator==(const rvScriptFuncUtility* sfu) const {
+	return IsEqualTo(sfu);
 }
 
 /*
@@ -464,6 +466,6 @@ bool rvScriptFuncUtility::operator==( const rvScriptFuncUtility* sfu ) const {
 rvScriptFuncUtility::operator==
 ================
 */
-bool rvScriptFuncUtility::operator==( const rvScriptFuncUtility& sfu ) const {
-	return IsEqualTo( &sfu );
+bool rvScriptFuncUtility::operator==(const rvScriptFuncUtility& sfu) const {
+	return IsEqualTo(&sfu);
 }

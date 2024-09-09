@@ -15,18 +15,18 @@ rvClientAFEntity
 ===============================================================================
 */
 
-CLASS_DECLARATION( rvAnimatedClientEntity, rvClientAFEntity )
+CLASS_DECLARATION(rvAnimatedClientEntity, rvClientAFEntity)
 END_CLASS
 
-static const float BOUNCE_SOUND_MIN_VELOCITY	= 80.0f;
-static const float BOUNCE_SOUND_MAX_VELOCITY	= 200.0f;
+static const float BOUNCE_SOUND_MIN_VELOCITY = 80.0f;
+static const float BOUNCE_SOUND_MAX_VELOCITY = 200.0f;
 
 /*
 ================
 rvClientAFEntity::rvClientAFEntity
 ================
 */
-rvClientAFEntity::rvClientAFEntity( void ) {
+rvClientAFEntity::rvClientAFEntity(void) {
 	combatModel = NULL;
 	combatModelContents = 0;
 	nextSoundTime = 0;
@@ -40,7 +40,7 @@ rvClientAFEntity::rvClientAFEntity( void ) {
 idAFEntity_Base::~idAFEntity_Base
 ================
 */
-rvClientAFEntity::~rvClientAFEntity( void ) {
+rvClientAFEntity::~rvClientAFEntity(void) {
 	delete		combatModel;
 	combatModel = NULL;
 }
@@ -50,10 +50,10 @@ rvClientAFEntity::~rvClientAFEntity( void ) {
 rvClientAFEntity::Spawn
 ================
 */
-void rvClientAFEntity::Spawn( void ) {
-	spawnOrigin		= worldOrigin;
-	spawnAxis		= worldAxis;
-	nextSoundTime	= 0;
+void rvClientAFEntity::Spawn(void) {
+	spawnOrigin = worldOrigin;
+	spawnAxis = worldAxis;
+	nextSoundTime = 0;
 
 	//if ( !LoadAF() ) {
 	//	gameLocal.Error( "Couldn't load af file on entity %d", entityNumber );
@@ -72,36 +72,36 @@ void rvClientAFEntity::Spawn( void ) {
 rvClientAFEntity::LoadAF
 ================
 */
-bool rvClientAFEntity::LoadAF( const char* keyname ) {
+bool rvClientAFEntity::LoadAF(const char* keyname) {
 	idStr fileName;
 
-	if ( !keyname || !*keyname ) {
+	if (!keyname || !*keyname) {
 		keyname = "articulatedFigure";
 	}
 
-	if ( !spawnArgs.GetString( keyname, "*unknown*", fileName ) ) {
+	if (!spawnArgs.GetString(keyname, "*unknown*", fileName)) {
 		return false;
 	}
 
-	af.SetAnimator( GetAnimator() );
-	
-	idDict args = gameLocal.entities[ ENTITYNUM_CLIENT ]->spawnArgs;
-	gameLocal.entities[ ENTITYNUM_CLIENT ]->spawnArgs = spawnArgs;
+	af.SetAnimator(GetAnimator());
 
-	if ( !af.Load( gameLocal.entities[ ENTITYNUM_CLIENT ], fileName ) ) {
-		gameLocal.Error( "rvClientAFEntity::LoadAF: Couldn't load af file '%s' on client entity %d", fileName.c_str(), entityNumber );
+	idDict args = gameLocal.entities[ENTITYNUM_CLIENT]->spawnArgs;
+	gameLocal.entities[ENTITYNUM_CLIENT]->spawnArgs = spawnArgs;
+
+	if (!af.Load(gameLocal.entities[ENTITYNUM_CLIENT], fileName)) {
+		gameLocal.Error("rvClientAFEntity::LoadAF: Couldn't load af file '%s' on client entity %d", fileName.c_str(), entityNumber);
 	}
-	gameLocal.entities[ ENTITYNUM_CLIENT ]->spawnArgs = args;
+	gameLocal.entities[ENTITYNUM_CLIENT]->spawnArgs = args;
 
 	af.Start();
 
-	af.GetPhysics()->Rotate( spawnAxis.ToRotation() );
-	af.GetPhysics()->Translate( spawnOrigin );
+	af.GetPhysics()->Rotate(spawnAxis.ToRotation());
+	af.GetPhysics()->Translate(spawnOrigin);
 
-	LoadState( spawnArgs );
+	LoadState(spawnArgs);
 
 	af.UpdateAnimation();
-	animator.CreateFrame( gameLocal.time, true );
+	animator.CreateFrame(gameLocal.time, true);
 	UpdateVisuals();
 
 	return true;
@@ -112,7 +112,7 @@ bool rvClientAFEntity::LoadAF( const char* keyname ) {
 rvClientAFEntity::Think
 ================
 */
-void rvClientAFEntity::Think( void ) {
+void rvClientAFEntity::Think(void) {
 	RunPhysics();
 	UpdateAnimation();
 
@@ -125,8 +125,8 @@ void rvClientAFEntity::Think( void ) {
 rvClientAFEntity::BodyForClipModelId
 ================
 */
-int rvClientAFEntity::BodyForClipModelId( int id ) const {
-	return af.BodyForClipModelId( id );
+int rvClientAFEntity::BodyForClipModelId(int id) const {
+	return af.BodyForClipModelId(id);
 }
 
 /*
@@ -134,31 +134,31 @@ int rvClientAFEntity::BodyForClipModelId( int id ) const {
 rvClientAFEntity::SaveState
 ================
 */
-void rvClientAFEntity::SaveState( idDict &args ) const {
-	const idKeyValue *kv;
+void rvClientAFEntity::SaveState(idDict& args) const {
+	const idKeyValue* kv;
 
 	// save the ragdoll pose
-	af.SaveState( args );
+	af.SaveState(args);
 
 	// save all the bind constraints
-	kv = spawnArgs.MatchPrefix( "bindConstraint ", NULL );
-	while ( kv ) {
-		args.Set( kv->GetKey(), kv->GetValue() );
-		kv = spawnArgs.MatchPrefix( "bindConstraint ", kv );
+	kv = spawnArgs.MatchPrefix("bindConstraint ", NULL);
+	while (kv) {
+		args.Set(kv->GetKey(), kv->GetValue());
+		kv = spawnArgs.MatchPrefix("bindConstraint ", kv);
 	}
 
 	// save the bind if it exists
-	kv = spawnArgs.FindKey( "bind" );
-	if ( kv ) {
-		args.Set( kv->GetKey(), kv->GetValue() );
+	kv = spawnArgs.FindKey("bind");
+	if (kv) {
+		args.Set(kv->GetKey(), kv->GetValue());
 	}
-	kv = spawnArgs.FindKey( "bindToJoint" );
-	if ( kv ) {
-		args.Set( kv->GetKey(), kv->GetValue() );
+	kv = spawnArgs.FindKey("bindToJoint");
+	if (kv) {
+		args.Set(kv->GetKey(), kv->GetValue());
 	}
-	kv = spawnArgs.FindKey( "bindToBody" );
-	if ( kv ) {
-		args.Set( kv->GetKey(), kv->GetValue() );
+	kv = spawnArgs.FindKey("bindToBody");
+	if (kv) {
+		args.Set(kv->GetKey(), kv->GetValue());
 	}
 }
 
@@ -167,8 +167,8 @@ void rvClientAFEntity::SaveState( idDict &args ) const {
 rvClientAFEntity::LoadState
 ================
 */
-void rvClientAFEntity::LoadState( const idDict &args ) {
-	af.LoadState( args );
+void rvClientAFEntity::LoadState(const idDict& args) {
+	af.LoadState(args);
 }
 
 /*
@@ -176,7 +176,7 @@ void rvClientAFEntity::LoadState( const idDict &args ) {
 rvClientAFEntity::AddBindConstraints
 ================
 */
-void rvClientAFEntity::AddBindConstraints( void ) {
+void rvClientAFEntity::AddBindConstraints(void) {
 	af.AddBindConstraints();
 }
 
@@ -185,7 +185,7 @@ void rvClientAFEntity::AddBindConstraints( void ) {
 rvClientAFEntity::RemoveBindConstraints
 ================
 */
-void rvClientAFEntity::RemoveBindConstraints( void ) {
+void rvClientAFEntity::RemoveBindConstraints(void) {
 	af.RemoveBindConstraints();
 }
 
@@ -194,11 +194,12 @@ void rvClientAFEntity::RemoveBindConstraints( void ) {
 rvClientAFEntity::GetImpactInfo
 ================
 */
-void rvClientAFEntity::GetImpactInfo( idEntity *ent, int id, const idVec3 &point, impactInfo_t *info ) {
-	if ( af.IsActive() ) {
-		af.GetImpactInfo( ent, id, point, info );
-	} else {
-		rvClientEntity::GetImpactInfo( ent, id, point, info );
+void rvClientAFEntity::GetImpactInfo(idEntity* ent, int id, const idVec3& point, impactInfo_t* info) {
+	if (af.IsActive()) {
+		af.GetImpactInfo(ent, id, point, info);
+	}
+	else {
+		rvClientEntity::GetImpactInfo(ent, id, point, info);
 	}
 }
 
@@ -207,12 +208,12 @@ void rvClientAFEntity::GetImpactInfo( idEntity *ent, int id, const idVec3 &point
 rvClientAFEntity::ApplyImpulse
 ================
 */
-void rvClientAFEntity::ApplyImpulse( idEntity *ent, int id, const idVec3 &point, const idVec3 &impulse, bool splash ) {
-	if ( af.IsLoaded() ) {
-		af.ApplyImpulse( ent, id, point, impulse );
+void rvClientAFEntity::ApplyImpulse(idEntity* ent, int id, const idVec3& point, const idVec3& impulse, bool splash) {
+	if (af.IsLoaded()) {
+		af.ApplyImpulse(ent, id, point, impulse);
 	}
-	if ( !af.IsActive() ) {
-		rvClientEntity::ApplyImpulse( ent, id, point, impulse, splash );
+	if (!af.IsActive()) {
+		rvClientEntity::ApplyImpulse(ent, id, point, impulse, splash);
 	}
 }
 
@@ -221,16 +222,16 @@ void rvClientAFEntity::ApplyImpulse( idEntity *ent, int id, const idVec3 &point,
 rvClientAFEntity::AddForce
 ================
 */
-void rvClientAFEntity::AddForce( idEntity *ent, int id, const idVec3 &point, const idVec3 &force ) {
-	if ( af.IsLoaded() ) {
-		af.AddForce( ent, id, point, force );
+void rvClientAFEntity::AddForce(idEntity* ent, int id, const idVec3& point, const idVec3& force) {
+	if (af.IsLoaded()) {
+		af.AddForce(ent, id, point, force);
 	}
-	if ( !af.IsActive() ) {
-		rvClientEntity::AddForce( ent, id, point, force );
+	if (!af.IsActive()) {
+		rvClientEntity::AddForce(ent, id, point, force);
 	}
 }
 
-bool rvClientAFEntity::CanPlayImpactEffect ( idEntity* attacker, idEntity* target ) {
+bool rvClientAFEntity::CanPlayImpactEffect(idEntity* attacker, idEntity* target) {
 	// stubbed out
 	return true;
 }
@@ -240,26 +241,28 @@ bool rvClientAFEntity::CanPlayImpactEffect ( idEntity* attacker, idEntity* targe
 rvClientAFEntity::Collide
 ================
 */
-bool rvClientAFEntity::Collide( const trace_t &collision, const idVec3 &velocity ) {
+bool rvClientAFEntity::Collide(const trace_t& collision, const idVec3& velocity) {
 	float v, f;
 
-	if ( af.IsActive() ) {
-		v = -( velocity * collision.c.normal );
-		if ( v > BOUNCE_SOUND_MIN_VELOCITY && gameLocal.time > nextSoundTime ) {
+	if (af.IsActive()) {
+		v = -(velocity * collision.c.normal);
+		if (v > BOUNCE_SOUND_MIN_VELOCITY && gameLocal.time > nextSoundTime) {
 			// RAVEN BEGIN
 			// jscott: fixed negative sqrt call
-			if( v > BOUNCE_SOUND_MAX_VELOCITY ) {
+			if (v > BOUNCE_SOUND_MAX_VELOCITY) {
 				f = 1.0f;
-			} else if( v <= BOUNCE_SOUND_MIN_VELOCITY ) {
+			}
+			else if (v <= BOUNCE_SOUND_MIN_VELOCITY) {
 				f = 0.0f;
-			} else {
-				f = ( v - BOUNCE_SOUND_MIN_VELOCITY ) * ( 1.0f / ( BOUNCE_SOUND_MAX_VELOCITY - BOUNCE_SOUND_MIN_VELOCITY ) );
+			}
+			else {
+				f = (v - BOUNCE_SOUND_MIN_VELOCITY) * (1.0f / (BOUNCE_SOUND_MAX_VELOCITY - BOUNCE_SOUND_MIN_VELOCITY));
 			}
 			// RAVEN END
-			if ( StartSound( "snd_bounce", SND_CHANNEL_ANY, 0, false, NULL ) ) {
+			if (StartSound("snd_bounce", SND_CHANNEL_ANY, 0, false, NULL)) {
 				// don't set the volume unless there is a bounce sound as it overrides the entire channel
 				// which causes footsteps on ai's to not honor their shader parms
-				SetSoundVolume( f );
+				SetSoundVolume(f);
 			}
 			nextSoundTime = gameLocal.time + 500;
 		}
@@ -273,12 +276,12 @@ bool rvClientAFEntity::Collide( const trace_t &collision, const idVec3 &velocity
 rvClientAFEntity::GetPhysicsToVisualTransform
 ================
 */
-bool rvClientAFEntity::GetPhysicsToVisualTransform( idVec3 &origin, idMat3 &axis ) {
-	if ( af.IsActive() ) {
-		af.GetPhysicsToVisualTransform( origin, axis );
+bool rvClientAFEntity::GetPhysicsToVisualTransform(idVec3& origin, idMat3& axis) {
+	if (af.IsActive()) {
+		af.GetPhysicsToVisualTransform(origin, axis);
 		return true;
 	}
-	return rvClientModel::GetPhysicsToVisualTransform( origin, axis );
+	return rvClientModel::GetPhysicsToVisualTransform(origin, axis);
 }
 
 /*
@@ -286,9 +289,9 @@ bool rvClientAFEntity::GetPhysicsToVisualTransform( idVec3 &origin, idMat3 &axis
 rvClientAFEntity::UpdateAnimationControllers
 ================
 */
-bool rvClientAFEntity::UpdateAnimationControllers( void ) {
-	if ( af.IsActive() ) {
-		if ( af.UpdateAnimation() ) {
+bool rvClientAFEntity::UpdateAnimationControllers(void) {
+	if (af.IsActive()) {
+		if (af.UpdateAnimation()) {
 			return true;
 		}
 	}
@@ -300,13 +303,14 @@ bool rvClientAFEntity::UpdateAnimationControllers( void ) {
 rvClientAFEntity::SetCombatModel
 ================
 */
-void rvClientAFEntity::SetCombatModel( void ) {
-	if ( combatModel ) {
+void rvClientAFEntity::SetCombatModel(void) {
+	if (combatModel) {
 		combatModel->Unlink();
-		combatModel->LoadModel( entityDefHandle );
-	} else {
+		combatModel->LoadModel(entityDefHandle);
+	}
+	else {
 		RV_PUSH_HEAP_MEM(this);
-		combatModel = new idClipModel( entityDefHandle );
+		combatModel = new idClipModel(entityDefHandle);
 		RV_POP_HEAP();
 	}
 }
@@ -316,7 +320,7 @@ void rvClientAFEntity::SetCombatModel( void ) {
 rvClientAFEntity::GetCombatModel
 ================
 */
-idClipModel *rvClientAFEntity::GetCombatModel( void ) const {
+idClipModel* rvClientAFEntity::GetCombatModel(void) const {
 	return combatModel;
 }
 
@@ -325,16 +329,17 @@ idClipModel *rvClientAFEntity::GetCombatModel( void ) const {
 rvClientAFEntity::SetCombatContents
 ================
 */
-void rvClientAFEntity::SetCombatContents( bool enable ) {
-	assert( combatModel );
-	if ( enable && combatModelContents ) {
-		assert( !combatModel->GetContents() );
-		combatModel->SetContents( combatModelContents );
+void rvClientAFEntity::SetCombatContents(bool enable) {
+	assert(combatModel);
+	if (enable && combatModelContents) {
+		assert(!combatModel->GetContents());
+		combatModel->SetContents(combatModelContents);
 		combatModelContents = 0;
-	} else if ( !enable && combatModel->GetContents() ) {
-		assert( !combatModelContents );
+	}
+	else if (!enable && combatModel->GetContents()) {
+		assert(!combatModelContents);
 		combatModelContents = combatModel->GetContents();
-		combatModel->SetContents( 0 );
+		combatModel->SetContents(0);
 	}
 }
 
@@ -343,9 +348,9 @@ void rvClientAFEntity::SetCombatContents( bool enable ) {
 rvClientAFEntity::LinkCombat
 ================
 */
-void rvClientAFEntity::LinkCombat( void ) {
-	if ( combatModel ) {
-		combatModel->Link( gameLocal.entities[ ENTITYNUM_CLIENT ], 0, renderEntity.origin, renderEntity.axis, entityDefHandle );
+void rvClientAFEntity::LinkCombat(void) {
+	if (combatModel) {
+		combatModel->Link(gameLocal.entities[ENTITYNUM_CLIENT], 0, renderEntity.origin, renderEntity.axis, entityDefHandle);
 	}
 }
 
@@ -354,8 +359,8 @@ void rvClientAFEntity::LinkCombat( void ) {
 rvClientAFEntity::UnlinkCombat
 ================
 */
-void rvClientAFEntity::UnlinkCombat( void ) {
-	if ( combatModel ) {
+void rvClientAFEntity::UnlinkCombat(void) {
+	if (combatModel) {
 		combatModel->Unlink();
 	}
 }
@@ -365,7 +370,7 @@ void rvClientAFEntity::UnlinkCombat( void ) {
 rvClientAFEntity::FreeEntityDef
 ================
 */
-void rvClientAFEntity::FreeEntityDef( void ) {
+void rvClientAFEntity::FreeEntityDef(void) {
 	UnlinkCombat();
 	rvClientEntity::FreeEntityDef();
 }
@@ -375,7 +380,7 @@ void rvClientAFEntity::FreeEntityDef( void ) {
 rvClientAFEntity::GetNoPlayerImpactFX
 ================
 */
-bool rvClientAFEntity::GetNoPlayerImpactFX( void ) {
+bool rvClientAFEntity::GetNoPlayerImpactFX(void) {
 	// stubbed out
 	return false;
 }
@@ -389,7 +394,7 @@ bool rvClientAFEntity::GetNoPlayerImpactFX( void ) {
 ===============================================================================
 */
 
-CLASS_DECLARATION( rvClientAFEntity, rvClientAFAttachment )
+CLASS_DECLARATION(rvClientAFEntity, rvClientAFAttachment)
 END_CLASS
 
 /*
@@ -397,11 +402,11 @@ END_CLASS
 rvClientAFAttachment::rvClientAFAttachment
 =====================
 */
-rvClientAFAttachment::rvClientAFAttachment( void ) {
-	body			= NULL;
-	combatModel		= NULL;
-	idleAnim		= 0;
-	damageJoint		= INVALID_JOINT;
+rvClientAFAttachment::rvClientAFAttachment(void) {
+	body = NULL;
+	combatModel = NULL;
+	idleAnim = 0;
+	damageJoint = INVALID_JOINT;
 }
 
 /*
@@ -409,7 +414,7 @@ rvClientAFAttachment::rvClientAFAttachment( void ) {
 rvClientAFAttachment::~rvClientAFAttachment
 =====================
 */
-rvClientAFAttachment::~rvClientAFAttachment( void ) {
+rvClientAFAttachment::~rvClientAFAttachment(void) {
 	delete combatModel;
 	combatModel = NULL;
 }
@@ -419,8 +424,8 @@ rvClientAFAttachment::~rvClientAFAttachment( void ) {
 rvClientAFAttachment::Spawn
 =====================
 */
-void rvClientAFAttachment::Spawn( void ) {
-	idleAnim = animator.GetAnim( "idle" );
+void rvClientAFAttachment::Spawn(void) {
+	idleAnim = animator.GetAnim("idle");
 }
 
 /*
@@ -428,45 +433,46 @@ void rvClientAFAttachment::Spawn( void ) {
 rvClientAFAttachment::InitCopyJoints
 =====================
 */
-void rvClientAFAttachment::InitCopyJoints ( void ) {
+void rvClientAFAttachment::InitCopyJoints(void) {
 	copyJoints_t		copyJoint;
-	const idKeyValue*	kv;
-	const char*			jointName;
-	idAnimator*			bodyAnimator;
+	const idKeyValue* kv;
+	const char* jointName;
+	idAnimator* bodyAnimator;
 
-	if ( !body ) {
+	if (!body) {
 		return;
 	}
-	
-	bodyAnimator = body->GetAnimator ( );
+
+	bodyAnimator = body->GetAnimator();
 
 	// set up the list of joints to copy to the head
-	for( kv = spawnArgs.MatchPrefix( "copy_joint", NULL ); kv != NULL; kv = spawnArgs.MatchPrefix( "copy_joint", kv ) ) {
-		if ( kv->GetValue() == "" ) {
+	for (kv = spawnArgs.MatchPrefix("copy_joint", NULL); kv != NULL; kv = spawnArgs.MatchPrefix("copy_joint", kv)) {
+		if (kv->GetValue() == "") {
 			// probably clearing out inherited key, so skip it
 			continue;
 		}
 
-		if ( !body->spawnArgs.GetString ( va("copy_joint_world %s", kv->GetValue().c_str() ), kv->GetValue().c_str(), &jointName ) ) {
-			copyJoint.mod = JOINTMOD_LOCAL_OVERRIDE;			
-			body->spawnArgs.GetString ( va("copy_joint %s", kv->GetValue().c_str() ), kv->GetValue().c_str(), &jointName );
-		} else {
+		if (!body->spawnArgs.GetString(va("copy_joint_world %s", kv->GetValue().c_str()), kv->GetValue().c_str(), &jointName)) {
+			copyJoint.mod = JOINTMOD_LOCAL_OVERRIDE;
+			body->spawnArgs.GetString(va("copy_joint %s", kv->GetValue().c_str()), kv->GetValue().c_str(), &jointName);
+		}
+		else {
 			copyJoint.mod = JOINTMOD_WORLD_OVERRIDE;
 		}
-		
-		copyJoint.from = bodyAnimator->GetJointHandle ( jointName );
-		if ( copyJoint.from == INVALID_JOINT ) {
-			gameLocal.Warning( "Unknown copy_joint '%s' on client entity %d", jointName, entityNumber );
+
+		copyJoint.from = bodyAnimator->GetJointHandle(jointName);
+		if (copyJoint.from == INVALID_JOINT) {
+			gameLocal.Warning("Unknown copy_joint '%s' on client entity %d", jointName, entityNumber);
 			continue;
 		}
 
-		copyJoint.to = animator.GetJointHandle( kv->GetValue() );
-		if ( copyJoint.to == INVALID_JOINT ) {
-			gameLocal.Warning( "Unknown copy_joint '%s' on head of entity %d", kv->GetValue().c_str(), entityNumber );
+		copyJoint.to = animator.GetJointHandle(kv->GetValue());
+		if (copyJoint.to == INVALID_JOINT) {
+			gameLocal.Warning("Unknown copy_joint '%s' on head of entity %d", kv->GetValue().c_str(), entityNumber);
 			continue;
 		}
 
-		copyJoints.Append( copyJoint );
+		copyJoints.Append(copyJoint);
 	}
 }
 
@@ -475,34 +481,35 @@ void rvClientAFAttachment::InitCopyJoints ( void ) {
 rvClientAFAttachment::CopyJointsFromBody
 =====================
 */
-void rvClientAFAttachment::CopyJointsFromBody ( void ) {
-	MEM_SCOPED_TAG(tag,MA_ANIM);
+void rvClientAFAttachment::CopyJointsFromBody(void) {
+	MEM_SCOPED_TAG(tag, MA_ANIM);
 
-	idAnimator*	bodyAnimator;
+	idAnimator* bodyAnimator;
 	int			i;
 	idMat3		mat;
 	idMat3		axis;
 	idVec3		pos;
-	
-	if ( !body ) {
+
+	if (!body) {
 		return;
 	}
 	bodyAnimator = body->GetAnimator();
 
 	// copy the animation from the body to the head
-	for( i = 0; i < copyJoints.Num(); i++ ) {
-		if ( copyJoints[ i ].mod == JOINTMOD_WORLD_OVERRIDE ) {
+	for (i = 0; i < copyJoints.Num(); i++) {
+		if (copyJoints[i].mod == JOINTMOD_WORLD_OVERRIDE) {
 			mat = GetPhysics()->GetAxis().Transpose();
-			body->GetJointWorldTransform( copyJoints[ i ].from, gameLocal.time, pos, axis );
+			body->GetJointWorldTransform(copyJoints[i].from, gameLocal.time, pos, axis);
 			pos -= GetPhysics()->GetOrigin();
-			animator.SetJointPos( copyJoints[ i ].to, copyJoints[ i ].mod, pos * mat );
-			animator.SetJointAxis( copyJoints[ i ].to, copyJoints[ i ].mod, axis * mat );
-		} else {
-			bodyAnimator->GetJointLocalTransform( copyJoints[ i ].from, gameLocal.time, pos, axis );
-			animator.SetJointPos( copyJoints[ i ].to, copyJoints[ i ].mod, pos );
-			animator.SetJointAxis( copyJoints[ i ].to, copyJoints[ i ].mod, axis );
+			animator.SetJointPos(copyJoints[i].to, copyJoints[i].mod, pos * mat);
+			animator.SetJointAxis(copyJoints[i].to, copyJoints[i].mod, axis * mat);
 		}
-	}	
+		else {
+			bodyAnimator->GetJointLocalTransform(copyJoints[i].from, gameLocal.time, pos, axis);
+			animator.SetJointPos(copyJoints[i].to, copyJoints[i].mod, pos);
+			animator.SetJointAxis(copyJoints[i].to, copyJoints[i].mod, axis);
+		}
+	}
 }
 
 /*
@@ -510,12 +517,12 @@ void rvClientAFAttachment::CopyJointsFromBody ( void ) {
 rvClientAFAttachment::SetBody
 =====================
 */
-void rvClientAFAttachment::SetBody( idAnimatedEntity *bodyEnt, const char *model, jointHandle_t _damageJoint ) {
+void rvClientAFAttachment::SetBody(idAnimatedEntity* bodyEnt, const char* model, jointHandle_t _damageJoint) {
 	body = bodyEnt;
 	damageJoint = _damageJoint;
-	SetModel( model );
+	SetModel(model);
 
-	spawnArgs.SetBool( "bleed", body->spawnArgs.GetBool( "bleed" ) );
+	spawnArgs.SetBool("bleed", body->spawnArgs.GetBool("bleed"));
 }
 
 /*
@@ -523,7 +530,7 @@ void rvClientAFAttachment::SetBody( idAnimatedEntity *bodyEnt, const char *model
 rvClientAFAttachment::ClearBody
 =====================
 */
-void rvClientAFAttachment::ClearBody( void ) {
+void rvClientAFAttachment::ClearBody(void) {
 	body = NULL;
 	damageJoint = INVALID_JOINT;
 	Hide();
@@ -534,7 +541,7 @@ void rvClientAFAttachment::ClearBody( void ) {
 rvClientAFAttachment::GetBody
 =====================
 */
-idEntity *rvClientAFAttachment::GetBody( void ) const {
+idEntity* rvClientAFAttachment::GetBody(void) const {
 	return body;
 }
 
@@ -543,7 +550,7 @@ idEntity *rvClientAFAttachment::GetBody( void ) const {
 idAFAttachment::Hide
 ================
 */
-void rvClientAFAttachment::Hide( void ) {
+void rvClientAFAttachment::Hide(void) {
 	UnlinkCombat();
 }
 
@@ -552,7 +559,7 @@ void rvClientAFAttachment::Hide( void ) {
 idAFAttachment::Show
 ================
 */
-void rvClientAFAttachment::Show( void ) {
+void rvClientAFAttachment::Show(void) {
 	LinkCombat();
 }
 
@@ -561,11 +568,11 @@ void rvClientAFAttachment::Show( void ) {
 idAFAttachment::AddDamageEffect
 ================
 */
-void rvClientAFAttachment::AddDamageEffect( const trace_t &collision, const idVec3 &velocity, const char *damageDefName, idEntity* inflictor ) {
-	if ( body ) {
+void rvClientAFAttachment::AddDamageEffect(const trace_t& collision, const idVec3& velocity, const char* damageDefName, idEntity* inflictor) {
+	if (body) {
 		trace_t c = collision;
-		c.c.id = JOINT_HANDLE_TO_CLIPMODEL_ID( damageJoint );
-		body->AddDamageEffect( c, velocity, damageDefName, inflictor );
+		c.c.id = JOINT_HANDLE_TO_CLIPMODEL_ID(damageJoint);
+		body->AddDamageEffect(c, velocity, damageDefName, inflictor);
 	}
 }
 
@@ -574,11 +581,12 @@ void rvClientAFAttachment::AddDamageEffect( const trace_t &collision, const idVe
 rvClientAFAttachment::GetImpactInfo
 ================
 */
-void rvClientAFAttachment::GetImpactInfo( idEntity *ent, int id, const idVec3 &point, impactInfo_t *info ) {
-	if ( body ) {
-		body->GetImpactInfo( ent, JOINT_HANDLE_TO_CLIPMODEL_ID( damageJoint ), point, info );
-	} else {
-		rvClientAFAttachment::GetImpactInfo( ent, id, point, info );
+void rvClientAFAttachment::GetImpactInfo(idEntity* ent, int id, const idVec3& point, impactInfo_t* info) {
+	if (body) {
+		body->GetImpactInfo(ent, JOINT_HANDLE_TO_CLIPMODEL_ID(damageJoint), point, info);
+	}
+	else {
+		rvClientAFAttachment::GetImpactInfo(ent, id, point, info);
 	}
 }
 
@@ -587,8 +595,8 @@ void rvClientAFAttachment::GetImpactInfo( idEntity *ent, int id, const idVec3 &p
 rvClientAFAttachment::CanPlayImpactEffect
 ================
 */
-bool rvClientAFAttachment::CanPlayImpactEffect ( idEntity* attacker, idEntity* target ) {
-	return rvClientAFEntity::CanPlayImpactEffect( attacker, target );
+bool rvClientAFAttachment::CanPlayImpactEffect(idEntity* attacker, idEntity* target) {
+	return rvClientAFEntity::CanPlayImpactEffect(attacker, target);
 }
 
 /*
@@ -596,11 +604,12 @@ bool rvClientAFAttachment::CanPlayImpactEffect ( idEntity* attacker, idEntity* t
 rvClientAFAttachment::ApplyImpulse
 ================
 */
-void rvClientAFAttachment::ApplyImpulse( idEntity *ent, int id, const idVec3 &point, const idVec3 &impulse, bool splash ) {
-	if ( body ) {
-		body->ApplyImpulse( ent, JOINT_HANDLE_TO_CLIPMODEL_ID( damageJoint ), point, impulse );
-	} else {
-		rvClientAFEntity::ApplyImpulse( ent, id, point, impulse );
+void rvClientAFAttachment::ApplyImpulse(idEntity* ent, int id, const idVec3& point, const idVec3& impulse, bool splash) {
+	if (body) {
+		body->ApplyImpulse(ent, JOINT_HANDLE_TO_CLIPMODEL_ID(damageJoint), point, impulse);
+	}
+	else {
+		rvClientAFEntity::ApplyImpulse(ent, id, point, impulse);
 	}
 }
 
@@ -609,11 +618,12 @@ void rvClientAFAttachment::ApplyImpulse( idEntity *ent, int id, const idVec3 &po
 rvClientAFAttachment::AddForce
 ================
 */
-void rvClientAFAttachment::AddForce( idEntity *ent, int id, const idVec3 &point, const idVec3 &force ) {
-	if ( body ) {
-		body->AddForce( ent, JOINT_HANDLE_TO_CLIPMODEL_ID( damageJoint ), point, force );
-	} else {
-		rvClientAFEntity::AddForce( ent, id, point, force );
+void rvClientAFAttachment::AddForce(idEntity* ent, int id, const idVec3& point, const idVec3& force) {
+	if (body) {
+		body->AddForce(ent, JOINT_HANDLE_TO_CLIPMODEL_ID(damageJoint), point, force);
+	}
+	else {
+		rvClientAFEntity::AddForce(ent, id, point, force);
 	}
 }
 
@@ -622,9 +632,9 @@ void rvClientAFAttachment::AddForce( idEntity *ent, int id, const idVec3 &point,
 rvClientAFAttachment::PlayIdleAnim
 ================
 */
-void rvClientAFAttachment::PlayIdleAnim( int channel, int blendTime ) {
-	if ( idleAnim && ( idleAnim != animator.CurrentAnim( channel )->AnimNum() ) ) {
-		animator.CycleAnim( channel, idleAnim, gameLocal.time, blendTime );
+void rvClientAFAttachment::PlayIdleAnim(int channel, int blendTime) {
+	if (idleAnim && (idleAnim != animator.CurrentAnim(channel)->AnimNum())) {
+		animator.CycleAnim(channel, idleAnim, gameLocal.time, blendTime);
 	}
 }
 
@@ -633,7 +643,7 @@ void rvClientAFAttachment::PlayIdleAnim( int channel, int blendTime ) {
 rvClientAFAttachment::Think
 ================
 */
-void rvClientAFAttachment::Think( void ) {
+void rvClientAFAttachment::Think(void) {
 	rvClientAFEntity::Think();
 }
 
@@ -642,9 +652,9 @@ void rvClientAFAttachment::Think( void ) {
 rvClientAFAttachment::UpdateAnimationControllers
 ================
 */
-bool rvClientAFAttachment::UpdateAnimationControllers( void ) {
-	CopyJointsFromBody( );
-	return rvClientAFEntity::UpdateAnimationControllers( );
+bool rvClientAFAttachment::UpdateAnimationControllers(void) {
+	CopyJointsFromBody();
+	return rvClientAFEntity::UpdateAnimationControllers();
 }
 
 /*
@@ -652,16 +662,17 @@ bool rvClientAFAttachment::UpdateAnimationControllers( void ) {
 rvClientAFAttachment::SetCombatModel
 ================
 */
-void rvClientAFAttachment::SetCombatModel( void ) {
-	if ( combatModel ) {
+void rvClientAFAttachment::SetCombatModel(void) {
+	if (combatModel) {
 		combatModel->Unlink();
-		combatModel->LoadModel( entityDefHandle );
-	} else {
+		combatModel->LoadModel(entityDefHandle);
+	}
+	else {
 		RV_PUSH_HEAP_MEM(this);
-		combatModel = new idClipModel( entityDefHandle );
+		combatModel = new idClipModel(entityDefHandle);
 		RV_POP_HEAP();
 	}
-	combatModel->SetOwner( body );
+	combatModel->SetOwner(body);
 }
 
 /*
@@ -669,7 +680,7 @@ void rvClientAFAttachment::SetCombatModel( void ) {
 rvClientAFAttachment::GetCombatModel
 ================
 */
-idClipModel *rvClientAFAttachment::GetCombatModel( void ) const {
+idClipModel* rvClientAFAttachment::GetCombatModel(void) const {
 	return combatModel;
 }
 
@@ -678,9 +689,9 @@ idClipModel *rvClientAFAttachment::GetCombatModel( void ) const {
 rvClientAFAttachment::LinkCombat
 ================
 */
-void rvClientAFAttachment::LinkCombat( void ) {
-	if ( combatModel ) {
-		combatModel->Link( gameLocal.entities[ ENTITYNUM_CLIENT ], 0, renderEntity.origin, renderEntity.axis, entityDefHandle );
+void rvClientAFAttachment::LinkCombat(void) {
+	if (combatModel) {
+		combatModel->Link(gameLocal.entities[ENTITYNUM_CLIENT], 0, renderEntity.origin, renderEntity.axis, entityDefHandle);
 	}
 }
 
@@ -689,8 +700,8 @@ void rvClientAFAttachment::LinkCombat( void ) {
 rvClientAFAttachment::UnlinkCombat
 ================
 */
-void rvClientAFAttachment::UnlinkCombat( void ) {
-	if ( combatModel ) {
+void rvClientAFAttachment::UnlinkCombat(void) {
+	if (combatModel) {
 		combatModel->Unlink();
 	}
 }

@@ -21,18 +21,18 @@
 
 class idLib {
 public:
-	static class idSys *		sys;
-	static class idCommon *		common;
-	static class idCVarSystem *	cvarSystem;
-	static class idFileSystem *	fileSystem;
+	static class idSys* sys;
+	static class idCommon* common;
+	static class idCVarSystem* cvarSystem;
+	static class idFileSystem* fileSystem;
 	static int					frameNumber;
 
-	static void					Init( void );
-	static void					ShutDown( void );
+	static void					Init(void);
+	static void					ShutDown(void);
 
 	// wrapper to idCommon functions 
-	static void					Error( const char *fmt, ... );
-	static void					Warning( const char *fmt, ... );
+	static void					Error(const char* fmt, ...);
+	static void					Warning(const char* fmt, ...);
 };
 
 
@@ -57,21 +57,21 @@ if ( !verify(game) ) {
 
 #ifdef _DEBUG
 
-	#define ID_CONDITIONAL_ASSERT
+#define ID_CONDITIONAL_ASSERT
 
-	void AssertFailed( const char *file, int line, const char *expression );
-	#undef assert
-	#ifdef ID_CONDITIONAL_ASSERT
-		// lets you disable an assertion at runtime when needed
-		// could extend this to count and produce an assert log - useful for 'release with asserts' builds
-		#define assert( x ) \
+void AssertFailed(const char* file, int line, const char* expression);
+#undef assert
+#ifdef ID_CONDITIONAL_ASSERT
+// lets you disable an assertion at runtime when needed
+// could extend this to count and produce an assert log - useful for 'release with asserts' builds
+#define assert( x ) \
 		{ \
 			volatile static bool assert_enabled = true; \
 			if ( assert_enabled ) { \
 				if ( x ) { } else AssertFailed( __FILE__, __LINE__, #x );	\
 			} \
 		}
-		#define verify( x ) \
+#define verify( x ) \
 		( \
 			( ( x ) ? true : ( \
 				( { \
@@ -80,16 +80,16 @@ if ( !verify(game) ) {
 				} ) \
 				, false ) ) \
 		)
-	#else
-		#define assert( x )		if ( x ) { } else AssertFailed( __FILE__, __LINE__, #x )
-		#define verify( x )		( ( x ) ? true : ( AssertFailed( __FILE__, __LINE__, #x ), false ) )
-	#endif
+#else
+#define assert( x )		if ( x ) { } else AssertFailed( __FILE__, __LINE__, #x )
+#define verify( x )		( ( x ) ? true : ( AssertFailed( __FILE__, __LINE__, #x ), false ) )
+#endif
 
 #else
 
-	#undef assert
-	#define assert( x )
-	#define verify( x )		( ( x ) ? true : false )
+#undef assert
+#define assert( x )
+#define verify( x )		( ( x ) ? true : false )
 
 #endif
 
@@ -117,7 +117,7 @@ class idException {
 public:
 	char error[2048];
 
-	idException( const char *text = "" ) { strcpy( error, text ); }
+	idException(const char* text = "") { strcpy(error, text); }
 };
 
 
@@ -179,27 +179,27 @@ extern	ID_VEC4_ALIGN idVec4 colorMdGrey;
 extern	ID_VEC4_ALIGN idVec4 colorDkGrey;
 
 // packs color floats in the range [0,1] into an integer
-dword	PackColor( const idVec3 &color );
-void	UnpackColor( const dword color, idVec3 &unpackedColor );
-dword	PackColor( const idVec4 &color );
-void	UnpackColor( const dword color, idVec4 &unpackedColor );
+dword	PackColor(const idVec3& color);
+void	UnpackColor(const dword color, idVec3& unpackedColor);
+dword	PackColor(const idVec4& color);
+void	UnpackColor(const dword color, idVec4& unpackedColor);
 
 // little/big endian conversion
-short	BigShort( short l );
-short	LittleShort( short l );
-int		BigLong( int l );
-int		LittleLong( int l );
-float	BigFloat( float l );
-float	LittleFloat( float l );
-void	BigRevBytes( void *bp, int elsize, int elcount );
-void	LittleRevBytes( void *bp, int elsize, int elcount );
-void	Swap_Init( void );
+short	BigShort(short l);
+short	LittleShort(short l);
+int		BigLong(int l);
+int		LittleLong(int l);
+float	BigFloat(float l);
+float	LittleFloat(float l);
+void	BigRevBytes(void* bp, int elsize, int elcount);
+void	LittleRevBytes(void* bp, int elsize, int elcount);
+void	Swap_Init(void);
 
-bool	Swap_IsBigEndian( void );
+bool	Swap_IsBigEndian(void);
 
 // for base64
-void	SixtetsForInt( byte *out, int src);
-int		IntForSixtets( byte *in );
+void	SixtetsForInt(byte* out, int src);
+int		IntForSixtets(byte* in);
 
 
 /*

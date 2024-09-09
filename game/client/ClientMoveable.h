@@ -10,52 +10,52 @@
 class rvClientMoveable : public rvClientEntity {
 public:
 
-	CLASS_PROTOTYPE( rvClientMoveable );
+	CLASS_PROTOTYPE(rvClientMoveable);
 
-	rvClientMoveable ( void );
-	virtual ~rvClientMoveable ( void );
-	
-	virtual void			Spawn			( void );
-	virtual void			Think			( void );
-	virtual idPhysics*		GetPhysics		( void ) const;	
-	virtual bool			Collide			( const trace_t &collision, const idVec3 &velocity );
-	
-	renderEntity_t*			GetRenderEntity	( void );
+	rvClientMoveable(void);
+	virtual ~rvClientMoveable(void);
 
-	void					Save			( idSaveGame *savefile ) const;
-	void					Restore			( idRestoreGame *savefile );
-	
-	static void				SpawnClientMoveables ( idEntity* ent, const char *type, idList<rvClientMoveable *>* list );
+	virtual void			Spawn(void);
+	virtual void			Think(void);
+	virtual idPhysics* GetPhysics(void) const;
+	virtual bool			Collide(const trace_t& collision, const idVec3& velocity);
 
-	virtual void			FreeEntityDef	( void );
+	renderEntity_t* GetRenderEntity(void);
 
-	void					SetOwner		( idEntity* ent );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	void					SetOrigin		( const idVec3& origin );
-	void					SetAxis			( const idMat3& axis );
+	static void				SpawnClientMoveables(idEntity* ent, const char* type, idList<rvClientMoveable*>* list);
+
+	virtual void			FreeEntityDef(void);
+
+	void					SetOwner(idEntity* ent);
+
+	void					SetOrigin(const idVec3& origin);
+	void					SetAxis(const idMat3& axis);
 protected:
 	renderEntity_t			renderEntity;
 	int						entityDefHandle;
 
 	rvClientEffectPtr		trailEffect;
 	float					trailAttenuateSpeed;
-		
+
 	idPhysics_RigidBody		physicsObj;
-	
+
 	int						bounceSoundTime;
-	const idSoundShader*	bounceSoundShader;
+	const idSoundShader* bounceSoundShader;
 	bool					mPlayBounceSoundOnce;
 	bool					mHasBounced;
 
 	idInterpolate<float>	scale;
-	
+
 private:
-	
-	void					Event_FadeOut			( int duration );
-	void					Event_ClearDepthHack	( void );
+
+	void					Event_FadeOut(int duration);
+	void					Event_ClearDepthHack(void);
 };
 
-ID_INLINE renderEntity_t* rvClientMoveable::GetRenderEntity ( void ) {
+ID_INLINE renderEntity_t* rvClientMoveable::GetRenderEntity(void) {
 	return &renderEntity;
 }
 

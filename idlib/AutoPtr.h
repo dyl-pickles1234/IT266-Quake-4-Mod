@@ -9,56 +9,56 @@ template<typename type>
 class idAutoPtr
 {
 public:
-	explicit idAutoPtr(type *ptr = 0)
+	explicit idAutoPtr(type* ptr = 0)
 		: mPtr(ptr)
-		{
-		}
+	{
+	}
 
 	~idAutoPtr()
 	{
 		delete mPtr;
 	}
 
-	type &operator*() const
-		{
+	type& operator*() const
+	{
 		return *mPtr;
-		}
+	}
 
-	type *operator->() const
+	type* operator->() const
 	{
 		return &**this;
 	}
 
-	type *get() const
+	type* get() const
 	{
 		return mPtr;
 	}
 
-	type *release()
+	type* release()
 	{
-		type *ptr = mPtr;
+		type* ptr = mPtr;
 		mPtr = NULL;
 		return ptr;
-		}
+	}
 
-	void reset(type *ptr = NULL)
+	void reset(type* ptr = NULL)
 	{
 		if (ptr != mPtr)
 			delete mPtr;
 		mPtr = ptr;
 	}
 
-	operator type*()
+	operator type* ()
 	{
 		return get();
 	}
 
 private:
 	// disallow copies
-	idAutoPtr<type> &operator=(idAutoPtr<type>& ptr);
+	idAutoPtr<type>& operator=(idAutoPtr<type>& ptr);
 	idAutoPtr(idAutoPtr<type>& ptr);
 
-	type *mPtr;
+	type* mPtr;
 };
 
 #endif

@@ -404,7 +404,6 @@
     <ClInclude Include="game\Effect.h" />
     <ClInclude Include="game\Entity.h" />
     <ClInclude Include="game\FreeView.h" />
-    <ClInclude Include="game\Fx.h" />
     <ClInclude Include="game\Game.h" />
     <ClInclude Include="game\GameEdit.h" />
     <ClInclude Include="game\gamesys\Class.h" />

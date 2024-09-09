@@ -18,11 +18,11 @@ idMD5Anim::idMD5Anim
 ====================
 */
 idMD5Anim::idMD5Anim() {
-	ref_count	= 0;
-	numFrames	= 0;
-	numJoints	= 0;
-	frameRate	= 24;
-	animLength	= 0;
+	ref_count = 0;
+	numFrames = 0;
+	numJoints = 0;
+	frameRate = 24;
+	animLength = 0;
 	totaldelta.Zero();
 }
 
@@ -40,12 +40,12 @@ idMD5Anim::~idMD5Anim() {
 idMD5Anim::Free
 ====================
 */
-void idMD5Anim::Free( void ) {
-	numFrames	= 0;
-	numJoints	= 0;
-	frameRate	= 24;
-	animLength	= 0;
-	name		= "";
+void idMD5Anim::Free(void) {
+	numFrames = 0;
+	numJoints = 0;
+	frameRate = 24;
+	animLength = 0;
+	name = "";
 
 	totaldelta.Zero();
 
@@ -59,7 +59,7 @@ void idMD5Anim::Free( void ) {
 idMD5Anim::NumFrames
 ====================
 */
-int	idMD5Anim::NumFrames( void ) const {
+int	idMD5Anim::NumFrames(void) const {
 	return numFrames;
 }
 
@@ -68,7 +68,7 @@ int	idMD5Anim::NumFrames( void ) const {
 idMD5Anim::NumJoints
 ====================
 */
-int	idMD5Anim::NumJoints( void ) const {
+int	idMD5Anim::NumJoints(void) const {
 	return numJoints;
 }
 
@@ -77,7 +77,7 @@ int	idMD5Anim::NumJoints( void ) const {
 idMD5Anim::Length
 ====================
 */
-int idMD5Anim::Length( void ) const {
+int idMD5Anim::Length(void) const {
 	return animLength;
 }
 
@@ -86,7 +86,7 @@ int idMD5Anim::Length( void ) const {
 idMD5Anim::TotalMovementDelta
 =====================
 */
-const idVec3 &idMD5Anim::TotalMovementDelta( void ) const {
+const idVec3& idMD5Anim::TotalMovementDelta(void) const {
 	return totaldelta;
 }
 
@@ -95,7 +95,7 @@ const idVec3 &idMD5Anim::TotalMovementDelta( void ) const {
 idMD5Anim::TotalMovementDelta
 =====================
 */
-const char *idMD5Anim::Name( void ) const {
+const char* idMD5Anim::Name(void) const {
 	return name;
 }
 
@@ -104,15 +104,15 @@ const char *idMD5Anim::Name( void ) const {
 idMD5Anim::Reload
 ====================
 */
-bool idMD5Anim::Reload( void ) {
-	TIME_THIS_SCOPE( __FUNCLINE__);
-	
+bool idMD5Anim::Reload(void) {
+	TIME_THIS_SCOPE(__FUNCLINE__);
+
 	idStr filename;
 
 	filename = name;
 	Free();
 
-	return LoadAnim( filename );
+	return LoadAnim(filename);
 }
 
 /*
@@ -120,7 +120,7 @@ bool idMD5Anim::Reload( void ) {
 idMD5Anim::Allocated
 ====================
 */
-size_t idMD5Anim::Allocated( void ) const {
+size_t idMD5Anim::Allocated(void) const {
 	size_t	size = bounds.Allocated() + jointInfo.Allocated() + componentFrames.Allocated() + name.Allocated();
 	return size;
 }
@@ -130,18 +130,18 @@ size_t idMD5Anim::Allocated( void ) const {
 idMD5Anim::LoadAnim
 ====================
 */
-bool idMD5Anim::LoadAnim( const char *filename ) {
+bool idMD5Anim::LoadAnim(const char* filename) {
 	int		version;
-// RAVEN BEGIN
-// jsinger: done this way to minimize amount of code change
-	idAutoPtr<Lexer>	lexer( LexerFactory::MakeLexer(LEXFL_ALLOWPATHNAMES | LEXFL_NOSTRINGESCAPECHARS | LEXFL_NOSTRINGCONCAT) );
-	Lexer &parser(*lexer);
-// RAVEN END
+	// RAVEN BEGIN
+	// jsinger: done this way to minimize amount of code change
+	idAutoPtr<Lexer>	lexer(LexerFactory::MakeLexer(LEXFL_ALLOWPATHNAMES | LEXFL_NOSTRINGESCAPECHARS | LEXFL_NOSTRINGCONCAT));
+	Lexer& parser(*lexer);
+	// RAVEN END
 	idToken	token;
 	int		i, j;
 	int		num;
 
-	if ( !parser.LoadFile( filename ) ) {
+	if (!parser.LoadFile(filename)) {
 		return false;
 	}
 
@@ -149,161 +149,165 @@ bool idMD5Anim::LoadAnim( const char *filename ) {
 
 	name = filename;
 
-	parser.ExpectTokenString( MD5_VERSION_STRING );
+	parser.ExpectTokenString(MD5_VERSION_STRING);
 	version = parser.ParseInt();
-	if ( version != MD5_VERSION ) {
-		parser.Error( "Invalid version %d.  Should be version %d\n", version, MD5_VERSION );
+	if (version != MD5_VERSION) {
+		parser.Error("Invalid version %d.  Should be version %d\n", version, MD5_VERSION);
 	}
 
 	// skip the commandline
-	parser.ExpectTokenString( "commandline" );
-	parser.ReadToken( &token );
+	parser.ExpectTokenString("commandline");
+	parser.ReadToken(&token);
 
 	// parse num frames
-	parser.ExpectTokenString( "numFrames" );
+	parser.ExpectTokenString("numFrames");
 	numFrames = parser.ParseInt();
-	if ( numFrames <= 0 ) {
-		parser.Error( "Invalid number of frames: %d", numFrames );
+	if (numFrames <= 0) {
+		parser.Error("Invalid number of frames: %d", numFrames);
 	}
 
 	// parse num joints
-	parser.ExpectTokenString( "numJoints" );
+	parser.ExpectTokenString("numJoints");
 	numJoints = parser.ParseInt();
-	if ( numJoints <= 0 ) {
-		parser.Error( "Invalid number of joints: %d", numJoints );
+	if (numJoints <= 0) {
+		parser.Error("Invalid number of joints: %d", numJoints);
 	}
 
 	// parse frame rate
-	parser.ExpectTokenString( "frameRate" );
+	parser.ExpectTokenString("frameRate");
 	frameRate = parser.ParseInt();
-	if ( frameRate < 0 ) {
-		parser.Error( "Invalid frame rate: %d", frameRate );
+	if (frameRate < 0) {
+		parser.Error("Invalid frame rate: %d", frameRate);
 	}
 
 	// parse number of animated components
-	parser.ExpectTokenString( "numAnimatedComponents" );
+	parser.ExpectTokenString("numAnimatedComponents");
 	numAnimatedComponents = parser.ParseInt();
-	if ( ( numAnimatedComponents < 0 ) || ( numAnimatedComponents > numJoints * 6 ) ) {
-		parser.Error( "Invalid number of animated components: %d", numAnimatedComponents );
+	if ((numAnimatedComponents < 0) || (numAnimatedComponents > numJoints * 6)) {
+		parser.Error("Invalid number of animated components: %d", numAnimatedComponents);
 	}
 
 	// parse the hierarchy
-	jointInfo.SetGranularity( 1 );
-	jointInfo.SetNum( numJoints );
-	parser.ExpectTokenString( "hierarchy" );
-	parser.ExpectTokenString( "{" );
-	for( i = 0; i < numJoints; i++ ) {
-		parser.ReadToken( &token );
-// RAVEN BEGIN
-// jsinger: animationLib changed to a pointer
-		jointInfo[ i ].nameIndex = animationLib->JointIndex( token );
-// RAVEN END
-		
-		// parse parent num
-		jointInfo[ i ].parentNum = parser.ParseInt();
-		if ( jointInfo[ i ].parentNum >= i ) {
-			parser.Error( "Invalid parent num: %d", jointInfo[ i ].parentNum );
+	jointInfo.SetGranularity(1);
+	jointInfo.SetNum(numJoints);
+	parser.ExpectTokenString("hierarchy");
+	parser.ExpectTokenString("{");
+	for (i = 0; i < numJoints; i++) {
+		parser.ReadToken(&token);
+		// RAVEN BEGIN
+		// jsinger: animationLib changed to a pointer
+		jointInfo[i].nameIndex = animationLib->JointIndex(token);
+		// RAVEN END
+
+				// parse parent num
+		jointInfo[i].parentNum = parser.ParseInt();
+		if (jointInfo[i].parentNum >= i) {
+			parser.Error("Invalid parent num: %d", jointInfo[i].parentNum);
 		}
 
-		if ( ( i != 0 ) && ( jointInfo[ i ].parentNum < 0 ) ) {
-			parser.Error( "Animations may have only one root joint" );
+		if ((i != 0) && (jointInfo[i].parentNum < 0)) {
+			parser.Error("Animations may have only one root joint");
 		}
 
 		// parse anim bits
-		jointInfo[ i ].animBits = parser.ParseInt();
-		if ( jointInfo[ i ].animBits & ~63 ) {
-			parser.Error( "Invalid anim bits: %d", jointInfo[ i ].animBits );
+		jointInfo[i].animBits = parser.ParseInt();
+		if (jointInfo[i].animBits & ~63) {
+			parser.Error("Invalid anim bits: %d", jointInfo[i].animBits);
 		}
 
 		// parse first component
-		jointInfo[ i ].firstComponent = parser.ParseInt();
-		if ( ( numAnimatedComponents > 0 ) && ( ( jointInfo[ i ].firstComponent < 0 ) || ( jointInfo[ i ].firstComponent >= numAnimatedComponents ) ) ) {
-			parser.Error( "Invalid first component: %d", jointInfo[ i ].firstComponent );
+		jointInfo[i].firstComponent = parser.ParseInt();
+		if ((numAnimatedComponents > 0) && ((jointInfo[i].firstComponent < 0) || (jointInfo[i].firstComponent >= numAnimatedComponents))) {
+			parser.Error("Invalid first component: %d", jointInfo[i].firstComponent);
 		}
 	}
 
-	parser.ExpectTokenString( "}" );
+	parser.ExpectTokenString("}");
 
 	// parse bounds
-	parser.ExpectTokenString( "bounds" );
-	parser.ExpectTokenString( "{" );
-	bounds.SetGranularity( 1 );
-	bounds.SetNum( numFrames );
-	for( i = 0; i < numFrames; i++ ) {
-		parser.Parse1DMatrix( 3, bounds[ i ][ 0 ].ToFloatPtr() );
-		parser.Parse1DMatrix( 3, bounds[ i ][ 1 ].ToFloatPtr() );
+	parser.ExpectTokenString("bounds");
+	parser.ExpectTokenString("{");
+	bounds.SetGranularity(1);
+	bounds.SetNum(numFrames);
+	for (i = 0; i < numFrames; i++) {
+		parser.Parse1DMatrix(3, bounds[i][0].ToFloatPtr());
+		parser.Parse1DMatrix(3, bounds[i][1].ToFloatPtr());
 	}
-	parser.ExpectTokenString( "}" );
+	parser.ExpectTokenString("}");
 
 	// parse base frame
-	baseFrame.SetGranularity( 1 );
-	baseFrame.SetNum( numJoints );
-	parser.ExpectTokenString( "baseframe" );
-	parser.ExpectTokenString( "{" );
-	for( i = 0; i < numJoints; i++ ) {
+	baseFrame.SetGranularity(1);
+	baseFrame.SetNum(numJoints);
+	parser.ExpectTokenString("baseframe");
+	parser.ExpectTokenString("{");
+	for (i = 0; i < numJoints; i++) {
 		idCQuat q;
-		parser.Parse1DMatrix( 3, baseFrame[ i ].t.ToFloatPtr() );
-		parser.Parse1DMatrix( 3, q.ToFloatPtr() );//baseFrame[ i ].q.ToFloatPtr() );
-		baseFrame[ i ].q = q.ToQuat();//.w = baseFrame[ i ].q.CalcW();
+		parser.Parse1DMatrix(3, baseFrame[i].t.ToFloatPtr());
+		parser.Parse1DMatrix(3, q.ToFloatPtr());//baseFrame[ i ].q.ToFloatPtr() );
+		baseFrame[i].q = q.ToQuat();//.w = baseFrame[ i ].q.CalcW();
 	}
-	parser.ExpectTokenString( "}" );
+	parser.ExpectTokenString("}");
 
 	// parse frames
-	componentFrames.SetGranularity( 1 );
-	componentFrames.SetNum( numAnimatedComponents * numFrames );
+	componentFrames.SetGranularity(1);
+	componentFrames.SetNum(numAnimatedComponents * numFrames);
 
-	float *componentPtr = componentFrames.Ptr();
-	for( i = 0; i < numFrames; i++ ) {
-		parser.ExpectTokenString( "frame" );
+	float* componentPtr = componentFrames.Ptr();
+	for (i = 0; i < numFrames; i++) {
+		parser.ExpectTokenString("frame");
 		num = parser.ParseInt();
-		if ( num != i ) {
-			parser.Error( "Expected frame number %d", i );
+		if (num != i) {
+			parser.Error("Expected frame number %d", i);
 		}
-		parser.ExpectTokenString( "{" );
-		
-		for( j = 0; j < numAnimatedComponents; j++, componentPtr++ ) {
+		parser.ExpectTokenString("{");
+
+		for (j = 0; j < numAnimatedComponents; j++, componentPtr++) {
 			*componentPtr = parser.ParseFloat();
 		}
 
-		parser.ExpectTokenString( "}" );
+		parser.ExpectTokenString("}");
 	}
 
 	// get total move delta
-	if ( !numAnimatedComponents ) {
+	if (!numAnimatedComponents) {
 		totaldelta.Zero();
-	} else {
-		componentPtr = &componentFrames[ jointInfo[ 0 ].firstComponent ];
-		if ( jointInfo[ 0 ].animBits & ANIM_TX ) {
-			for( i = 0; i < numFrames; i++ ) {
-				componentPtr[ numAnimatedComponents * i ] -= baseFrame[ 0 ].t.x;
+	}
+	else {
+		componentPtr = &componentFrames[jointInfo[0].firstComponent];
+		if (jointInfo[0].animBits & ANIM_TX) {
+			for (i = 0; i < numFrames; i++) {
+				componentPtr[numAnimatedComponents * i] -= baseFrame[0].t.x;
 			}
-			totaldelta.x = componentPtr[ numAnimatedComponents * ( numFrames - 1 ) ];
+			totaldelta.x = componentPtr[numAnimatedComponents * (numFrames - 1)];
 			componentPtr++;
-		} else {
+		}
+		else {
 			totaldelta.x = 0.0f;
 		}
-		if ( jointInfo[ 0 ].animBits & ANIM_TY ) {
-			for( i = 0; i < numFrames; i++ ) {
-				componentPtr[ numAnimatedComponents * i ] -= baseFrame[ 0 ].t.y;
+		if (jointInfo[0].animBits & ANIM_TY) {
+			for (i = 0; i < numFrames; i++) {
+				componentPtr[numAnimatedComponents * i] -= baseFrame[0].t.y;
 			}
-			totaldelta.y = componentPtr[ numAnimatedComponents * ( numFrames - 1 ) ];
+			totaldelta.y = componentPtr[numAnimatedComponents * (numFrames - 1)];
 			componentPtr++;
-		} else {
+		}
+		else {
 			totaldelta.y = 0.0f;
 		}
-		if ( jointInfo[ 0 ].animBits & ANIM_TZ ) {
-			for( i = 0; i < numFrames; i++ ) {
-				componentPtr[ numAnimatedComponents * i ] -= baseFrame[ 0 ].t.z;
+		if (jointInfo[0].animBits & ANIM_TZ) {
+			for (i = 0; i < numFrames; i++) {
+				componentPtr[numAnimatedComponents * i] -= baseFrame[0].t.z;
 			}
-			totaldelta.z = componentPtr[ numAnimatedComponents * ( numFrames - 1 ) ];
-		} else {
+			totaldelta.z = componentPtr[numAnimatedComponents * (numFrames - 1)];
+		}
+		else {
 			totaldelta.z = 0.0f;
 		}
 	}
-	baseFrame[ 0 ].t.Zero();
+	baseFrame[0].t.Zero();
 
 	// we don't count last frame because it would cause a 1 frame pause at the end
-	animLength = ( ( numFrames - 1 ) * 1000 + frameRate - 1 ) / frameRate;
+	animLength = ((numFrames - 1) * 1000 + frameRate - 1) / frameRate;
 
 	// done
 	return true;
@@ -314,7 +318,7 @@ bool idMD5Anim::LoadAnim( const char *filename ) {
 idMD5Anim::IncreaseRefs
 ====================
 */
-void idMD5Anim::IncreaseRefs( void ) const {
+void idMD5Anim::IncreaseRefs(void) const {
 	ref_count++;
 }
 
@@ -323,7 +327,7 @@ void idMD5Anim::IncreaseRefs( void ) const {
 idMD5Anim::DecreaseRefs
 ====================
 */
-void idMD5Anim::DecreaseRefs( void ) const {
+void idMD5Anim::DecreaseRefs(void) const {
 	ref_count--;
 }
 
@@ -332,7 +336,7 @@ void idMD5Anim::DecreaseRefs( void ) const {
 idMD5Anim::NumRefs
 ====================
 */
-int idMD5Anim::NumRefs( void ) const {
+int idMD5Anim::NumRefs(void) const {
 	return ref_count;
 }
 
@@ -341,49 +345,49 @@ int idMD5Anim::NumRefs( void ) const {
 idMD5Anim::ConvertTimeToFrame
 ====================
 */
-void idMD5Anim::ConvertTimeToFrame( int time, int cyclecount, frameBlend_t &frame ) const {
+void idMD5Anim::ConvertTimeToFrame(int time, int cyclecount, frameBlend_t& frame) const {
 	int frameTime;
 	int frameNum;
 
-	if ( numFrames <= 1 ) {
-		frame.frame1		= 0;
-		frame.frame2		= 0;
-		frame.backlerp		= 0.0f;
-		frame.frontlerp		= 1.0f;
-		frame.cycleCount	= 0;
+	if (numFrames <= 1) {
+		frame.frame1 = 0;
+		frame.frame2 = 0;
+		frame.backlerp = 0.0f;
+		frame.frontlerp = 1.0f;
+		frame.cycleCount = 0;
 		return;
 	}
 
-	if ( time <= 0 ) {
-		frame.frame1		= 0;
-		frame.frame2		= 1;
-		frame.backlerp		= 0.0f;
-		frame.frontlerp		= 1.0f;
-		frame.cycleCount	= 0;
+	if (time <= 0) {
+		frame.frame1 = 0;
+		frame.frame2 = 1;
+		frame.backlerp = 0.0f;
+		frame.frontlerp = 1.0f;
+		frame.cycleCount = 0;
 		return;
 	}
-	
-	frameTime			= time * frameRate;
-	frameNum			= frameTime / 1000;
-	frame.cycleCount	= frameNum / ( numFrames - 1 );
 
-	if ( ( cyclecount > 0 ) && ( frame.cycleCount >= cyclecount ) ) {
-		frame.cycleCount	= cyclecount - 1;
-		frame.frame1		= numFrames - 1;
-		frame.frame2		= frame.frame1;
-		frame.backlerp		= 0.0f;
-		frame.frontlerp		= 1.0f;
+	frameTime = time * frameRate;
+	frameNum = frameTime / 1000;
+	frame.cycleCount = frameNum / (numFrames - 1);
+
+	if ((cyclecount > 0) && (frame.cycleCount >= cyclecount)) {
+		frame.cycleCount = cyclecount - 1;
+		frame.frame1 = numFrames - 1;
+		frame.frame2 = frame.frame1;
+		frame.backlerp = 0.0f;
+		frame.frontlerp = 1.0f;
 		return;
 	}
-	
-	frame.frame1 = frameNum % ( numFrames - 1 );
+
+	frame.frame1 = frameNum % (numFrames - 1);
 	frame.frame2 = frame.frame1 + 1;
-	if ( frame.frame2 >= numFrames ) {
+	if (frame.frame2 >= numFrames) {
 		frame.frame2 = 0;
 	}
 
-	frame.backlerp	= ( frameTime % 1000 ) * 0.001f;
-	frame.frontlerp	= 1.0f - frame.backlerp;
+	frame.backlerp = (frameTime % 1000) * 0.001f;
+	frame.frontlerp = 1.0f - frame.backlerp;
 }
 
 // RAVEN BEGIN
@@ -395,14 +399,14 @@ idMD5Anim::ConvertFrameToTime
 MD5_FRAMERATE is always 24
 ====================
 */
-int idMD5Anim::ConvertFrameToTime( frameBlend_t &frame ) const {
+int idMD5Anim::ConvertFrameToTime(frameBlend_t& frame) const {
 	int		time;
 
 	// Adjust the time so the lerping doesn't break the reverse calc
-	time = ( ( frame.frame1 % (numFrames - 1)) * 1000 ) / frameRate;
+	time = ((frame.frame1 % (numFrames - 1)) * 1000) / frameRate;
 	time += 500 / frameRate;
 
-	return( time );
+	return(time);
 }
 // RAVEN END
 
@@ -411,38 +415,38 @@ int idMD5Anim::ConvertFrameToTime( frameBlend_t &frame ) const {
 idMD5Anim::GetOrigin
 ====================
 */
-void idMD5Anim::GetOrigin( idVec3 &offset, int time, int cyclecount ) const {
+void idMD5Anim::GetOrigin(idVec3& offset, int time, int cyclecount) const {
 	frameBlend_t frame;
 
-	offset = baseFrame[ 0 ].t;
-	if ( !( jointInfo[ 0 ].animBits & ( ANIM_TX | ANIM_TY | ANIM_TZ ) ) ) {
+	offset = baseFrame[0].t;
+	if (!(jointInfo[0].animBits & (ANIM_TX | ANIM_TY | ANIM_TZ))) {
 		// just use the baseframe		
 		return;
 	}
 
-	ConvertTimeToFrame( time, cyclecount, frame );
+	ConvertTimeToFrame(time, cyclecount, frame);
 
-	const float *componentPtr1 = &componentFrames[ numAnimatedComponents * frame.frame1 + jointInfo[ 0 ].firstComponent ];
-	const float *componentPtr2 = &componentFrames[ numAnimatedComponents * frame.frame2 + jointInfo[ 0 ].firstComponent ];
+	const float* componentPtr1 = &componentFrames[numAnimatedComponents * frame.frame1 + jointInfo[0].firstComponent];
+	const float* componentPtr2 = &componentFrames[numAnimatedComponents * frame.frame2 + jointInfo[0].firstComponent];
 
-	if ( jointInfo[ 0 ].animBits & ANIM_TX ) {
+	if (jointInfo[0].animBits & ANIM_TX) {
 		offset.x = *componentPtr1 * frame.frontlerp + *componentPtr2 * frame.backlerp;
 		componentPtr1++;
 		componentPtr2++;
 	}
 
-	if ( jointInfo[ 0 ].animBits & ANIM_TY ) {
+	if (jointInfo[0].animBits & ANIM_TY) {
 		offset.y = *componentPtr1 * frame.frontlerp + *componentPtr2 * frame.backlerp;
 		componentPtr1++;
 		componentPtr2++;
 	}
 
-	if ( jointInfo[ 0 ].animBits & ANIM_TZ ) {
+	if (jointInfo[0].animBits & ANIM_TZ) {
 		offset.z = *componentPtr1 * frame.frontlerp + *componentPtr2 * frame.backlerp;
 	}
 
-	if ( frame.cycleCount ) {
-		offset += totaldelta * ( float )frame.cycleCount;
+	if (frame.cycleCount) {
+		offset += totaldelta * (float)frame.cycleCount;
 	}
 }
 
@@ -451,33 +455,33 @@ void idMD5Anim::GetOrigin( idVec3 &offset, int time, int cyclecount ) const {
 idMD5Anim::GetOriginRotation
 ====================
 */
-void idMD5Anim::GetOriginRotation( idQuat &rotation, int time, int cyclecount ) const {
+void idMD5Anim::GetOriginRotation(idQuat& rotation, int time, int cyclecount) const {
 	frameBlend_t	frame;
 	int				animBits;
-	
-	animBits = jointInfo[ 0 ].animBits;
-	if ( !( animBits & ( ANIM_QX | ANIM_QY | ANIM_QZ ) ) ) {
+
+	animBits = jointInfo[0].animBits;
+	if (!(animBits & (ANIM_QX | ANIM_QY | ANIM_QZ))) {
 		// just use the baseframe		
-		rotation = baseFrame[ 0 ].q;
+		rotation = baseFrame[0].q;
 		return;
 	}
 
-	ConvertTimeToFrame( time, cyclecount, frame );
+	ConvertTimeToFrame(time, cyclecount, frame);
 
-	const float	*jointframe1 = &componentFrames[ numAnimatedComponents * frame.frame1 + jointInfo[ 0 ].firstComponent ];
-	const float	*jointframe2 = &componentFrames[ numAnimatedComponents * frame.frame2 + jointInfo[ 0 ].firstComponent ];
+	const float* jointframe1 = &componentFrames[numAnimatedComponents * frame.frame1 + jointInfo[0].firstComponent];
+	const float* jointframe2 = &componentFrames[numAnimatedComponents * frame.frame2 + jointInfo[0].firstComponent];
 
-	if ( animBits & ANIM_TX ) {
+	if (animBits & ANIM_TX) {
 		jointframe1++;
 		jointframe2++;
 	}
 
-	if ( animBits & ANIM_TY ) {
+	if (animBits & ANIM_TY) {
 		jointframe1++;
 		jointframe2++;
 	}
 
-	if ( animBits & ANIM_TZ ) {
+	if (animBits & ANIM_TZ) {
 		jointframe1++;
 		jointframe2++;
 	}
@@ -485,80 +489,80 @@ void idMD5Anim::GetOriginRotation( idQuat &rotation, int time, int cyclecount ) 
 	idQuat q1;
 	idQuat q2;
 
-	switch( animBits & (ANIM_QX|ANIM_QY|ANIM_QZ) ) {
-		case ANIM_QX:
-			q1.x = jointframe1[0];
-			q2.x = jointframe2[0];
-			q1.y = baseFrame[ 0 ].q.y;
-			q2.y = q1.y;
-			q1.z = baseFrame[ 0 ].q.z;
-			q2.z = q1.z;
-			q1.w = q1.CalcW();
-			q2.w = q2.CalcW();
-			break;
-		case ANIM_QY:
-			q1.y = jointframe1[0];
-			q2.y = jointframe2[0];
-			q1.x = baseFrame[ 0 ].q.x;
-			q2.x = q1.x;
-			q1.z = baseFrame[ 0 ].q.z;
-			q2.z = q1.z;
-			q1.w = q1.CalcW();
-			q2.w = q2.CalcW();
-			break;
-		case ANIM_QZ:
-			q1.z = jointframe1[0];
-			q2.z = jointframe2[0];
-			q1.x = baseFrame[ 0 ].q.x;
-			q2.x = q1.x;
-			q1.y = baseFrame[ 0 ].q.y;
-			q2.y = q1.y;
-			q1.w = q1.CalcW();
-			q2.w = q2.CalcW();
-			break;
-		case ANIM_QX|ANIM_QY:
-			q1.x = jointframe1[0];
-			q1.y = jointframe1[1];
-			q2.x = jointframe2[0];
-			q2.y = jointframe2[1];
-			q1.z = baseFrame[ 0 ].q.z;
-			q2.z = q1.z;
-			q1.w = q1.CalcW();
-			q2.w = q2.CalcW();
-			break;
-		case ANIM_QX|ANIM_QZ:
-			q1.x = jointframe1[0];
-			q1.z = jointframe1[1];
-			q2.x = jointframe2[0];
-			q2.z = jointframe2[1];
-			q1.y = baseFrame[ 0 ].q.y;
-			q2.y = q1.y;
-			q1.w = q1.CalcW();
-			q2.w = q2.CalcW();
-			break;
-		case ANIM_QY|ANIM_QZ:
-			q1.y = jointframe1[0];
-			q1.z = jointframe1[1];
-			q2.y = jointframe2[0];
-			q2.z = jointframe2[1];
-			q1.x = baseFrame[ 0 ].q.x;
-			q2.x = q1.x;
-			q1.w = q1.CalcW();
-			q2.w = q2.CalcW();
-			break;
-		case ANIM_QX|ANIM_QY|ANIM_QZ:
-			q1.x = jointframe1[0];
-			q1.y = jointframe1[1];
-			q1.z = jointframe1[2];
-			q2.x = jointframe2[0];
-			q2.y = jointframe2[1];
-			q2.z = jointframe2[2];
-			q1.w = q1.CalcW();
-			q2.w = q2.CalcW();
-			break;
+	switch (animBits & (ANIM_QX | ANIM_QY | ANIM_QZ)) {
+	case ANIM_QX:
+		q1.x = jointframe1[0];
+		q2.x = jointframe2[0];
+		q1.y = baseFrame[0].q.y;
+		q2.y = q1.y;
+		q1.z = baseFrame[0].q.z;
+		q2.z = q1.z;
+		q1.w = q1.CalcW();
+		q2.w = q2.CalcW();
+		break;
+	case ANIM_QY:
+		q1.y = jointframe1[0];
+		q2.y = jointframe2[0];
+		q1.x = baseFrame[0].q.x;
+		q2.x = q1.x;
+		q1.z = baseFrame[0].q.z;
+		q2.z = q1.z;
+		q1.w = q1.CalcW();
+		q2.w = q2.CalcW();
+		break;
+	case ANIM_QZ:
+		q1.z = jointframe1[0];
+		q2.z = jointframe2[0];
+		q1.x = baseFrame[0].q.x;
+		q2.x = q1.x;
+		q1.y = baseFrame[0].q.y;
+		q2.y = q1.y;
+		q1.w = q1.CalcW();
+		q2.w = q2.CalcW();
+		break;
+	case ANIM_QX | ANIM_QY:
+		q1.x = jointframe1[0];
+		q1.y = jointframe1[1];
+		q2.x = jointframe2[0];
+		q2.y = jointframe2[1];
+		q1.z = baseFrame[0].q.z;
+		q2.z = q1.z;
+		q1.w = q1.CalcW();
+		q2.w = q2.CalcW();
+		break;
+	case ANIM_QX | ANIM_QZ:
+		q1.x = jointframe1[0];
+		q1.z = jointframe1[1];
+		q2.x = jointframe2[0];
+		q2.z = jointframe2[1];
+		q1.y = baseFrame[0].q.y;
+		q2.y = q1.y;
+		q1.w = q1.CalcW();
+		q2.w = q2.CalcW();
+		break;
+	case ANIM_QY | ANIM_QZ:
+		q1.y = jointframe1[0];
+		q1.z = jointframe1[1];
+		q2.y = jointframe2[0];
+		q2.z = jointframe2[1];
+		q1.x = baseFrame[0].q.x;
+		q2.x = q1.x;
+		q1.w = q1.CalcW();
+		q2.w = q2.CalcW();
+		break;
+	case ANIM_QX | ANIM_QY | ANIM_QZ:
+		q1.x = jointframe1[0];
+		q1.y = jointframe1[1];
+		q1.z = jointframe1[2];
+		q2.x = jointframe2[0];
+		q2.y = jointframe2[1];
+		q2.z = jointframe2[2];
+		q1.w = q1.CalcW();
+		q2.w = q2.CalcW();
+		break;
 	}
 
-	rotation.Slerp( q1, q2, frame.backlerp );
+	rotation.Slerp(q1, q2, frame.backlerp);
 }
 
 /*
@@ -566,40 +570,40 @@ void idMD5Anim::GetOriginRotation( idQuat &rotation, int time, int cyclecount ) 
 idMD5Anim::GetBounds
 ====================
 */
-void idMD5Anim::GetBounds( idBounds &bnds, int time, int cyclecount ) const {
+void idMD5Anim::GetBounds(idBounds& bnds, int time, int cyclecount) const {
 	frameBlend_t	frame;
 	idVec3			offset;
 
-	ConvertTimeToFrame( time, cyclecount, frame );
+	ConvertTimeToFrame(time, cyclecount, frame);
 
-	bnds = bounds[ frame.frame1 ];
-	bnds.AddBounds( bounds[ frame.frame2 ] );
+	bnds = bounds[frame.frame1];
+	bnds.AddBounds(bounds[frame.frame2]);
 
 	// origin position
-	offset = baseFrame[ 0 ].t;
-	if ( jointInfo[ 0 ].animBits & ( ANIM_TX | ANIM_TY | ANIM_TZ ) ) {
-		const float *componentPtr1 = &componentFrames[ numAnimatedComponents * frame.frame1 + jointInfo[ 0 ].firstComponent ];
-		const float *componentPtr2 = &componentFrames[ numAnimatedComponents * frame.frame2 + jointInfo[ 0 ].firstComponent ];
+	offset = baseFrame[0].t;
+	if (jointInfo[0].animBits & (ANIM_TX | ANIM_TY | ANIM_TZ)) {
+		const float* componentPtr1 = &componentFrames[numAnimatedComponents * frame.frame1 + jointInfo[0].firstComponent];
+		const float* componentPtr2 = &componentFrames[numAnimatedComponents * frame.frame2 + jointInfo[0].firstComponent];
 
-		if ( jointInfo[ 0 ].animBits & ANIM_TX ) {
+		if (jointInfo[0].animBits & ANIM_TX) {
 			offset.x = *componentPtr1 * frame.frontlerp + *componentPtr2 * frame.backlerp;
 			componentPtr1++;
 			componentPtr2++;
 		}
 
-		if ( jointInfo[ 0 ].animBits & ANIM_TY ) {
+		if (jointInfo[0].animBits & ANIM_TY) {
 			offset.y = *componentPtr1 * frame.frontlerp + *componentPtr2 * frame.backlerp;
 			componentPtr1++;
 			componentPtr2++;
 		}
 
-		if ( jointInfo[ 0 ].animBits & ANIM_TZ ) {
+		if (jointInfo[0].animBits & ANIM_TZ) {
 			offset.z = *componentPtr1 * frame.frontlerp + *componentPtr2 * frame.backlerp;
 		}
 	}
 
-	bnds[ 0 ] -= offset;
-	bnds[ 1 ] -= offset;
+	bnds[0] -= offset;
+	bnds[1] -= offset;
 }
 
 /*
@@ -607,194 +611,194 @@ void idMD5Anim::GetBounds( idBounds &bnds, int time, int cyclecount ) const {
 idMD5Anim::GetInterpolatedFrame
 ====================
 */
-void idMD5Anim::GetInterpolatedFrame( const frameBlend_t &frame, idJointQuat *joints, const int *index, int numIndexes ) const {
+void idMD5Anim::GetInterpolatedFrame(const frameBlend_t& frame, idJointQuat* joints, const int* index, int numIndexes) const {
 	int						i, numLerpJoints;
-	const float				*frame1;
-	const float				*frame2;
-	const float				*jointframe1;
-	const float				*jointframe2;
-	const jointAnimInfo_t	*infoPtr;
+	const float* frame1;
+	const float* frame2;
+	const float* jointframe1;
+	const float* jointframe2;
+	const jointAnimInfo_t* infoPtr;
 	int						animBits;
-	idJointQuat				*blendJoints;
-	idJointQuat				*jointPtr;
-	idJointQuat				*blendPtr;
-	int						*lerpIndex;
+	idJointQuat* blendJoints;
+	idJointQuat* jointPtr;
+	idJointQuat* blendPtr;
+	int* lerpIndex;
 
 	// copy the baseframe
-	SIMDProcessor->Memcpy( joints, baseFrame.Ptr(), baseFrame.Num() * sizeof( baseFrame[ 0 ] ) );
+	SIMDProcessor->Memcpy(joints, baseFrame.Ptr(), baseFrame.Num() * sizeof(baseFrame[0]));
 
 #if 0
-	if ( !gameLocal.isLastPredictFrame ) {
+	if (!gameLocal.isLastPredictFrame) {
 		return;
 	}
 #endif
 
-	if ( !numAnimatedComponents ) {
+	if (!numAnimatedComponents) {
 		// just use the base frame
 		return;
 	}
 
-	blendJoints = (idJointQuat *)_alloca16( baseFrame.Num() * sizeof( blendPtr[ 0 ] ) );
-	lerpIndex = (int *)_alloca16( baseFrame.Num() * sizeof( lerpIndex[ 0 ] ) );
+	blendJoints = (idJointQuat*)_alloca16(baseFrame.Num() * sizeof(blendPtr[0]));
+	lerpIndex = (int*)_alloca16(baseFrame.Num() * sizeof(lerpIndex[0]));
 	numLerpJoints = 0;
 
-	frame1 = &componentFrames[ frame.frame1 * numAnimatedComponents ];
-	frame2 = &componentFrames[ frame.frame2 * numAnimatedComponents ];
+	frame1 = &componentFrames[frame.frame1 * numAnimatedComponents];
+	frame2 = &componentFrames[frame.frame2 * numAnimatedComponents];
 
-	for ( i = 0; i < numIndexes; i++ ) {
+	for (i = 0; i < numIndexes; i++) {
 		int j = index[i];
 		jointPtr = &joints[j];
 		blendPtr = &blendJoints[j];
 		infoPtr = &jointInfo[j];
 
 		animBits = infoPtr->animBits;
-		if ( animBits ) {
+		if (animBits) {
 
 			lerpIndex[numLerpJoints++] = j;
 
 			jointframe1 = frame1 + infoPtr->firstComponent;
 			jointframe2 = frame2 + infoPtr->firstComponent;
 
-			switch( animBits & (ANIM_TX|ANIM_TY|ANIM_TZ) ) {
-				case 0:
-					blendPtr->t = jointPtr->t;
-					break;
-				case ANIM_TX:
-					jointPtr->t.x = jointframe1[0];
-					blendPtr->t.x = jointframe2[0];
-					blendPtr->t.y = jointPtr->t.y;
-					blendPtr->t.z = jointPtr->t.z;
-					jointframe1++;
-					jointframe2++;
-					break;
-				case ANIM_TY:
-					jointPtr->t.y = jointframe1[0];
-					blendPtr->t.y = jointframe2[0];
-					blendPtr->t.x = jointPtr->t.x;
-					blendPtr->t.z = jointPtr->t.z;
-					jointframe1++;
-					jointframe2++;
-					break;
-				case ANIM_TZ:
-					jointPtr->t.z = jointframe1[0];
-					blendPtr->t.z = jointframe2[0];
-					blendPtr->t.x = jointPtr->t.x;
-					blendPtr->t.y = jointPtr->t.y;
-					jointframe1++;
-					jointframe2++;
-					break;
-				case ANIM_TX|ANIM_TY:
-					jointPtr->t.x = jointframe1[0];
-					jointPtr->t.y = jointframe1[1];
-					blendPtr->t.x = jointframe2[0];
-					blendPtr->t.y = jointframe2[1];
-					blendPtr->t.z = jointPtr->t.z;
-					jointframe1 += 2;
-					jointframe2 += 2;
-					break;
-				case ANIM_TX|ANIM_TZ:
-					jointPtr->t.x = jointframe1[0];
-					jointPtr->t.z = jointframe1[1];
-					blendPtr->t.x = jointframe2[0];
-					blendPtr->t.z = jointframe2[1];
-					blendPtr->t.y = jointPtr->t.y;
-					jointframe1 += 2;
-					jointframe2 += 2;
-					break;
-				case ANIM_TY|ANIM_TZ:
-					jointPtr->t.y = jointframe1[0];
-					jointPtr->t.z = jointframe1[1];
-					blendPtr->t.y = jointframe2[0];
-					blendPtr->t.z = jointframe2[1];
-					blendPtr->t.x = jointPtr->t.x;
-					jointframe1 += 2;
-					jointframe2 += 2;
-					break;
-				case ANIM_TX|ANIM_TY|ANIM_TZ:
-					jointPtr->t.x = jointframe1[0];
-					jointPtr->t.y = jointframe1[1];
-					jointPtr->t.z = jointframe1[2];
-					blendPtr->t.x = jointframe2[0];
-					blendPtr->t.y = jointframe2[1];
-					blendPtr->t.z = jointframe2[2];
-					jointframe1 += 3;
-					jointframe2 += 3;
-					break;
+			switch (animBits & (ANIM_TX | ANIM_TY | ANIM_TZ)) {
+			case 0:
+				blendPtr->t = jointPtr->t;
+				break;
+			case ANIM_TX:
+				jointPtr->t.x = jointframe1[0];
+				blendPtr->t.x = jointframe2[0];
+				blendPtr->t.y = jointPtr->t.y;
+				blendPtr->t.z = jointPtr->t.z;
+				jointframe1++;
+				jointframe2++;
+				break;
+			case ANIM_TY:
+				jointPtr->t.y = jointframe1[0];
+				blendPtr->t.y = jointframe2[0];
+				blendPtr->t.x = jointPtr->t.x;
+				blendPtr->t.z = jointPtr->t.z;
+				jointframe1++;
+				jointframe2++;
+				break;
+			case ANIM_TZ:
+				jointPtr->t.z = jointframe1[0];
+				blendPtr->t.z = jointframe2[0];
+				blendPtr->t.x = jointPtr->t.x;
+				blendPtr->t.y = jointPtr->t.y;
+				jointframe1++;
+				jointframe2++;
+				break;
+			case ANIM_TX | ANIM_TY:
+				jointPtr->t.x = jointframe1[0];
+				jointPtr->t.y = jointframe1[1];
+				blendPtr->t.x = jointframe2[0];
+				blendPtr->t.y = jointframe2[1];
+				blendPtr->t.z = jointPtr->t.z;
+				jointframe1 += 2;
+				jointframe2 += 2;
+				break;
+			case ANIM_TX | ANIM_TZ:
+				jointPtr->t.x = jointframe1[0];
+				jointPtr->t.z = jointframe1[1];
+				blendPtr->t.x = jointframe2[0];
+				blendPtr->t.z = jointframe2[1];
+				blendPtr->t.y = jointPtr->t.y;
+				jointframe1 += 2;
+				jointframe2 += 2;
+				break;
+			case ANIM_TY | ANIM_TZ:
+				jointPtr->t.y = jointframe1[0];
+				jointPtr->t.z = jointframe1[1];
+				blendPtr->t.y = jointframe2[0];
+				blendPtr->t.z = jointframe2[1];
+				blendPtr->t.x = jointPtr->t.x;
+				jointframe1 += 2;
+				jointframe2 += 2;
+				break;
+			case ANIM_TX | ANIM_TY | ANIM_TZ:
+				jointPtr->t.x = jointframe1[0];
+				jointPtr->t.y = jointframe1[1];
+				jointPtr->t.z = jointframe1[2];
+				blendPtr->t.x = jointframe2[0];
+				blendPtr->t.y = jointframe2[1];
+				blendPtr->t.z = jointframe2[2];
+				jointframe1 += 3;
+				jointframe2 += 3;
+				break;
 			}
 
-			switch( animBits & (ANIM_QX|ANIM_QY|ANIM_QZ) ) {
-				case 0:
-					blendPtr->q = jointPtr->q;
-					break;
-				case ANIM_QX:
-					jointPtr->q.x = jointframe1[0];
-					blendPtr->q.x = jointframe2[0];
-					blendPtr->q.y = jointPtr->q.y;
-					blendPtr->q.z = jointPtr->q.z;
-					jointPtr->q.w = jointPtr->q.CalcW();
-					blendPtr->q.w = blendPtr->q.CalcW();
-					break;
-				case ANIM_QY:
-					jointPtr->q.y = jointframe1[0];
-					blendPtr->q.y = jointframe2[0];
-					blendPtr->q.x = jointPtr->q.x;
-					blendPtr->q.z = jointPtr->q.z;
-					jointPtr->q.w = jointPtr->q.CalcW();
-					blendPtr->q.w = blendPtr->q.CalcW();
-					break;
-				case ANIM_QZ:
-					jointPtr->q.z = jointframe1[0];
-					blendPtr->q.z = jointframe2[0];
-					blendPtr->q.x = jointPtr->q.x;
-					blendPtr->q.y = jointPtr->q.y;
-					jointPtr->q.w = jointPtr->q.CalcW();
-					blendPtr->q.w = blendPtr->q.CalcW();
-					break;
-				case ANIM_QX|ANIM_QY:
-					jointPtr->q.x = jointframe1[0];
-					jointPtr->q.y = jointframe1[1];
-					blendPtr->q.x = jointframe2[0];
-					blendPtr->q.y = jointframe2[1];
-					blendPtr->q.z = jointPtr->q.z;
-					jointPtr->q.w = jointPtr->q.CalcW();
-					blendPtr->q.w = blendPtr->q.CalcW();
-					break;
-				case ANIM_QX|ANIM_QZ:
-					jointPtr->q.x = jointframe1[0];
-					jointPtr->q.z = jointframe1[1];
-					blendPtr->q.x = jointframe2[0];
-					blendPtr->q.z = jointframe2[1];
-					blendPtr->q.y = jointPtr->q.y;
-					jointPtr->q.w = jointPtr->q.CalcW();
-					blendPtr->q.w = blendPtr->q.CalcW();
-					break;
-				case ANIM_QY|ANIM_QZ:
-					jointPtr->q.y = jointframe1[0];
-					jointPtr->q.z = jointframe1[1];
-					blendPtr->q.y = jointframe2[0];
-					blendPtr->q.z = jointframe2[1];
-					blendPtr->q.x = jointPtr->q.x;
-					jointPtr->q.w = jointPtr->q.CalcW();
-					blendPtr->q.w = blendPtr->q.CalcW();
-					break;
-				case ANIM_QX|ANIM_QY|ANIM_QZ:
-					jointPtr->q.x = jointframe1[0];
-					jointPtr->q.y = jointframe1[1];
-					jointPtr->q.z = jointframe1[2];
-					blendPtr->q.x = jointframe2[0];
-					blendPtr->q.y = jointframe2[1];
-					blendPtr->q.z = jointframe2[2];
-					jointPtr->q.w = jointPtr->q.CalcW();
-					blendPtr->q.w = blendPtr->q.CalcW();
-					break;
+			switch (animBits & (ANIM_QX | ANIM_QY | ANIM_QZ)) {
+			case 0:
+				blendPtr->q = jointPtr->q;
+				break;
+			case ANIM_QX:
+				jointPtr->q.x = jointframe1[0];
+				blendPtr->q.x = jointframe2[0];
+				blendPtr->q.y = jointPtr->q.y;
+				blendPtr->q.z = jointPtr->q.z;
+				jointPtr->q.w = jointPtr->q.CalcW();
+				blendPtr->q.w = blendPtr->q.CalcW();
+				break;
+			case ANIM_QY:
+				jointPtr->q.y = jointframe1[0];
+				blendPtr->q.y = jointframe2[0];
+				blendPtr->q.x = jointPtr->q.x;
+				blendPtr->q.z = jointPtr->q.z;
+				jointPtr->q.w = jointPtr->q.CalcW();
+				blendPtr->q.w = blendPtr->q.CalcW();
+				break;
+			case ANIM_QZ:
+				jointPtr->q.z = jointframe1[0];
+				blendPtr->q.z = jointframe2[0];
+				blendPtr->q.x = jointPtr->q.x;
+				blendPtr->q.y = jointPtr->q.y;
+				jointPtr->q.w = jointPtr->q.CalcW();
+				blendPtr->q.w = blendPtr->q.CalcW();
+				break;
+			case ANIM_QX | ANIM_QY:
+				jointPtr->q.x = jointframe1[0];
+				jointPtr->q.y = jointframe1[1];
+				blendPtr->q.x = jointframe2[0];
+				blendPtr->q.y = jointframe2[1];
+				blendPtr->q.z = jointPtr->q.z;
+				jointPtr->q.w = jointPtr->q.CalcW();
+				blendPtr->q.w = blendPtr->q.CalcW();
+				break;
+			case ANIM_QX | ANIM_QZ:
+				jointPtr->q.x = jointframe1[0];
+				jointPtr->q.z = jointframe1[1];
+				blendPtr->q.x = jointframe2[0];
+				blendPtr->q.z = jointframe2[1];
+				blendPtr->q.y = jointPtr->q.y;
+				jointPtr->q.w = jointPtr->q.CalcW();
+				blendPtr->q.w = blendPtr->q.CalcW();
+				break;
+			case ANIM_QY | ANIM_QZ:
+				jointPtr->q.y = jointframe1[0];
+				jointPtr->q.z = jointframe1[1];
+				blendPtr->q.y = jointframe2[0];
+				blendPtr->q.z = jointframe2[1];
+				blendPtr->q.x = jointPtr->q.x;
+				jointPtr->q.w = jointPtr->q.CalcW();
+				blendPtr->q.w = blendPtr->q.CalcW();
+				break;
+			case ANIM_QX | ANIM_QY | ANIM_QZ:
+				jointPtr->q.x = jointframe1[0];
+				jointPtr->q.y = jointframe1[1];
+				jointPtr->q.z = jointframe1[2];
+				blendPtr->q.x = jointframe2[0];
+				blendPtr->q.y = jointframe2[1];
+				blendPtr->q.z = jointframe2[2];
+				jointPtr->q.w = jointPtr->q.CalcW();
+				blendPtr->q.w = blendPtr->q.CalcW();
+				break;
 			}
 		}
 	}
 
-	SIMDProcessor->BlendJoints( joints, blendJoints, frame.backlerp, lerpIndex, numLerpJoints );
+	SIMDProcessor->BlendJoints(joints, blendJoints, frame.backlerp, lerpIndex, numLerpJoints);
 
-	if ( frame.cycleCount ) {
-		joints[ 0 ].t += totaldelta * ( float )frame.cycleCount;
+	if (frame.cycleCount) {
+		joints[0].t += totaldelta * (float)frame.cycleCount;
 	}
 }
 
@@ -803,60 +807,60 @@ void idMD5Anim::GetInterpolatedFrame( const frameBlend_t &frame, idJointQuat *jo
 idMD5Anim::GetSingleFrame
 ====================
 */
-void idMD5Anim::GetSingleFrame( int framenum, idJointQuat *joints, const int *index, int numIndexes ) const {
+void idMD5Anim::GetSingleFrame(int framenum, idJointQuat* joints, const int* index, int numIndexes) const {
 	int						i;
-	const float				*frame;
-	const float				*jointframe;
+	const float* frame;
+	const float* jointframe;
 	int						animBits;
-	idJointQuat				*jointPtr;
-	const jointAnimInfo_t	*infoPtr;
+	idJointQuat* jointPtr;
+	const jointAnimInfo_t* infoPtr;
 
 	// copy the baseframe
-	SIMDProcessor->Memcpy( joints, baseFrame.Ptr(), baseFrame.Num() * sizeof( baseFrame[ 0 ] ) );
+	SIMDProcessor->Memcpy(joints, baseFrame.Ptr(), baseFrame.Num() * sizeof(baseFrame[0]));
 
-	if ( ( framenum == 0 ) || !numAnimatedComponents ) {
+	if ((framenum == 0) || !numAnimatedComponents) {
 		// just use the base frame
 		return;
 	}
 
-	frame = &componentFrames[ framenum * numAnimatedComponents ];
+	frame = &componentFrames[framenum * numAnimatedComponents];
 
-	for ( i = 0; i < numIndexes; i++ ) {
+	for (i = 0; i < numIndexes; i++) {
 		int j = index[i];
 		jointPtr = &joints[j];
 		infoPtr = &jointInfo[j];
 
 		animBits = infoPtr->animBits;
-		if ( animBits ) {
+		if (animBits) {
 
 			jointframe = frame + infoPtr->firstComponent;
 
-			if ( animBits & (ANIM_TX|ANIM_TY|ANIM_TZ) ) {
+			if (animBits & (ANIM_TX | ANIM_TY | ANIM_TZ)) {
 
-				if ( animBits & ANIM_TX ) {
+				if (animBits & ANIM_TX) {
 					jointPtr->t.x = *jointframe++;
 				}
 
-				if ( animBits & ANIM_TY ) {
+				if (animBits & ANIM_TY) {
 					jointPtr->t.y = *jointframe++;
 				}
 
-				if ( animBits & ANIM_TZ ) {
+				if (animBits & ANIM_TZ) {
 					jointPtr->t.z = *jointframe++;
 				}
 			}
 
-			if ( animBits & (ANIM_QX|ANIM_QY|ANIM_QZ) ) {
+			if (animBits & (ANIM_QX | ANIM_QY | ANIM_QZ)) {
 
-				if ( animBits & ANIM_QX ) {
+				if (animBits & ANIM_QX) {
 					jointPtr->q.x = *jointframe++;
 				}
 
-				if ( animBits & ANIM_QY ) {
+				if (animBits & ANIM_QY) {
 					jointPtr->q.y = *jointframe++;
 				}
 
-				if ( animBits & ANIM_QZ ) {
+				if (animBits & ANIM_QZ) {
 					jointPtr->q.z = *jointframe;
 				}
 
@@ -871,38 +875,39 @@ void idMD5Anim::GetSingleFrame( int framenum, idJointQuat *joints, const int *in
 idMD5Anim::CheckModelHierarchy
 ====================
 */
-void idMD5Anim::CheckModelHierarchy( const idRenderModel *model ) const {
+void idMD5Anim::CheckModelHierarchy(const idRenderModel* model) const {
 	int	i;
 	int	jointNum;
 	int	parent;
 
-	if ( jointInfo.Num() != model->NumJoints() ) {
-// RAVEN BEGIN
-// scork: reports the actual joint # mismatch as well
-		gameLocal.Error( "Model '%s' has different # of joints (%d) than anim '%s' (%d)", model->Name(), model->NumJoints(), name.c_str(), jointInfo.Num() );
-// scork: if we don't return here, we get dozens of other warnings generated by mismatching models below, one warning is sufficient...
+	if (jointInfo.Num() != model->NumJoints()) {
+		// RAVEN BEGIN
+		// scork: reports the actual joint # mismatch as well
+		gameLocal.Error("Model '%s' has different # of joints (%d) than anim '%s' (%d)", model->Name(), model->NumJoints(), name.c_str(), jointInfo.Num());
+		// scork: if we don't return here, we get dozens of other warnings generated by mismatching models below, one warning is sufficient...
 		if (common->DoingDeclValidation()) {
 			return;
 		}
-// RAVEN END
+		// RAVEN END
 	}
 
-	const idMD5Joint *modelJoints = model->GetJoints();
-	for( i = 0; i < jointInfo.Num(); i++ ) {
-		jointNum = jointInfo[ i ].nameIndex;
-// RAVEN BEGIN
-// jsinger: animationLib changed to a pointer
-		if ( modelJoints[ i ].name != animationLib->JointName( jointNum ) ) {
-// RAVEN END
-			gameLocal.Error( "Model '%s''s joint names don't match anim '%s''s", model->Name(), name.c_str() );
+	const idMD5Joint* modelJoints = model->GetJoints();
+	for (i = 0; i < jointInfo.Num(); i++) {
+		jointNum = jointInfo[i].nameIndex;
+		// RAVEN BEGIN
+		// jsinger: animationLib changed to a pointer
+		if (modelJoints[i].name != animationLib->JointName(jointNum)) {
+			// RAVEN END
+			gameLocal.Error("Model '%s''s joint names don't match anim '%s''s", model->Name(), name.c_str());
 		}
-		if ( modelJoints[ i ].parent ) {
-			parent = modelJoints[ i ].parent - modelJoints;
-		} else {
+		if (modelJoints[i].parent) {
+			parent = modelJoints[i].parent - modelJoints;
+		}
+		else {
 			parent = -1;
 		}
-		if ( parent != jointInfo[ i ].parentNum ) {
-			gameLocal.Error( "Model '%s' has different joint hierarchy than anim '%s'", model->Name(), name.c_str() );
+		if (parent != jointInfo[i].parentNum) {
+			gameLocal.Error("Model '%s' has different joint hierarchy than anim '%s'", model->Name(), name.c_str());
 		}
 	}
 }
@@ -919,12 +924,12 @@ idAnimManager::idAnimManager
 ====================
 */
 idAnimManager::idAnimManager() {
-// RAVEN BEGIN
-// mwhitlock: Dynamic memory consolidation
+	// RAVEN BEGIN
+	// mwhitlock: Dynamic memory consolidation
 #if defined(_RV_MEM_SYS_SUPPORT)
-	insideLevelLoad=false;
+	insideLevelLoad = false;
 #endif
-// RAVEN END
+	// RAVEN END
 }
 
 /*
@@ -941,7 +946,7 @@ idAnimManager::~idAnimManager() {
 idAnimManager::Shutdown
 ====================
 */
-void idAnimManager::Shutdown( void ) {
+void idAnimManager::Shutdown(void) {
 	animations.DeleteContents();
 	jointnames.Clear();
 	jointnamesHash.Free();
@@ -955,7 +960,7 @@ void idAnimManager::Shutdown( void ) {
 idAnimManager::BeginLevelLoad
 ====================
 */
-void idAnimManager::BeginLevelLoad( void )
+void idAnimManager::BeginLevelLoad(void)
 {
 	insideLevelLoad = true;
 }
@@ -965,7 +970,7 @@ void idAnimManager::BeginLevelLoad( void )
 idAnimManager::EndLevelLoad
 ====================
 */
-void idAnimManager::EndLevelLoad( void )
+void idAnimManager::EndLevelLoad(void)
 {
 	insideLevelLoad = false;
 }
@@ -977,46 +982,47 @@ void idAnimManager::EndLevelLoad( void )
 idAnimManager::GetAnim
 ====================
 */
-idMD5Anim *idAnimManager::GetAnim( const char *name ) {
-	idMD5Anim **animptrptr;
-	idMD5Anim *anim;
+idMD5Anim* idAnimManager::GetAnim(const char* name) {
+	idMD5Anim** animptrptr;
+	idMD5Anim* anim;
 
 	// see if it has been asked for before
 	animptrptr = NULL;
-	if ( animations.Get( name, &animptrptr ) ) {
+	if (animations.Get(name, &animptrptr)) {
 		anim = *animptrptr;
-	} else {
+	}
+	else {
 		idStr extension;
 		idStr filename = name;
 
-		filename.ExtractFileExtension( extension );
-		if ( extension != MD5_ANIM_EXT ) {
-// RAVEN BEGIN
-// nmckenzie: I'm not interested in debugging this blindly again.
-			gameLocal.Warning( "Animation '%s' doesn't have the correct extension for an animation file.", filename.c_str() );
-// RAVEN END
+		filename.ExtractFileExtension(extension);
+		if (extension != MD5_ANIM_EXT) {
+			// RAVEN BEGIN
+			// nmckenzie: I'm not interested in debugging this blindly again.
+			gameLocal.Warning("Animation '%s' doesn't have the correct extension for an animation file.", filename.c_str());
+			// RAVEN END
 			return NULL;
 		}
 
-// RAVEN BEGIN
-// mwhitlock: Dynamic memory consolidation
+		// RAVEN BEGIN
+		// mwhitlock: Dynamic memory consolidation
 #if defined(_RV_MEM_SYS_SUPPORT)
-		RV_PUSH_SYS_HEAP_ID(insideLevelLoad?RV_HEAP_ID_LEVEL:RV_HEAP_ID_PERMANENT);
+		RV_PUSH_SYS_HEAP_ID(insideLevelLoad ? RV_HEAP_ID_LEVEL : RV_HEAP_ID_PERMANENT);
 #endif
-// RAVEN END
+		// RAVEN END
 		anim = new idMD5Anim();
-// RAVEN BEGIN
-// mwhitlock: Dynamic memory consolidation
+		// RAVEN BEGIN
+		// mwhitlock: Dynamic memory consolidation
 #if defined(_RV_MEM_SYS_SUPPORT)
 		RV_POP_HEAP();
 #endif
-// RAVEN END
-		if ( !anim->LoadAnim( filename ) ) {
-			gameLocal.Warning( "Couldn't load anim: '%s'", filename.c_str() );
+		// RAVEN END
+		if (!anim->LoadAnim(filename)) {
+			gameLocal.Warning("Couldn't load anim: '%s'", filename.c_str());
 			delete anim;
 			anim = NULL;
 		}
-		animations.Set( filename, anim );
+		animations.Set(filename, anim);
 	}
 
 	return anim;
@@ -1027,16 +1033,16 @@ idMD5Anim *idAnimManager::GetAnim( const char *name ) {
 idAnimManager::ReloadAnims
 ================
 */
-void idAnimManager::ReloadAnims( void ) {
-	TIME_THIS_SCOPE( __FUNCLINE__);
-	
-	int			i;
-	idMD5Anim	**animptr;
+void idAnimManager::ReloadAnims(void) {
+	TIME_THIS_SCOPE(__FUNCLINE__);
 
-	for( i = 0; i < animations.Num(); i++ ) {
-		animptr = animations.GetIndex( i );
-		if ( animptr && *animptr ) {
-			( *animptr )->Reload();
+	int			i;
+	idMD5Anim** animptr;
+
+	for (i = 0; i < animations.Num(); i++) {
+		animptr = animations.GetIndex(i);
+		if (animptr && *animptr) {
+			(*animptr)->Reload();
 		}
 	}
 }
@@ -1046,18 +1052,18 @@ void idAnimManager::ReloadAnims( void ) {
 idAnimManager::JointIndex
 ================
 */
-int	idAnimManager::JointIndex( const char *name ) {
+int	idAnimManager::JointIndex(const char* name) {
 	int i, hash;
 
-	hash = jointnamesHash.GenerateKey( name );
-	for ( i = jointnamesHash.First( hash ); i != -1; i = jointnamesHash.Next( i ) ) {
-		if ( jointnames[i].Cmp( name ) == 0 ) {
+	hash = jointnamesHash.GenerateKey(name);
+	for (i = jointnamesHash.First(hash); i != -1; i = jointnamesHash.Next(i)) {
+		if (jointnames[i].Cmp(name) == 0) {
 			return i;
 		}
 	}
 
-	i = jointnames.Append( name );
-	jointnamesHash.Add( hash, i );
+	i = jointnames.Append(name);
+	jointnamesHash.Add(hash, i);
 	return i;
 }
 
@@ -1066,8 +1072,8 @@ int	idAnimManager::JointIndex( const char *name ) {
 idAnimManager::JointName
 ================
 */
-const char *idAnimManager::JointName( int index ) const {
-	return jointnames[ index ];
+const char* idAnimManager::JointName(int index) const {
+	return jointnames[index];
 }
 
 /*
@@ -1075,10 +1081,10 @@ const char *idAnimManager::JointName( int index ) const {
 idAnimManager::ListAnims
 ================
 */
-void idAnimManager::ListAnims( void ) const {
+void idAnimManager::ListAnims(void) const {
 	int			i;
-	idMD5Anim	**animptr;
-	idMD5Anim	*anim;
+	idMD5Anim** animptr;
+	idMD5Anim* anim;
 	size_t		size;
 	size_t		s;
 	size_t		namesize;
@@ -1086,24 +1092,24 @@ void idAnimManager::ListAnims( void ) const {
 
 	num = 0;
 	size = 0;
-	for( i = 0; i < animations.Num(); i++ ) {
-		animptr = animations.GetIndex( i );
-		if ( animptr && *animptr ) {
+	for (i = 0; i < animations.Num(); i++) {
+		animptr = animations.GetIndex(i);
+		if (animptr && *animptr) {
 			anim = *animptr;
 			s = anim->Size();
-			gameLocal.Printf( "%8d bytes : %2d refs : %s\n", s, anim->NumRefs(), anim->Name() );
+			gameLocal.Printf("%8d bytes : %2d refs : %s\n", s, anim->NumRefs(), anim->Name());
 			size += s;
 			num++;
 		}
 	}
 
 	namesize = jointnames.Size() + jointnamesHash.Size();
-	for( i = 0; i < jointnames.Num(); i++ ) {
-		namesize += jointnames[ i ].Size();
+	for (i = 0; i < jointnames.Num(); i++) {
+		namesize += jointnames[i].Size();
 	}
 
-	gameLocal.Printf( "\n%d memory used in %d anims\n", size, num );
-	gameLocal.Printf( "%d memory used in %d joint names\n", namesize, jointnames.Num() );
+	gameLocal.Printf("\n%d memory used in %d anims\n", size, num);
+	gameLocal.Printf("%d memory used in %d joint names\n", namesize, jointnames.Num());
 }
 
 // RAVEN BEGIN
@@ -1112,44 +1118,44 @@ void idAnimManager::ListAnims( void ) const {
 idAnimManager::PrintMemInfo
 ================
 */
-void idAnimManager::PrintMemInfo( MemInfo *mi ) {
+void idAnimManager::PrintMemInfo(MemInfo* mi) {
 
 	int			i;
-	idMD5Anim	**animptr;
-	idMD5Anim	*anim;
+	idMD5Anim** animptr;
+	idMD5Anim* anim;
 	size_t		size;
 	size_t		namesize;
 	int			num;
-	idFile		*f;
+	idFile* f;
 
-	f = fileSystem->OpenFileWrite( mi->filebase + "_anim.txt" );
-	if( !f ) {
+	f = fileSystem->OpenFileWrite(mi->filebase + "_anim.txt");
+	if (!f) {
 		return;
 	}
 
 	num = 0;
 	size = 0;
-	for( i = 0; i < animations.Num(); i++ ) {
-		animptr = animations.GetIndex( i );
-		if ( animptr && *animptr ) {
+	for (i = 0; i < animations.Num(); i++) {
+		animptr = animations.GetIndex(i);
+		if (animptr && *animptr) {
 			anim = *animptr;
 			size += anim->Size();
 			num++;
 
-			f->Printf( "%8d: %s\n", anim->Size(), anim->Name() );
+			f->Printf("%8d: %s\n", anim->Size(), anim->Name());
 		}
 	}
 
 	namesize = jointnames.Size() + jointnamesHash.Size();
-	for( i = 0; i < jointnames.Num(); i++ ) {
-		namesize += jointnames[ i ].Size();
+	for (i = 0; i < jointnames.Num(); i++) {
+		namesize += jointnames[i].Size();
 	}
 
 	mi->animsAssetsCount = num;
 	mi->animsAssetsTotal = namesize + size;
 
-	f->Printf( "\nTotal anim bytes allocated: %s (%s items)\n", idStr::FormatNumber( mi->animsAssetsTotal ).c_str(), idStr::FormatNumber( mi->animsAssetsCount ).c_str() );
-	fileSystem->CloseFile( f );
+	f->Printf("\nTotal anim bytes allocated: %s (%s items)\n", idStr::FormatNumber(mi->animsAssetsTotal).c_str(), idStr::FormatNumber(mi->animsAssetsCount).c_str());
+	fileSystem->CloseFile(f);
 }
 // RAVEN END
 
@@ -1158,25 +1164,25 @@ void idAnimManager::PrintMemInfo( MemInfo *mi ) {
 idAnimManager::FlushUnusedAnims
 ================
 */
-void idAnimManager::FlushUnusedAnims( void ) {
+void idAnimManager::FlushUnusedAnims(void) {
 
-	TIME_THIS_SCOPE( __FUNCLINE__);
+	TIME_THIS_SCOPE(__FUNCLINE__);
 
 	int						i;
-	idMD5Anim				**animptr;
-	idList<idMD5Anim *>		removeAnims;
-	
-	for( i = 0; i < animations.Num(); i++ ) {
-		animptr = animations.GetIndex( i );
-		if ( animptr && *animptr ) {
-			if ( ( *animptr )->NumRefs() <= 0 ) {
-				removeAnims.Append( *animptr );
+	idMD5Anim** animptr;
+	idList<idMD5Anim*>		removeAnims;
+
+	for (i = 0; i < animations.Num(); i++) {
+		animptr = animations.GetIndex(i);
+		if (animptr && *animptr) {
+			if ((*animptr)->NumRefs() <= 0) {
+				removeAnims.Append(*animptr);
 			}
 		}
 	}
 
-	for( i = 0; i < removeAnims.Num(); i++ ) {
-		animations.Remove( removeAnims[ i ]->Name() );
-		delete removeAnims[ i ];
+	for (i = 0; i < removeAnims.Num(); i++) {
+		animations.Remove(removeAnims[i]->Name());
+		delete removeAnims[i];
 	}
 }

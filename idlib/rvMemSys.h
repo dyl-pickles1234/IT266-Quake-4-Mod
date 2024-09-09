@@ -16,7 +16,7 @@
 #ifndef __RV_MEM_SYS_H__
 #define __RV_MEM_SYS_H__
 
-typedef enum 
+typedef enum
 {
 	RV_HEAP_ID_DEFAULT,			// heap that exists on application startup
 	RV_HEAP_ID_PERMANENT,		// heap for allocations that have permanent (application scope) lifetime
@@ -26,10 +26,10 @@ typedef enum
 	RV_HEAP_ID_TEMPORARY,		// heap for objects that have a short lifetime (temporaries generally used for level loading)
 	RV_HEAP_ID_IO_TEMP,			// heap for allocations that are temporaries used in I/O operations like level loading or writing out data
 	rv_heap_ID_max_count		// just a count, not a valid type
-} 
+}
 Rv_Sys_Heap_ID_t;
 
-static const uint MAX_SYSTEM_HEAPS	= (uint) rv_heap_ID_max_count;
+static const uint MAX_SYSTEM_HEAPS = (uint)rv_heap_ID_max_count;
 
 #ifdef _RV_MEM_SYS_SUPPORT
 
@@ -37,17 +37,17 @@ static const uint MAX_SYSTEM_HEAPS	= (uint) rv_heap_ID_max_count;
 //	_RV_MEM_SYS_SUPPORT is defined
 //
 
-extern rvHeapArena *currentHeapArena;	
+extern rvHeapArena* currentHeapArena;
 
 // Functions for getting and setting the system heaps.
-void	rvSetSysHeap( Rv_Sys_Heap_ID_t sysHeapID, rvHeap *heapPtr );					// associates a heap with the given system heap ID value
-rvHeap* rvGetSysHeap( Rv_Sys_Heap_ID_t sysHeapID );										// retrieves the specified system heap
-void	rvGetAllSysHeaps( rvHeap *destSystemHeapArray[MAX_SYSTEM_HEAPS] );				// retrieves all the MAX_SYSTEM_HEAPS heap pointers into the given array
-void	rvSetAllSysHeaps( rvHeap *srcSystemHeapArray[MAX_SYSTEM_HEAPS] );				// associates all the MAX_SYSTEM_HEAPS heap pointers from the given array with their corresponding id value
-bool	rvPushHeapContainingMemory( const void* mem );									// pushes the heap containg the memory specified to the top of the arena stack, making it current - mwhitlock
+void	rvSetSysHeap(Rv_Sys_Heap_ID_t sysHeapID, rvHeap* heapPtr);					// associates a heap with the given system heap ID value
+rvHeap* rvGetSysHeap(Rv_Sys_Heap_ID_t sysHeapID);										// retrieves the specified system heap
+void	rvGetAllSysHeaps(rvHeap* destSystemHeapArray[MAX_SYSTEM_HEAPS]);				// retrieves all the MAX_SYSTEM_HEAPS heap pointers into the given array
+void	rvSetAllSysHeaps(rvHeap* srcSystemHeapArray[MAX_SYSTEM_HEAPS]);				// associates all the MAX_SYSTEM_HEAPS heap pointers from the given array with their corresponding id value
+bool	rvPushHeapContainingMemory(const void* mem);									// pushes the heap containg the memory specified to the top of the arena stack, making it current - mwhitlock
 
-void rvEnterArenaCriticalSection( );							// enters the heap arena critical section
-void rvExitArenaCriticalSection( );								// exits the heap arena critical section
+void rvEnterArenaCriticalSection();							// enters the heap arena critical section
+void rvExitArenaCriticalSection();								// exits the heap arena critical section
 void rvPushSysHeap(Rv_Sys_Heap_ID_t sysHeapID);					// pushes the system heap associated with the given identifier to the top of the arena stack, making it current
 
 // Useful in situations where a heap is pushed, but a return on error or an
@@ -75,12 +75,12 @@ public:
 	rvAutoHeapCtxt(const void* mem) :
 		mPushed(false)
 	{
-		mPushed = rvPushHeapContainingMemory( mem );
+		mPushed = rvPushHeapContainingMemory(mem);
 	}
 
 	~rvAutoHeapCtxt(void)
 	{
-		if(mPushed)
+		if (mPushed)
 		{
 			currentHeapArena->Pop();
 		}

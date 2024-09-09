@@ -542,9 +542,6 @@
     <ClInclude Include="mpgame\Entity.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="mpgame\Game.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="mpgame\Game_Debug.h">
       <Filter>Game</Filter>
     </ClInclude>
@@ -832,6 +829,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="mpgame\Game.def" />
+    <None Include="mpgame\mpgame.def" />
   </ItemGroup>
 </Project>

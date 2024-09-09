@@ -9,20 +9,20 @@
 
 class rvVehicleSpline : public rvVehicle {
 public:
-	CLASS_PROTOTYPE( rvVehicleSpline );
+	CLASS_PROTOTYPE(rvVehicleSpline);
 
-							rvVehicleSpline					( void );
-							~rvVehicleSpline				( void );
-	
-	void					Spawn							( void );
-	void					Save							( idSaveGame *savefile ) const;
-	void					Restore							( idRestoreGame *savefile );
+	rvVehicleSpline(void);
+	~rvVehicleSpline(void);
 
-	void					Think							( void );
+	void					Spawn(void);
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	void					Event_PostSpawn					( void );
-	void					Event_SetSpline					( idEntity * spline );
-	void					Event_DoneMoving				( void );
+	void					Think(void);
+
+	void					Event_PostSpawn(void);
+	void					Event_SetSpline(idEntity* spline);
+	void					Event_DoneMoving(void);
 
 protected:
 	rvPhysics_Spline		physicsObj;

@@ -9,25 +9,25 @@
 class CriticalSection
 {
 public:
-	ID_INLINE CriticalSection() 
-	{ 
-		InitializeCriticalSection(&mCrit); 
+	ID_INLINE CriticalSection()
+	{
+		InitializeCriticalSection(&mCrit);
 	}
-	ID_INLINE ~CriticalSection() 
-	{ 
-		DeleteCriticalSection(&mCrit); 
+	ID_INLINE ~CriticalSection()
+	{
+		DeleteCriticalSection(&mCrit);
 	}
 
-	ID_INLINE void Enter() 
-	{ 
-		while(!Try())
+	ID_INLINE void Enter()
+	{
+		while (!Try())
 		{
 			Sleep(0);	// give another thread a chance to run to try to eliminate deadlock
 		}
 	}
-	ID_INLINE void Leave() 
-	{ 
-		LeaveCriticalSection(&mCrit); 
+	ID_INLINE void Leave()
+	{
+		LeaveCriticalSection(&mCrit);
 	}
 
 	ID_INLINE bool Try()
@@ -48,12 +48,12 @@ template <typename t>
 class AutoCrit
 {
 public:
-	ID_INLINE AutoCrit() 
-	{ 
+	ID_INLINE AutoCrit()
+	{
 		sCrit.Enter();
 	}
-	ID_INLINE ~AutoCrit() 
-	{ 
+	ID_INLINE ~AutoCrit()
+	{
 		sCrit.Leave();
 	}
 private:
@@ -69,7 +69,7 @@ class ConditionalAutoCrit
 public:
 	ID_INLINE ConditionalAutoCrit()
 	{
-		if(sThreading)
+		if (sThreading)
 		{
 			sCrit.Enter();
 			mMustLeave = true;
@@ -81,7 +81,7 @@ public:
 	}
 	ID_INLINE ~ConditionalAutoCrit()
 	{
-		if(mMustLeave)
+		if (mMustLeave)
 		{
 			sCrit.Leave();
 		}
@@ -108,7 +108,7 @@ template<typename t>
 CriticalSection ConditionalAutoCrit<t>::sCrit;
 
 template<typename t>
-bool ConditionalAutoCrit<t>::sThreading=false;
+bool ConditionalAutoCrit<t>::sThreading = false;
 
 #else
 // these compile out completely in release and removes the need
@@ -151,15 +151,15 @@ class AutoInstanceCrit
 {
 public:
 
-	ID_INLINE AutoInstanceCrit(t *ptr)
+	ID_INLINE AutoInstanceCrit(t* ptr)
 	{
-		CritInfo *critPtr = NULL;
+		CritInfo* critPtr = NULL;
 		//AutoCrit<AutoInstanceCrit<t> > crit;			// protect access to the map
 		critSect.Enter();
 		mPtr = ptr;
 		int i = sPtrs.FindIndex(mPtr);
 
-		if(i == -1)	// not found
+		if (i == -1)	// not found
 		{
 			i = sPtrs.Num();
 			sPtrs.Append(mPtr);
@@ -172,9 +172,9 @@ public:
 		critPtr->crit.Enter();
 	}
 
-	ID_INLINE ~AutoInstanceCrit() 
-	{ 
-		CritInfo *critPtr = NULL;
+	ID_INLINE ~AutoInstanceCrit()
+	{
+		CritInfo* critPtr = NULL;
 		{
 			//AutoCrit<AutoInstanceCrit<t> > crit;			// protect access to the map
 			critSect.Enter();
@@ -194,13 +194,13 @@ public:
 	}
 
 private:
-	t *mPtr;		// the pointer we're protecting
+	t* mPtr;		// the pointer we're protecting
 	static CriticalSection critSect;
-	static idList<t *> sPtrs;
+	static idList<t*> sPtrs;
 	static idList<CritInfo> sInfos;
 };
 template<typename t>
-idList<t *> AutoInstanceCrit<t>::sPtrs;
+idList<t*> AutoInstanceCrit<t>::sPtrs;
 
 template<typename t>
 idList<CritInfo> AutoInstanceCrit<t>::sInfos;
@@ -215,7 +215,7 @@ template <typename t>
 class AutoInstanceCrit
 {
 public:
-	ID_INLINE AutoInstanceCrit(t *ptr) { }
+	ID_INLINE AutoInstanceCrit(t* ptr) { }
 };
 #endif
 

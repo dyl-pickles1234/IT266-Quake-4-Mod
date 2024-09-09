@@ -14,26 +14,26 @@
 
 class idIK {
 public:
-							idIK( void );
-	virtual					~idIK( void );
+	idIK(void);
+	virtual					~idIK(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	bool					IsInitialized( void ) const;
+	bool					IsInitialized(void) const;
 
-	virtual bool			Init( idEntity *self, const char *anim, const idVec3 &modelOffset );
-	virtual void			Evaluate( void );
-	virtual void			ClearJointMods( void );
+	virtual bool			Init(idEntity* self, const char* anim, const idVec3& modelOffset);
+	virtual void			Evaluate(void);
+	virtual void			ClearJointMods(void);
 
-	bool					SolveTwoBones( const idVec3 &startPos, const idVec3 &endPos, const idVec3 &dir, float len0, float len1, idVec3 &jointPos );
-	float					GetBoneAxis( const idVec3 &startPos, const idVec3 &endPos, const idVec3 &dir, idMat3 &axis );
+	bool					SolveTwoBones(const idVec3& startPos, const idVec3& endPos, const idVec3& dir, float len0, float len1, idVec3& jointPos);
+	float					GetBoneAxis(const idVec3& startPos, const idVec3& endPos, const idVec3& dir, idMat3& axis);
 
 protected:
 	bool					initialized;
 	bool					ik_activate;
-	idEntity *				self;				// entity using the animated model
-	idAnimator *			animator;			// animator on entity
+	idEntity* self;				// entity using the animated model
+	idAnimator* animator;			// animator on entity
 	int						modifiedAnim;		// animation modified by the IK
 	idVec3					modelOffset;
 };
@@ -42,7 +42,7 @@ protected:
 /*
 ===============================================================================
 
-  IK controller for a walking character with an arbitrary number of legs.	
+  IK controller for a walking character with an arbitrary number of legs.
 
 ===============================================================================
 */
@@ -50,25 +50,25 @@ protected:
 class idIK_Walk : public idIK {
 public:
 
-							idIK_Walk( void );
-	virtual					~idIK_Walk( void );
+	idIK_Walk(void);
+	virtual					~idIK_Walk(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	virtual bool			Init( idEntity *self, const char *anim, const idVec3 &modelOffset );
-	virtual void			Evaluate( void );
-	virtual void			ClearJointMods( void );
+	virtual bool			Init(idEntity* self, const char* anim, const idVec3& modelOffset);
+	virtual void			Evaluate(void);
+	virtual void			ClearJointMods(void);
 
-	void					EnableAll( void );
-	void					DisableAll( void );
-	void					EnableLeg( int num );
-	void					DisableLeg( int num );
+	void					EnableAll(void);
+	void					DisableAll(void);
+	void					EnableLeg(int num);
+	void					DisableLeg(int num);
 
 private:
-	static const int		MAX_LEGS		= 8;
+	static const int		MAX_LEGS = 8;
 
-	idClipModel *			footModel;
+	idClipModel* footModel;
 
 	int						numLegs;
 	int						enabledLegs;
@@ -121,19 +121,19 @@ private:
 class idIK_Reach : public idIK {
 public:
 
-							idIK_Reach( void );
-	virtual					~idIK_Reach( void );
+	idIK_Reach(void);
+	virtual					~idIK_Reach(void);
 
-	void					Save( idSaveGame *savefile ) const;
-	void					Restore( idRestoreGame *savefile );
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	virtual bool			Init( idEntity *self, const char *anim, const idVec3 &modelOffset );
-	virtual void			Evaluate( void );
-	virtual void			ClearJointMods( void );
+	virtual bool			Init(idEntity* self, const char* anim, const idVec3& modelOffset);
+	virtual void			Evaluate(void);
+	virtual void			ClearJointMods(void);
 
 private:
 
-	static const int		MAX_ARMS	= 2;
+	static const int		MAX_ARMS = 2;
 
 	int						numArms;
 	int						enabledArms;

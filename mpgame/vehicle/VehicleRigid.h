@@ -15,27 +15,27 @@ class rvVehicleRigid : public rvVehicle
 {
 public:
 
-	CLASS_PROTOTYPE( rvVehicleRigid );
+	CLASS_PROTOTYPE(rvVehicleRigid);
 
-							rvVehicleRigid		( void );
-							~rvVehicleRigid		( void );
+	rvVehicleRigid(void);
+	~rvVehicleRigid(void);
 
-	void					Spawn				( void );
-	void					Save				( idSaveGame *savefile ) const;
-	void					Restore				( idRestoreGame *savefile );
+	void					Spawn(void);
+	void					Save(idSaveGame* savefile) const;
+	void					Restore(idRestoreGame* savefile);
 
-	void					WriteToSnapshot		( idBitMsgDelta &msg ) const;
-	void					ReadFromSnapshot	( const idBitMsgDelta &msg );
+	void					WriteToSnapshot(idBitMsgDelta& msg) const;
+	void					ReadFromSnapshot(const idBitMsgDelta& msg);
 
-	bool					SkipImpulse			( idEntity* ent, int id );
+	bool					SkipImpulse(idEntity* ent, int id);
 
 protected:
-	
-	void					SetClipModel	( void );
-	
+
+	void					SetClipModel(void);
+
 	// twhitaker:
-	virtual void			RunPrePhysics			( void );
-	virtual void			RunPostPhysics			( void );
+	virtual void			RunPrePhysics(void);
+	virtual void			RunPostPhysics(void);
 	idVec3					storedVelocity;
 	// end twhitaker:
 

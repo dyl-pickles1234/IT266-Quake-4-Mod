@@ -18,24 +18,24 @@ static byte crctable[256];
    x^8 + x^2 + x^1 + x^0
 */
 
-void make_crc_table( void ) {
+void make_crc_table(void) {
 	int i, j;
 	unsigned long poly, c;
 	/* terms of polynomial defining this crc (except x^8): */
-	static const byte p[] = {0,1,2};
+	static const byte p[] = { 0,1,2 };
 
 	/* make exclusive-or pattern from polynomial (0x07) */
 	poly = 0L;
-	for ( i = 0; i < sizeof( p ) / sizeof( byte ); i++ ) {
+	for (i = 0; i < sizeof(p) / sizeof(byte); i++) {
 		poly |= 1L << p[i];
 	}
 
-	for ( i = 0; i < 256; i++ ) {
+	for (i = 0; i < 256; i++) {
 		c = i;
-		for ( j = 0; j < 8; j++ ) {
-			c = ( c & 0x80 ) ? poly ^ ( c << 1 ) : ( c << 1 );
+		for (j = 0; j < 8; j++) {
+			c = (c & 0x80) ? poly ^ (c << 1) : (c << 1);
 		}
-		crctable[i] = (byte) c;
+		crctable[i] = (byte)c;
 	}
 }
 
@@ -81,34 +81,34 @@ static byte crctable[256] = {
 
 #endif
 
-void CRC8_InitChecksum( unsigned char &crcvalue ) {
+void CRC8_InitChecksum(unsigned char& crcvalue) {
 	crcvalue = CRC8_INIT_VALUE;
 }
 
-void CRC8_Update( unsigned char &crcvalue, const byte data ) {
+void CRC8_Update(unsigned char& crcvalue, const byte data) {
 	crcvalue = crctable[crcvalue ^ data];
 }
 
-void CRC8_UpdateChecksum( unsigned char &crcvalue, const void *data, int length ) {
+void CRC8_UpdateChecksum(unsigned char& crcvalue, const void* data, int length) {
 	unsigned char crc;
-	const unsigned char *buf = (const unsigned char *) data;
+	const unsigned char* buf = (const unsigned char*)data;
 
 	crc = crcvalue;
-	while( length-- ) {
+	while (length--) {
 		crc = crctable[crc ^ *buf++];
 	}
 	crcvalue = crc;
 }
 
-void CRC8_FinishChecksum( unsigned char &crcvalue ) {
+void CRC8_FinishChecksum(unsigned char& crcvalue) {
 	crcvalue ^= CRC8_XOR_VALUE;
 }
 
-unsigned char CRC8_BlockChecksum( const void *data, int length ) {
+unsigned char CRC8_BlockChecksum(const void* data, int length) {
 	unsigned char crc;
 
-	CRC8_InitChecksum( crc );
-	CRC8_UpdateChecksum( crc, data, length );
-	CRC8_FinishChecksum( crc );
+	CRC8_InitChecksum(crc);
+	CRC8_UpdateChecksum(crc, data, length);
+	CRC8_FinishChecksum(crc);
 	return crc;
 }

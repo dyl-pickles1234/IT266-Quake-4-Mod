@@ -11,11 +11,11 @@
 idAAS::Alloc
 ============
 */
-idAAS *idAAS::Alloc( void ) {
-// RAVEN BEGIN
-// jnewquist: Tag scope and callees to track allocations using "new".
-	MEM_SCOPED_TAG(tag,MA_AAS);
-// RAVEN END
+idAAS* idAAS::Alloc(void) {
+	// RAVEN BEGIN
+	// jnewquist: Tag scope and callees to track allocations using "new".
+	MEM_SCOPED_TAG(tag, MA_AAS);
+	// RAVEN END
 	return new idAASLocal;
 }
 
@@ -24,7 +24,7 @@ idAAS *idAAS::Alloc( void ) {
 idAAS::idAAS
 ============
 */
-idAAS::~idAAS( void ) {
+idAAS::~idAAS(void) {
 }
 
 /*
@@ -32,7 +32,7 @@ idAAS::~idAAS( void ) {
 idAASLocal::idAASLocal
 ============
 */
-idAASLocal::idAASLocal( void ) {
+idAASLocal::idAASLocal(void) {
 	file = NULL;
 }
 
@@ -41,7 +41,7 @@ idAASLocal::idAASLocal( void ) {
 idAASLocal::~idAASLocal
 ============
 */
-idAASLocal::~idAASLocal( void ) {
+idAASLocal::~idAASLocal(void) {
 	Shutdown();
 }
 
@@ -50,27 +50,27 @@ idAASLocal::~idAASLocal( void ) {
 idAASLocal::Init
 ============
 */
-bool idAASLocal::Init( const idStr &mapName, unsigned int mapFileCRC ) {
-	if ( file && mapName.Icmp( file->GetName() ) == 0 && mapFileCRC == file->GetCRC() ) {
-		gameLocal.Printf( "Keeping %s\n", file->GetName() );
+bool idAASLocal::Init(const idStr& mapName, unsigned int mapFileCRC) {
+	if (file && mapName.Icmp(file->GetName()) == 0 && mapFileCRC == file->GetCRC()) {
+		gameLocal.Printf("Keeping %s\n", file->GetName());
 		RemoveAllObstacles();
 	}
 	else {
 		Shutdown();
 
-		file = AASFileManager->LoadAAS( mapName, mapFileCRC );
-		if ( !file ) {
-			common->DWarning( "Couldn't load AAS file: '%s'", mapName.c_str() );
+		file = AASFileManager->LoadAAS(mapName, mapFileCRC);
+		if (!file) {
+			common->DWarning("Couldn't load AAS file: '%s'", mapName.c_str());
 			return false;
 		}
-// RAVEN BEGIN
-// rhummer: Check if this is a dummy file, since it really has no valid data dump it.
-		else if ( file->IsDummyFile( mapFileCRC ) ) {
-			AASFileManager->FreeAAS( file );
+		// RAVEN BEGIN
+		// rhummer: Check if this is a dummy file, since it really has no valid data dump it.
+		else if (file->IsDummyFile(mapFileCRC)) {
+			AASFileManager->FreeAAS(file);
 			file = NULL;
 			return false;
 		}
-// RAVEN END
+		// RAVEN END
 		SetupRouting();
 	}
 	return true;
@@ -81,11 +81,11 @@ bool idAASLocal::Init( const idStr &mapName, unsigned int mapFileCRC ) {
 idAASLocal::Shutdown
 ============
 */
-void idAASLocal::Shutdown( void ) {
-	if ( file ) {
+void idAASLocal::Shutdown(void) {
+	if (file) {
 		ShutdownRouting();
 		RemoveAllObstacles();
-		AASFileManager->FreeAAS( file );
+		AASFileManager->FreeAAS(file);
 		file = NULL;
 	}
 }
@@ -95,11 +95,11 @@ void idAASLocal::Shutdown( void ) {
 idAASLocal::Stats
 ============
 */
-void idAASLocal::Stats( void ) const {
-	if ( !file ) {
+void idAASLocal::Stats(void) const {
+	if (!file) {
 		return;
 	}
-	common->Printf( "[%s]\n", file->GetName() );
+	common->Printf("[%s]\n", file->GetName());
 	file->PrintInfo();
 	RoutingStats();
 }
@@ -111,20 +111,20 @@ void idAASLocal::Stats( void ) const {
 idAASLocal::StatsSummary
 ============
 */
-size_t idAASLocal::StatsSummary( void ) const {
+size_t idAASLocal::StatsSummary(void) const {
 
 	int		size;
 
-	if( !file ) {
+	if (!file) {
 
-		return( 0 );
+		return(0);
 	}
 
-	size = ( numAreaTravelTimes * sizeof( unsigned short ) ) 
-			+ ( areaCacheIndexSize * sizeof( idRoutingCache * ) ) 
-			+ ( portalCacheIndexSize * sizeof( idRoutingCache * ) );
+	size = (numAreaTravelTimes * sizeof(unsigned short))
+		+ (areaCacheIndexSize * sizeof(idRoutingCache*))
+		+ (portalCacheIndexSize * sizeof(idRoutingCache*));
 
-	return( file->GetMemorySize() + size );
+	return(file->GetMemorySize() + size);
 }
 // RAVEN END
 
@@ -133,8 +133,8 @@ size_t idAASLocal::StatsSummary( void ) const {
 idAASLocal::GetSettings
 ============
 */
-const idAASSettings *idAASLocal::GetSettings( void ) const {
-	if ( !file ) {
+const idAASSettings* idAASLocal::GetSettings(void) const {
+	if (!file) {
 		return NULL;
 	}
 	return &file->GetSettings();
@@ -145,11 +145,11 @@ const idAASSettings *idAASLocal::GetSettings( void ) const {
 idAASLocal::PointAreaNum
 ============
 */
-int idAASLocal::PointAreaNum( const idVec3 &origin ) const {
-	if ( !file ) {
+int idAASLocal::PointAreaNum(const idVec3& origin) const {
+	if (!file) {
 		return 0;
 	}
-	return file->PointAreaNum( origin );
+	return file->PointAreaNum(origin);
 }
 
 /*
@@ -157,12 +157,12 @@ int idAASLocal::PointAreaNum( const idVec3 &origin ) const {
 idAASLocal::PointReachableAreaNum
 ============
 */
-int idAASLocal::PointReachableAreaNum( const idVec3 &origin, const idBounds &searchBounds, const int areaFlags ) const {
-	if ( !file ) {
+int idAASLocal::PointReachableAreaNum(const idVec3& origin, const idBounds& searchBounds, const int areaFlags) const {
+	if (!file) {
 		return 0;
 	}
 
-	return file->PointReachableAreaNum( origin, searchBounds, areaFlags, TFL_INVALID );
+	return file->PointReachableAreaNum(origin, searchBounds, areaFlags, TFL_INVALID);
 }
 
 /*
@@ -170,12 +170,12 @@ int idAASLocal::PointReachableAreaNum( const idVec3 &origin, const idBounds &sea
 idAASLocal::BoundsReachableAreaNum
 ============
 */
-int idAASLocal::BoundsReachableAreaNum( const idBounds &bounds, const int areaFlags ) const {
-	if ( !file ) {
+int idAASLocal::BoundsReachableAreaNum(const idBounds& bounds, const int areaFlags) const {
+	if (!file) {
 		return 0;
 	}
-	
-	return file->BoundsReachableAreaNum( bounds, areaFlags, TFL_INVALID );
+
+	return file->BoundsReachableAreaNum(bounds, areaFlags, TFL_INVALID);
 }
 
 /*
@@ -183,11 +183,11 @@ int idAASLocal::BoundsReachableAreaNum( const idBounds &bounds, const int areaFl
 idAASLocal::PushPointIntoAreaNum
 ============
 */
-void idAASLocal::PushPointIntoAreaNum( int areaNum, idVec3 &origin ) const {
-	if ( !file ) {
+void idAASLocal::PushPointIntoAreaNum(int areaNum, idVec3& origin) const {
+	if (!file) {
 		return;
 	}
-	file->PushPointIntoAreaNum( areaNum, origin );
+	file->PushPointIntoAreaNum(areaNum, origin);
 }
 
 /*
@@ -195,11 +195,11 @@ void idAASLocal::PushPointIntoAreaNum( int areaNum, idVec3 &origin ) const {
 idAASLocal::AreaCenter
 ============
 */
-idVec3 idAASLocal::AreaCenter( int areaNum ) const {
-	if ( !file ) {
+idVec3 idAASLocal::AreaCenter(int areaNum) const {
+	if (!file) {
 		return vec3_origin;
 	}
-	return file->GetArea( areaNum ).center;
+	return file->GetArea(areaNum).center;
 }
 
 // RAVEN BEGIN
@@ -209,11 +209,11 @@ idVec3 idAASLocal::AreaCenter( int areaNum ) const {
 idAASLocal::AreaRadius
 ============
 */
-float idAASLocal::AreaRadius( int areaNum ) const {
-	if ( !file ) {
+float idAASLocal::AreaRadius(int areaNum) const {
+	if (!file) {
 		return 0;
 	}
-	return file->GetArea( areaNum ).bounds.GetRadius();
+	return file->GetArea(areaNum).bounds.GetRadius();
 }
 // mcg: added
 /*
@@ -221,16 +221,16 @@ float idAASLocal::AreaRadius( int areaNum ) const {
 idAASLocal::AreaBounds
 ============
 */
-idBounds & idAASLocal::AreaBounds( int areaNum ) const {
-	return file->GetArea( areaNum ).bounds;
+idBounds& idAASLocal::AreaBounds(int areaNum) const {
+	return file->GetArea(areaNum).bounds;
 }
 /*
 ============
 idAASLocal::AreaCeiling
 ============
 */
-float idAASLocal::AreaCeiling( int areaNum ) const {
-	return file->GetArea( areaNum ).ceiling;
+float idAASLocal::AreaCeiling(int areaNum) const {
+	return file->GetArea(areaNum).ceiling;
 }
 // RAVEN END
 
@@ -239,11 +239,11 @@ float idAASLocal::AreaCeiling( int areaNum ) const {
 idAASLocal::AreaFlags
 ============
 */
-int idAASLocal::AreaFlags( int areaNum ) const {
-	if ( !file ) {
+int idAASLocal::AreaFlags(int areaNum) const {
+	if (!file) {
 		return 0;
 	}
-	return file->GetArea( areaNum ).flags;
+	return file->GetArea(areaNum).flags;
 }
 
 /*
@@ -251,11 +251,11 @@ int idAASLocal::AreaFlags( int areaNum ) const {
 idAASLocal::AreaTravelFlags
 ============
 */
-int idAASLocal::AreaTravelFlags( int areaNum ) const {
-	if ( !file ) {
+int idAASLocal::AreaTravelFlags(int areaNum) const {
+	if (!file) {
 		return 0;
 	}
-	return file->GetArea( areaNum ).travelFlags;
+	return file->GetArea(areaNum).travelFlags;
 }
 
 /*
@@ -263,14 +263,14 @@ int idAASLocal::AreaTravelFlags( int areaNum ) const {
 idAASLocal::Trace
 ============
 */
-bool idAASLocal::Trace( aasTrace_t &trace, const idVec3 &start, const idVec3 &end ) const {
-	if ( !file ) {
+bool idAASLocal::Trace(aasTrace_t& trace, const idVec3& start, const idVec3& end) const {
+	if (!file) {
 		trace.fraction = 0.0f;
 		trace.lastAreaNum = 0;
 		trace.numAreas = 0;
 		return true;
 	}
-	return file->Trace( trace, start, end );
+	return file->Trace(trace, start, end);
 }
 
 /*
@@ -278,12 +278,12 @@ bool idAASLocal::Trace( aasTrace_t &trace, const idVec3 &start, const idVec3 &en
 idAASLocal::GetPlane
 ============
 */
-const idPlane &idAASLocal::GetPlane( int planeNum ) const {
-	if ( !file ) {
+const idPlane& idAASLocal::GetPlane(int planeNum) const {
+	if (!file) {
 		static idPlane dummy;
 		return dummy;
 	}
-	return file->GetPlane( planeNum );
+	return file->GetPlane(planeNum);
 }
 
 /*
@@ -291,12 +291,12 @@ const idPlane &idAASLocal::GetPlane( int planeNum ) const {
 idAASLocal::GetEdgeVertexNumbers
 ============
 */
-void idAASLocal::GetEdgeVertexNumbers( int edgeNum, int verts[2] ) const {
-	if ( !file ) {
+void idAASLocal::GetEdgeVertexNumbers(int edgeNum, int verts[2]) const {
+	if (!file) {
 		verts[0] = verts[1] = 0;
 		return;
 	}
-	const int *v = file->GetEdge( abs(edgeNum) ).vertexNum;
+	const int* v = file->GetEdge(abs(edgeNum)).vertexNum;
 	verts[0] = v[INTSIGNBITSET(edgeNum)];
 	verts[1] = v[INTSIGNBITNOTSET(edgeNum)];
 }
@@ -306,15 +306,15 @@ void idAASLocal::GetEdgeVertexNumbers( int edgeNum, int verts[2] ) const {
 idAASLocal::GetEdge
 ============
 */
-void idAASLocal::GetEdge( int edgeNum, idVec3 &start, idVec3 &end ) const {
-	if ( !file ) {
+void idAASLocal::GetEdge(int edgeNum, idVec3& start, idVec3& end) const {
+	if (!file) {
 		start.Zero();
 		end.Zero();
 		return;
 	}
-	const int *v = file->GetEdge( abs(edgeNum) ).vertexNum;
-	start = file->GetVertex( v[INTSIGNBITSET(edgeNum)] );
-	end = file->GetVertex( v[INTSIGNBITNOTSET(edgeNum)] );
+	const int* v = file->GetEdge(abs(edgeNum)).vertexNum;
+	start = file->GetVertex(v[INTSIGNBITSET(edgeNum)]);
+	end = file->GetVertex(v[INTSIGNBITNOTSET(edgeNum)]);
 }
 
 
@@ -331,7 +331,7 @@ void idAASLocal::GetEdge( int edgeNum, idVec3 &start, idVec3 &end ) const {
 idAASCallback::~idAASCallback
 ============
 */
-idAASCallback::~idAASCallback ( void ) {
+idAASCallback::~idAASCallback(void) {
 }
 
 /*
@@ -339,73 +339,73 @@ idAASCallback::~idAASCallback ( void ) {
 idAASCallback::Test
 ============
 */
-idAASCallback::testResult_t idAASCallback::Test ( class idAAS *aas, int areaNum, const idVec3& origin, float minDistance, float maxDistance, const idVec3* point, aasGoal_t& goal ) {
+idAASCallback::testResult_t idAASCallback::Test(class idAAS* aas, int areaNum, const idVec3& origin, float minDistance, float maxDistance, const idVec3* point, aasGoal_t& goal) {
 	// Get AAS file
-	idAASFile* file = ((idAAS&)*aas).GetFile ( );
-	if ( !file ) {
+	idAASFile* file = ((idAAS&)*aas).GetFile();
+	if (!file) {
 		return TEST_BADAREA;
 	}
-	
+
 	// Get area for edges
-	aasArea_t& area = file->GetArea ( areaNum );
+	aasArea_t& area = file->GetArea(areaNum);
 
-	if ( ai_debugTactical.GetInteger ( ) > 1 ) {
-		gameRenderWorld->DebugLine ( colorYellow, area.center, area.center + idVec3(0,0,80.0f), 10000 );
+	if (ai_debugTactical.GetInteger() > 1) {
+		gameRenderWorld->DebugLine(colorYellow, area.center, area.center + idVec3(0, 0, 80.0f), 10000);
 	}
-	
+
 	// Make sure the area itself is valid
-	if ( !TestArea ( aas, areaNum, area ) ) {
+	if (!TestArea(aas, areaNum, area)) {
 		return TEST_BADAREA;
 	}
 
-	if ( ai_debugTactical.GetInteger ( ) > 1 && point ) {
-		gameRenderWorld->DebugLine ( colorMagenta, *point, *point + idVec3(0,0,64.0f), 10000 );
+	if (ai_debugTactical.GetInteger() > 1 && point) {
+		gameRenderWorld->DebugLine(colorMagenta, *point, *point + idVec3(0, 0, 64.0f), 10000);
 	}
-	
+
 	// Test the original origin first
-	if ( point && TestPointDistance ( origin, *point, minDistance, maxDistance) && TestPoint ( aas, *point ) ) {
+	if (point && TestPointDistance(origin, *point, minDistance, maxDistance) && TestPoint(aas, *point)) {
 		goal.areaNum = areaNum;
-		goal.origin  = *point;
+		goal.origin = *point;
 		return TEST_OK;
 	}
 
-	if ( ai_debugTactical.GetInteger ( ) > 1 ) {
-		gameRenderWorld->DebugLine ( colorCyan, area.center, area.center + idVec3(0,0,64.0f), 10000 );
+	if (ai_debugTactical.GetInteger() > 1) {
+		gameRenderWorld->DebugLine(colorCyan, area.center, area.center + idVec3(0, 0, 64.0f), 10000);
 	}
-	
+
 	// Test the center of the area
-	if ( TestPointDistance ( origin, area.center, minDistance, maxDistance) && TestPoint ( aas, area.center, area.ceiling ) ) {
+	if (TestPointDistance(origin, area.center, minDistance, maxDistance) && TestPoint(aas, area.center, area.ceiling)) {
 		goal.areaNum = areaNum;
-		goal.origin  = area.center;
+		goal.origin = area.center;
 		return TEST_OK;
 	}
-	
+
 	// For each face test all available edges
 	int	f;
 	int	e;
-	for ( f = 0; f < area.numFaces; f ++ ) {
-		aasFace_t& face = file->GetFace ( abs ( file->GetFaceIndex (area.firstFace + f ) ) );
-		
+	for (f = 0; f < area.numFaces; f++) {
+		aasFace_t& face = file->GetFace(abs(file->GetFaceIndex(area.firstFace + f)));
+
 		// for each edge test a point between the center of the edge and the center
-		for ( e = 0; e < face.numEdges; e ++ ) {
-			idVec3 edgeCenter = file->EdgeCenter ( abs( file->GetEdgeIndex( face.firstEdge + e ) ) ); 	
-			idVec3 dir        = area.center - edgeCenter;
+		for (e = 0; e < face.numEdges; e++) {
+			idVec3 edgeCenter = file->EdgeCenter(abs(file->GetEdgeIndex(face.firstEdge + e)));
+			idVec3 dir = area.center - edgeCenter;
 			float  dist;
-			for ( dist = dir.Normalize() - 64.0f; dist > 0.0f; dist -= 64.0f ) {				
+			for (dist = dir.Normalize() - 64.0f; dist > 0.0f; dist -= 64.0f) {
 				idVec3 testPoint = edgeCenter + dir * dist;
-				if ( ai_debugTactical.GetInteger ( ) > 1 ) {
-					gameRenderWorld->DebugLine ( colorPurple, testPoint, testPoint + idVec3(0,0,64.0f), 10000 );
+				if (ai_debugTactical.GetInteger() > 1) {
+					gameRenderWorld->DebugLine(colorPurple, testPoint, testPoint + idVec3(0, 0, 64.0f), 10000);
 				}
 
-				if ( TestPointDistance ( origin, testPoint, minDistance, maxDistance) && TestPoint ( aas, testPoint, area.ceiling ) ) {
+				if (TestPointDistance(origin, testPoint, minDistance, maxDistance) && TestPoint(aas, testPoint, area.ceiling)) {
 					goal.areaNum = areaNum;
-					goal.origin  = testPoint;
+					goal.origin = testPoint;
 					return TEST_OK;
 				}
 			}
 		}
 	}
-	
+
 	return TEST_BADPOINT;
 }
 
@@ -414,12 +414,12 @@ idAASCallback::testResult_t idAASCallback::Test ( class idAAS *aas, int areaNum,
 idAASCallback::Init
 ============
 */
-bool idAASCallback::TestPointDistance ( const idVec3& origin, const idVec3& point, float minDistance, float maxDistance ) {
-	float dist = (origin - point).LengthFast ( );
-	if ( minDistance > 0.0f && dist < minDistance ) {
+bool idAASCallback::TestPointDistance(const idVec3& origin, const idVec3& point, float minDistance, float maxDistance) {
+	float dist = (origin - point).LengthFast();
+	if (minDistance > 0.0f && dist < minDistance) {
 		return false;
 	}
-	if ( maxDistance > 0.0f && dist > maxDistance ) {
+	if (maxDistance > 0.0f && dist > maxDistance) {
 		return false;
 	}
 	return true;
@@ -430,7 +430,7 @@ bool idAASCallback::TestPointDistance ( const idVec3& origin, const idVec3& poin
 idAASCallback::Init
 ============
 */
-void idAASCallback::Init ( void ) {
+void idAASCallback::Init(void) {
 }
 
 /*
@@ -438,7 +438,7 @@ void idAASCallback::Init ( void ) {
 idAASCallback::Finish
 ============
 */
-void idAASCallback::Finish ( void ) {
+void idAASCallback::Finish(void) {
 }
 
 /*
@@ -446,7 +446,7 @@ void idAASCallback::Finish ( void ) {
 idAASCallback::TestArea
 ============
 */
-bool idAASCallback::TestArea ( class idAAS *aas, int areaNum, const aasArea_t& area ) {
+bool idAASCallback::TestArea(class idAAS* aas, int areaNum, const aasArea_t& area) {
 	return true;
 }
 
@@ -455,7 +455,7 @@ bool idAASCallback::TestArea ( class idAAS *aas, int areaNum, const aasArea_t& a
 idAASCallback::TestPoint
 ============
 */
-bool idAASCallback::TestPoint ( class idAAS *aas, const idVec3& pos, const float zAllow ) {
+bool idAASCallback::TestPoint(class idAAS* aas, const idVec3& pos, const float zAllow) {
 	return true;
 }
 

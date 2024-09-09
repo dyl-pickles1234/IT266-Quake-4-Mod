@@ -398,7 +398,6 @@
     <ClInclude Include="mpgame\client\ClientMoveable.h" />
     <ClInclude Include="mpgame\Effect.h" />
     <ClInclude Include="mpgame\Entity.h" />
-    <ClInclude Include="mpgame\Game.h" />
     <ClInclude Include="mpgame\GameEdit.h" />
     <ClInclude Include="mpgame\gamesys\Class.h" />
     <ClInclude Include="mpgame\gamesys\DebugGraph.h" />
@@ -478,7 +477,7 @@
     <ClInclude Include="mpgame\WorldSpawn.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="mpgame\Game.def" />
+    <None Include="mpgame\mpgame.def" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="idlib.vcxproj">

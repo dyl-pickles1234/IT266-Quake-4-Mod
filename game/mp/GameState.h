@@ -44,52 +44,52 @@ typedef enum {
 class rvGameState {
 public:
 
-					rvGameState( bool allocPrevious = true );
-	virtual			~rvGameState( void );
+	rvGameState(bool allocPrevious = true);
+	virtual			~rvGameState(void);
 
-					// clientNum == -1 except for SendInitialState
-					// when clientNum >= 0, always send the state
-	virtual void	SendState( int clientNum = -1 );
-	virtual void	ReceiveState( const idBitMsg& msg );
+	// clientNum == -1 except for SendInitialState
+	// when clientNum >= 0, always send the state
+	virtual void	SendState(int clientNum = -1);
+	virtual void	ReceiveState(const idBitMsg& msg);
 
-	virtual void	SendInitialState( int clientNum );
+	virtual void	SendInitialState(int clientNum);
 
-	virtual void	PackState( idBitMsg& outMsg );
-	virtual	void	WriteState( idBitMsg &msg );
+	virtual void	PackState(idBitMsg& outMsg);
+	virtual	void	WriteState(idBitMsg& msg);
 
-	virtual void	UnpackState( const idBitMsg& inMsg );
+	virtual void	UnpackState(const idBitMsg& inMsg);
 
-	virtual void	GameStateChanged( void );
+	virtual void	GameStateChanged(void);
 
-	virtual void	Run( void );
-	virtual void	NewState( mpGameState_t newState );
+	virtual void	Run(void);
+	virtual void	NewState(mpGameState_t newState);
 
-	virtual void	ClientDisconnect( idPlayer* player );
-	virtual void	Spectate( idPlayer* player );
+	virtual void	ClientDisconnect(idPlayer* player);
+	virtual void	Spectate(idPlayer* player);
 
-	virtual void	Clear( void );
+	virtual void	Clear(void);
 
-	virtual	bool	IsType( gameStateType_t type ) const;
-	static gameStateType_t GetClassType( void );
+	virtual	bool	IsType(gameStateType_t type) const;
+	static gameStateType_t GetClassType(void);
 
-	mpGameState_t	GetMPGameState( void ) { return currentState; }
+	mpGameState_t	GetMPGameState(void) { return currentState; }
 
-	mpGameState_t	GetNextMPGameState( void ) { return nextState; }
-	int				GetNextMPGameStateTime( void ) { return nextStateTime; }
-	void			SetNextMPGameState( mpGameState_t newState ) { nextState = newState; }
-	void			SetNextMPGameStateTime( int time ) { nextStateTime = time; }
+	mpGameState_t	GetNextMPGameState(void) { return nextState; }
+	int				GetNextMPGameStateTime(void) { return nextStateTime; }
+	void			SetNextMPGameState(mpGameState_t newState) { nextState = newState; }
+	void			SetNextMPGameStateTime(int time) { nextStateTime = time; }
 
-	bool			operator==( const rvGameState& rhs ) const;
-	bool			operator!=( const rvGameState& rhs ) const;
-	rvGameState&	operator=( const rvGameState& rhs );
+	bool			operator==(const rvGameState& rhs) const;
+	bool			operator!=(const rvGameState& rhs) const;
+	rvGameState& operator=(const rvGameState& rhs);
 
-	void			WriteNetworkInfo( idFile *file, int clientNum );
-	void			ReadNetworkInfo( idFile *file, int clientNum );
+	void			WriteNetworkInfo(idFile* file, int clientNum);
+	void			ReadNetworkInfo(idFile* file, int clientNum);
 
 	void			SpawnDeadZonePowerup();
 protected:
 	static gameStateType_t type;
-	rvGameState*	previousGameState;
+	rvGameState* previousGameState;
 	bool			trackPrevious;
 
 	mpGameState_t	currentState;
@@ -110,12 +110,12 @@ Game state info for DM
 */
 class rvDMGameState : public rvGameState {
 public:
-					rvDMGameState( bool allocPrevious = true );
+	rvDMGameState(bool allocPrevious = true);
 
-	virtual void	Run( void );
+	virtual void	Run(void);
 
-	virtual	bool	IsType( gameStateType_t type ) const;
-	static gameStateType_t GetClassType( void );
+	virtual	bool	IsType(gameStateType_t type) const;
+	static gameStateType_t GetClassType(void);
 
 private:
 	static gameStateType_t type;
@@ -132,12 +132,12 @@ Game state info for Team DM
 */
 class rvTeamDMGameState : public rvGameState {
 public:
-					rvTeamDMGameState( bool allocPrevious = true );
+	rvTeamDMGameState(bool allocPrevious = true);
 
-	virtual void	Run( void );
+	virtual void	Run(void);
 
-	virtual	bool	IsType( gameStateType_t type ) const;
-	static gameStateType_t GetClassType( void );
+	virtual	bool	IsType(gameStateType_t type) const;
+	static gameStateType_t GetClassType(void);
 
 private:
 	static gameStateType_t type;
@@ -177,71 +177,71 @@ struct flagStatus_t {
 
 class rvCTFGameState : public rvGameState {
 public:
-					rvCTFGameState( bool allocPrevious = true );
-	virtual void	Clear( void );
+	rvCTFGameState(bool allocPrevious = true);
+	virtual void	Clear(void);
 
 
-	virtual void	SendState( int clientNum = -1 );
-	virtual void	ReceiveState( const idBitMsg& msg );
+	virtual void	SendState(int clientNum = -1);
+	virtual void	ReceiveState(const idBitMsg& msg);
 
-	virtual void	SendInitialState( int clientNum );
+	virtual void	SendInitialState(int clientNum);
 
-	virtual void	PackState( idBitMsg& outMsg );
-	virtual	void	WriteState( idBitMsg &msg );
+	virtual void	PackState(idBitMsg& outMsg);
+	virtual	void	WriteState(idBitMsg& msg);
 
-	virtual void	UnpackState( const idBitMsg& inMsg );
+	virtual void	UnpackState(const idBitMsg& inMsg);
 
-	virtual void	GameStateChanged( void );
-	virtual void	Run( void );
+	virtual void	GameStateChanged(void);
+	virtual void	Run(void);
 
-	void			SetAPOwner( int ap, int owner );
-	int				GetAPOwner( int ap );
-	
-	void			SetFlagState( int flag, flagState_t newState );
-	flagState_t		GetFlagState( int flag );
-	int				GetFlagCarrier( int flag );
+	void			SetAPOwner(int ap, int owner);
+	int				GetAPOwner(int ap);
 
-	void			SetFlagCarrier( int flag, int clientNum );
+	void			SetFlagState(int flag, flagState_t newState);
+	flagState_t		GetFlagState(int flag);
+	int				GetFlagCarrier(int flag);
 
-	bool			operator==( const rvCTFGameState& rhs ) const;
-	rvCTFGameState&	operator=( const rvCTFGameState& rhs );
+	void			SetFlagCarrier(int flag, int clientNum);
 
-	virtual	bool	IsType( gameStateType_t type ) const;
-	static gameStateType_t GetClassType( void );
+	bool			operator==(const rvCTFGameState& rhs) const;
+	rvCTFGameState& operator=(const rvCTFGameState& rhs);
+
+	virtual	bool	IsType(gameStateType_t type) const;
+	static gameStateType_t GetClassType(void);
 private:
-	flagStatus_t	flagStatus[ TEAM_MAX ];	
-	apState_t		apState[ MAX_AP ];
+	flagStatus_t	flagStatus[TEAM_MAX];
+	apState_t		apState[MAX_AP];
 
 	static gameStateType_t type;
 };
 
-ID_INLINE void rvCTFGameState::SetAPOwner( int ap, int owner ) {
-	assert( (ap >= 0 && ap < MAX_AP) && (owner >= 0 && owner < TEAM_MAX) );
+ID_INLINE void rvCTFGameState::SetAPOwner(int ap, int owner) {
+	assert((ap >= 0 && ap < MAX_AP) && (owner >= 0 && owner < TEAM_MAX));
 
-	apState[ ap ] = (apState_t)owner;
+	apState[ap] = (apState_t)owner;
 }
 
-ID_INLINE int rvCTFGameState::GetAPOwner( int ap ) {
-	return apState[ ap ];
+ID_INLINE int rvCTFGameState::GetAPOwner(int ap) {
+	return apState[ap];
 }
 
-ID_INLINE flagState_t rvCTFGameState::GetFlagState( int flag ) {
-	assert( flag >= 0 && flag < TEAM_MAX );
+ID_INLINE flagState_t rvCTFGameState::GetFlagState(int flag) {
+	assert(flag >= 0 && flag < TEAM_MAX);
 
-	return flagStatus[ flag ].state;
+	return flagStatus[flag].state;
 }
 
-ID_INLINE int rvCTFGameState::GetFlagCarrier( int flag ) {
-	assert( flag >= 0 && flag < TEAM_MAX );
+ID_INLINE int rvCTFGameState::GetFlagCarrier(int flag) {
+	assert(flag >= 0 && flag < TEAM_MAX);
 
-	return flagStatus[ flag ].clientNum;
+	return flagStatus[flag].clientNum;
 }
 
-ID_INLINE bool operator==( const flagStatus_t& lhs, const flagStatus_t rhs ) {
+ID_INLINE bool operator==(const flagStatus_t& lhs, const flagStatus_t rhs) {
 	return (lhs.state == rhs.state) && (lhs.clientNum == rhs.clientNum);
 }
 
-ID_INLINE bool operator!=( const flagStatus_t& lhs, const flagStatus_t rhs ) {
+ID_INLINE bool operator!=(const flagStatus_t& lhs, const flagStatus_t rhs) {
 	return (lhs.state != rhs.state) || (lhs.clientNum != rhs.clientNum);
 }
 
@@ -264,66 +264,66 @@ enum tourneyState_t {
 
 class rvTourneyGameState : public rvGameState {
 public:
-					rvTourneyGameState( bool allocPrevious = true );
+	rvTourneyGameState(bool allocPrevious = true);
 
-	virtual void	Clear( void );
+	virtual void	Clear(void);
 
-	virtual void	Run( void );
+	virtual void	Run(void);
 
-	virtual void	Reset( void );
+	virtual void	Reset(void);
 
-	virtual void	SendState( int clientNum = -1 );
-	virtual void	ReceiveState( const idBitMsg& msg );
+	virtual void	SendState(int clientNum = -1);
+	virtual void	ReceiveState(const idBitMsg& msg);
 
-	virtual void	SendInitialState( int clientNum );
+	virtual void	SendInitialState(int clientNum);
 
-	virtual void	PackState( idBitMsg& outMsg );
-	virtual	void	WriteState( idBitMsg &msg );
+	virtual void	PackState(idBitMsg& outMsg);
+	virtual	void	WriteState(idBitMsg& msg);
 
-	virtual void	UnpackState( const idBitMsg& inMsg );
+	virtual void	UnpackState(const idBitMsg& inMsg);
 
-	virtual void	GameStateChanged( void );
-	virtual void	NewState( mpGameState_t newState );
+	virtual void	GameStateChanged(void);
+	virtual void	NewState(mpGameState_t newState);
 
-	virtual void	ClientDisconnect( idPlayer* player );
-	virtual void	Spectate( idPlayer* player );
+	virtual void	ClientDisconnect(idPlayer* player);
+	virtual void	Spectate(idPlayer* player);
 
-	void			RemovePlayer( idPlayer* player );
+	void			RemovePlayer(idPlayer* player);
 
-	bool				operator==( const rvTourneyGameState& rhs ) const;
-	rvTourneyGameState&	operator=( const rvTourneyGameState& rhs );
+	bool				operator==(const rvTourneyGameState& rhs) const;
+	rvTourneyGameState& operator=(const rvTourneyGameState& rhs);
 
-	int				GetNumArenas( void ) const;
-	bool			HasBye( idPlayer* player );
+	int				GetNumArenas(void) const;
+	bool			HasBye(idPlayer* player);
 
-	int				GetMaxRound( void ) const;
-	int				GetRound( void ) const;
-	int				GetStartingRound( void ) const;
+	int				GetMaxRound(void) const;
+	int				GetRound(void) const;
+	int				GetStartingRound(void) const;
 
-	idPlayer**		GetArenaPlayers( int arena );
+	idPlayer** GetArenaPlayers(int arena);
 
-	rvTourneyArena& GetArena( int arena );
+	rvTourneyArena& GetArena(int arena);
 
-	const char*		GetRoundDescription( void );
-	int				GetNextActiveArena( int arena );
-	int				GetPrevActiveArena( int arena );
+	const char* GetRoundDescription(void);
+	int				GetNextActiveArena(int arena);
+	int				GetPrevActiveArena(int arena);
 
-	void			SpectateCycleNext( idPlayer* player );
-	void			SpectateCyclePrev( idPlayer* player );
-	int				GetTourneyCount( void );
-	void			SetTourneyCount( int count ) { tourneyCount = count; }
+	void			SpectateCycleNext(idPlayer* player);
+	void			SpectateCyclePrev(idPlayer* player);
+	int				GetTourneyCount(void);
+	void			SetTourneyCount(int count) { tourneyCount = count; }
 
-	void			UpdateTourneyBrackets( void ); 
+	void			UpdateTourneyBrackets(void);
 
-	void			UpdateTourneyHistory( int round );
-	int				FirstAvailableArena( void );
+	void			UpdateTourneyHistory(int round);
+	int				FirstAvailableArena(void);
 
-	arenaOutcome_t*	GetArenaOutcome( int arena );
+	arenaOutcome_t* GetArenaOutcome(int arena);
 
-	virtual	bool	IsType( gameStateType_t type ) const;
-	static gameStateType_t GetClassType( void );
+	virtual	bool	IsType(gameStateType_t type) const;
+	static gameStateType_t GetClassType(void);
 private:
-	void			SetupInitialBrackets( void );
+	void			SetupInitialBrackets(void);
 
 	tourneyState_t			tourneyState;
 
@@ -334,9 +334,9 @@ private:
 	// maxRound				- the most rounds we'll run (based on MAX_ARENAS)
 	int						maxRound;
 	// arenas				- current brackets, an extra arena to serve as the waiting room
-	rvTourneyArena			arenas[ MAX_ARENAS + 1 ];
+	rvTourneyArena			arenas[MAX_ARENAS + 1];
 	// tourneyHistory		- past winners
-	arenaOutcome_t			tourneyHistory[ MAX_ROUNDS ][ MAX_ARENAS ];
+	arenaOutcome_t			tourneyHistory[MAX_ROUNDS][MAX_ARENAS];
 	// byeArena				- the arena that natural (non disconnection) bye players go in
 	int						byeArena;
 	// packTourneyHistory	- whether or not we should transmit tourney history to one client through SendState
@@ -351,50 +351,54 @@ private:
 	static gameStateType_t type;
 };
 
-ID_INLINE int rvTourneyGameState::GetMaxRound( void ) const {
-	assert( type == GS_TOURNEY );
+ID_INLINE int rvTourneyGameState::GetMaxRound(void) const {
+	assert(type == GS_TOURNEY);
 	return maxRound;
 }
 
-ID_INLINE int rvTourneyGameState::GetRound( void ) const {
-	assert( type == GS_TOURNEY );
+ID_INLINE int rvTourneyGameState::GetRound(void) const {
+	assert(type == GS_TOURNEY);
 	return round;
 }
 
-ID_INLINE int rvTourneyGameState::GetStartingRound( void ) const {
-	assert( type == GS_TOURNEY );
+ID_INLINE int rvTourneyGameState::GetStartingRound(void) const {
+	assert(type == GS_TOURNEY);
 	return startingRound;
 }
 
-ID_INLINE idPlayer** rvTourneyGameState::GetArenaPlayers( int arena ) {
-	assert( type == GS_TOURNEY );
-	return arenas[ arena ].GetPlayers();
+ID_INLINE idPlayer** rvTourneyGameState::GetArenaPlayers(int arena) {
+	assert(type == GS_TOURNEY);
+	return arenas[arena].GetPlayers();
 }
 
-ID_INLINE rvTourneyArena& rvTourneyGameState::GetArena( int arena ) {
-	assert( type == GS_TOURNEY );
-	return arenas[ arena ]; 
+ID_INLINE rvTourneyArena& rvTourneyGameState::GetArena(int arena) {
+	assert(type == GS_TOURNEY);
+	return arenas[arena];
 }
 
-ID_INLINE const char* rvTourneyGameState::GetRoundDescription( void ) {
-	assert( type == GS_TOURNEY );
+ID_INLINE const char* rvTourneyGameState::GetRoundDescription(void) {
+	assert(type == GS_TOURNEY);
 
-	if( round == maxRound ) {
-		return common->GetLocalizedString( "#str_107720" );
-	} else if( round == maxRound - 1 ) {
-		return common->GetLocalizedString( "#str_107719" );
-	} else if( round == maxRound - 2 ) {
-		return common->GetLocalizedString( "#str_107718" );
-	} else if( round == maxRound - 3 ) {
-		return common->GetLocalizedString( "#str_107717" );
-	} else {
+	if (round == maxRound) {
+		return common->GetLocalizedString("#str_107720");
+	}
+	else if (round == maxRound - 1) {
+		return common->GetLocalizedString("#str_107719");
+	}
+	else if (round == maxRound - 2) {
+		return common->GetLocalizedString("#str_107718");
+	}
+	else if (round == maxRound - 3) {
+		return common->GetLocalizedString("#str_107717");
+	}
+	else {
 		// shouldn't happen in production
-		return va( "ROUND %d", round );
+		return va("ROUND %d", round);
 	}
 }
 
-ID_INLINE int rvTourneyGameState::GetTourneyCount( void ) {
-	assert( type == GS_TOURNEY );
+ID_INLINE int rvTourneyGameState::GetTourneyCount(void) {
+	assert(type == GS_TOURNEY);
 	return tourneyCount;
 }
 
@@ -433,51 +437,51 @@ struct dzStatus_t {
 
 class riDZGameState : public rvGameState {
 public:
-					riDZGameState( bool allocPrevious = true );
-					~riDZGameState( void );
-	virtual void	Clear( void );
+	riDZGameState(bool allocPrevious = true);
+	~riDZGameState(void);
+	virtual void	Clear(void);
 
 
-	virtual void	SendState( int clientNum = -1 );
-	virtual void	ReceiveState( const idBitMsg& msg );
+	virtual void	SendState(int clientNum = -1);
+	virtual void	ReceiveState(const idBitMsg& msg);
 
-	virtual void	SendInitialState( int clientNum );
+	virtual void	SendInitialState(int clientNum);
 
-	virtual void	PackState( idBitMsg& outMsg );
-	virtual void	WriteState( idBitMsg &msg );
+	virtual void	PackState(idBitMsg& outMsg);
+	virtual void	WriteState(idBitMsg& msg);
 
-	virtual void	UnpackState( const idBitMsg& inMsg );
+	virtual void	UnpackState(const idBitMsg& inMsg);
 
-	virtual void	GameStateChanged( void );
-	virtual void	Run( void );
-	
-	void			SetDZState( int dz, dzState_t newState );
-	dzState_t		GetDZState( int dz );
+	virtual void	GameStateChanged(void);
+	virtual void	Run(void);
 
-	bool			operator==( const riDZGameState& rhs ) const;
-	riDZGameState&	operator=( const riDZGameState& rhs );
+	void			SetDZState(int dz, dzState_t newState);
+	dzState_t		GetDZState(int dz);
+
+	bool			operator==(const riDZGameState& rhs) const;
+	riDZGameState& operator=(const riDZGameState& rhs);
 
 	int				dzTriggerEnt;
 	int				dzShaderParm;
 
 private:
-	dzStatus_t		dzStatus[ TEAM_MAX ];	
+	dzStatus_t		dzStatus[TEAM_MAX];
 
-	void ControlZoneStateChanged( int team );
+	void ControlZoneStateChanged(int team);
 };
 
 
-ID_INLINE dzState_t riDZGameState::GetDZState( int dz ) {
-	assert( dz >= 0 && dz < TEAM_MAX );
+ID_INLINE dzState_t riDZGameState::GetDZState(int dz) {
+	assert(dz >= 0 && dz < TEAM_MAX);
 
-	return dzStatus[ dz ].state;
+	return dzStatus[dz].state;
 }
 
-ID_INLINE bool operator==( const dzStatus_t& lhs, const dzStatus_t rhs ) {
+ID_INLINE bool operator==(const dzStatus_t& lhs, const dzStatus_t rhs) {
 	return (lhs.state == rhs.state) && (lhs.clientNum == rhs.clientNum);
 }
 
-ID_INLINE bool operator!=( const dzStatus_t& lhs, const dzStatus_t rhs ) {
+ID_INLINE bool operator!=(const dzStatus_t& lhs, const dzStatus_t rhs) {
 	return (lhs.state != rhs.state) || (lhs.clientNum != rhs.clientNum);
 }
 #endif

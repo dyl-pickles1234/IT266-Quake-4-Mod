@@ -39,47 +39,47 @@ typedef struct {
 class rvAITactical : public idAI {
 public:
 
-	CLASS_PROTOTYPE( rvAITactical );
+	CLASS_PROTOTYPE(rvAITactical);
 
-	rvAITactical ( void );
+	rvAITactical(void);
 
-	void				InitSpawnArgsVariables			( void );
-	void				Spawn							( void );
-	void				Think							( void );
-	void				Save							( idSaveGame *savefile ) const;
-	void				Restore							( idRestoreGame *savefile );
+	void				InitSpawnArgsVariables(void);
+	void				Spawn(void);
+	void				Think(void);
+	void				Save(idSaveGame* savefile) const;
+	void				Restore(idRestoreGame* savefile);
 
-	virtual bool		CheckActions					( void );
+	virtual bool		CheckActions(void);
 
-	virtual void		GetDebugInfo					( debugInfoProc_t proc, void* userData );
+	virtual void		GetDebugInfo(debugInfoProc_t proc, void* userData);
 
-	virtual bool		CanTurn							( void ) const;
-	virtual bool		CanMove							( void ) const;
+	virtual bool		CanTurn(void) const;
+	virtual bool		CanMove(void) const;
 
-	virtual bool		IsCrouching						( void ) const;
+	virtual bool		IsCrouching(void) const;
 
 protected:
 
-	virtual const char*	GetIdleAnimName					( void );
-	virtual void		OnStopMoving					( aiMoveCommand_t oldMoveCommand );
-	virtual void		OnPostureChange					( void );
-	virtual void		OnSetKey						( const char* key, const char* value );
+	virtual const char* GetIdleAnimName(void);
+	virtual void		OnStopMoving(aiMoveCommand_t oldMoveCommand);
+	virtual void		OnPostureChange(void);
+	virtual void		OnSetKey(const char* key, const char* value);
 
-	bool				CheckRelaxed					( void ) const;
+	bool				CheckRelaxed(void) const;
 
-	void				InitPostureInfo					( void );
-	bool				UpdatePosture					( void );
-	void				CalculateShots					( const char* fireAnim );
-	void				UseAmmo							( int amount );
-	void				SetPosture						( aiPosture_t newPosture );
-	void				UpdateAnimPrefix				( void );
+	void				InitPostureInfo(void);
+	bool				UpdatePosture(void);
+	void				CalculateShots(const char* fireAnim);
+	void				UseAmmo(int amount);
+	void				SetPosture(aiPosture_t newPosture);
+	void				UpdateAnimPrefix(void);
 
 	int					ammo;
-	int					maxShots;	
+	int					maxShots;
 	int					minShots;
 	int					shots;
 	float				fireRate;
-	
+
 	int					playerFocusTime;
 	int					playerAnnoyTime;
 
@@ -99,34 +99,34 @@ private:
 	bool				healthRegenEnabled;
 	int					healthRegenNextTime;
 	int					maxHealth;
-	
+
 	int					nextWallTraceTime;
 
 	// Custom actions
-	bool				CheckAction_Reload					( rvAIAction* action, int animNum );
-	bool				CheckAction_Relax					( rvAIAction* action, int animNum );
+	bool				CheckAction_Reload(rvAIAction* action, int animNum);
+	bool				CheckAction_Relax(rvAIAction* action, int animNum);
 
 	// Torso States
-	stateResult_t		State_Torso_SetPosture				( const stateParms_t& parms );
-	
-	stateResult_t		State_Torso_RangedAttack			( const stateParms_t& parms );
-	stateResult_t		State_Torso_MovingRangedAttack		( const stateParms_t& parms );
-	stateResult_t		State_Torso_Reload					( const stateParms_t& parms );
+	stateResult_t		State_Torso_SetPosture(const stateParms_t& parms);
 
-	stateResult_t		State_Torso_Cover_LeanLeftAttack	( const stateParms_t& parms );
-	stateResult_t		State_Torso_Cover_LeanRightAttack	( const stateParms_t& parms );	
-	stateResult_t		State_Torso_Cover_LeanAttack		( const stateParms_t& parms );	
-	stateResult_t		State_Torso_Cover_Peek				( const stateParms_t& parms );
+	stateResult_t		State_Torso_RangedAttack(const stateParms_t& parms);
+	stateResult_t		State_Torso_MovingRangedAttack(const stateParms_t& parms);
+	stateResult_t		State_Torso_Reload(const stateParms_t& parms);
+
+	stateResult_t		State_Torso_Cover_LeanLeftAttack(const stateParms_t& parms);
+	stateResult_t		State_Torso_Cover_LeanRightAttack(const stateParms_t& parms);
+	stateResult_t		State_Torso_Cover_LeanAttack(const stateParms_t& parms);
+	stateResult_t		State_Torso_Cover_Peek(const stateParms_t& parms);
 
 	// Frame Commands
-	stateResult_t		State_Frame_Peek					( const stateParms_t& parms );
+	stateResult_t		State_Frame_Peek(const stateParms_t& parms);
 
 	// Events
-	void				Event_ForcePosture					( int posture );
+	void				Event_ForcePosture(int posture);
 
-	virtual void		Event_PostSpawn						( void );
+	virtual void		Event_PostSpawn(void);
 
-	CLASS_STATES_PROTOTYPE ( rvAITactical );
+	CLASS_STATES_PROTOTYPE(rvAITactical);
 };
 
 extern const idEventDef AI_ForcePosture;

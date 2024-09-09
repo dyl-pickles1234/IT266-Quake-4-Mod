@@ -11,36 +11,36 @@
 
 class rvInstance {
 public:
-	rvInstance( int id, bool deferPopulate = false );
+	rvInstance(int id, bool deferPopulate = false);
 	~rvInstance();
 
-	void Populate( int serverChecksum = 0 );
-	void PopulateFromMessage( const idBitMsg& msg );
-	void Restart( void );
-	
-	void JoinInstance( idPlayer* player );
-	int GetInstanceID( void );
-	
-	void SetSpawnInstanceID( int newInstance );
+	void Populate(int serverChecksum = 0);
+	void PopulateFromMessage(const idBitMsg& msg);
+	void Restart(void);
 
-	void PrintMapNumbers( void );
-	int	GetNumMapEntities( void ) { return numMapEntities; }
-	unsigned short GetMapEntityNumber( int i ) { return mapEntityNumbers[ i ]; }
+	void JoinInstance(idPlayer* player);
+	int GetInstanceID(void);
+
+	void SetSpawnInstanceID(int newInstance);
+
+	void PrintMapNumbers(void);
+	int	GetNumMapEntities(void) { return numMapEntities; }
+	unsigned short GetMapEntityNumber(int i) { return mapEntityNumbers[i]; }
 
 private:
-	void					BuildInstanceMessage( void );
+	void					BuildInstanceMessage(void);
 
 	int						instanceID;
 	int						spawnInstanceID;
-	unsigned short*			mapEntityNumbers;
+	unsigned short* mapEntityNumbers;
 	int						numMapEntities;
 	int						initialSpawnCount;
-	
+
 	idBitMsg				mapEntityMsg;
-	byte					mapEntityMsgBuf[ MAX_GAME_MESSAGE_SIZE ];
+	byte					mapEntityMsgBuf[MAX_GAME_MESSAGE_SIZE];
 };
 
-ID_INLINE int rvInstance::GetInstanceID( void ) {
+ID_INLINE int rvInstance::GetInstanceID(void) {
 	return instanceID;
 }
 

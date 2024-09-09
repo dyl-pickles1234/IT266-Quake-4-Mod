@@ -128,10 +128,10 @@ class idToken : public idStr {
 
 	friend class idParser;
 	friend class idLexer;
-// RAVEN BEGIN
-// jsinger: added to allow Lexer direct access to token internals as well
+	// RAVEN BEGIN
+	// jsinger: added to allow Lexer direct access to token internals as well
 	friend class Lexer;
-// RAVEN END
+	// RAVEN END
 
 public:
 	int				type;								// token type
@@ -141,99 +141,100 @@ public:
 	int				flags;								// token flags, used for recursive defines
 
 public:
-					idToken( void );
-					idToken( const idToken *token );
-					~idToken( void );
+	idToken(void);
+	idToken(const idToken* token);
+	~idToken(void);
 
-	void			operator=( const idStr& text );
-	void			operator=( const char *text );
+	void			operator=(const idStr& text);
+	void			operator=(const char* text);
 
-	double			GetDoubleValue( void );				// double value of TT_NUMBER
-	float			GetFloatValue( void );				// float value of TT_NUMBER
-	unsigned long	GetUnsignedLongValue( void );		// unsigned long value of TT_NUMBER
-	int				GetIntValue( void );				// int value of TT_NUMBER
-	int				WhiteSpaceBeforeToken( void ) const;// returns length of whitespace before token
-	void			ClearTokenWhiteSpace( void );		// forget whitespace before token
+	double			GetDoubleValue(void);				// double value of TT_NUMBER
+	float			GetFloatValue(void);				// float value of TT_NUMBER
+	unsigned long	GetUnsignedLongValue(void);		// unsigned long value of TT_NUMBER
+	int				GetIntValue(void);				// int value of TT_NUMBER
+	int				WhiteSpaceBeforeToken(void) const;// returns length of whitespace before token
+	void			ClearTokenWhiteSpace(void);		// forget whitespace before token
 
-	void			NumberValue( void );				// calculate values for a TT_NUMBER
+	void			NumberValue(void);				// calculate values for a TT_NUMBER
 
 private:
 	unsigned long	intvalue;							// integer value
 	double			floatvalue;							// floating point value
-	const char *	whiteSpaceStart_p;					// start of white space before token, only used by idLexer
-	const char *	whiteSpaceEnd_p;					// end of white space before token, only used by idLexer
-	idToken *		next;								// next token in chain, only used by idParser
+	const char* whiteSpaceStart_p;					// start of white space before token, only used by idLexer
+	const char* whiteSpaceEnd_p;					// end of white space before token, only used by idLexer
+	idToken* next;								// next token in chain, only used by idParser
 
-	void			AppendDirty( const char a );		// append character without adding trailing zero
+	void			AppendDirty(const char a);		// append character without adding trailing zero
 };
 
 // RAVEN BEGIN
 // rjohnson: initialized floatvalue to prevent fpu exceptin
 
-ID_INLINE idToken::idToken( void ) :
+ID_INLINE idToken::idToken(void) :
 	floatvalue(0.0)
 {
 }
 
 // RAVEN END
 
-ID_INLINE idToken::idToken( const idToken *token ) {
+ID_INLINE idToken::idToken(const idToken* token) {
 	*this = *token;
 }
 
-ID_INLINE idToken::~idToken( void ) {
+ID_INLINE idToken::~idToken(void) {
 }
 
-ID_INLINE void idToken::operator=( const char *text) {
-	*static_cast<idStr *>(this) = text;
+ID_INLINE void idToken::operator=(const char* text) {
+	*static_cast<idStr*>(this) = text;
 }
 
-ID_INLINE void idToken::operator=( const idStr& text ) {
-	*static_cast<idStr *>(this) = text;
+ID_INLINE void idToken::operator=(const idStr& text) {
+	*static_cast<idStr*>(this) = text;
 }
 
-ID_INLINE double idToken::GetDoubleValue( void ) {
-	if ( type != TT_NUMBER ) {
+ID_INLINE double idToken::GetDoubleValue(void) {
+	if (type != TT_NUMBER) {
 		return 0.0;
 	}
-	if ( !(subtype & TT_VALUESVALID) ) {
+	if (!(subtype & TT_VALUESVALID)) {
 		NumberValue();
 	}
 	return floatvalue;
 }
 
-ID_INLINE float idToken::GetFloatValue( void ) {
-	return (float) GetDoubleValue();
+ID_INLINE float idToken::GetFloatValue(void) {
+	return (float)GetDoubleValue();
 }
 
-ID_INLINE unsigned long	idToken::GetUnsignedLongValue( void ) {
-	if ( type != TT_NUMBER ) {
+ID_INLINE unsigned long	idToken::GetUnsignedLongValue(void) {
+	if (type != TT_NUMBER) {
 		return 0;
 	}
-	if ( !(subtype & TT_VALUESVALID) ) {
+	if (!(subtype & TT_VALUESVALID)) {
 		NumberValue();
 	}
 	return intvalue;
 }
 
-ID_INLINE int idToken::GetIntValue( void ) {
-	return (int) GetUnsignedLongValue();
+ID_INLINE int idToken::GetIntValue(void) {
+	return (int)GetUnsignedLongValue();
 }
 
-ID_INLINE int idToken::WhiteSpaceBeforeToken( void ) const {
-	return ( whiteSpaceEnd_p > whiteSpaceStart_p );
+ID_INLINE int idToken::WhiteSpaceBeforeToken(void) const {
+	return (whiteSpaceEnd_p > whiteSpaceStart_p);
 }
 
-ID_INLINE void idToken::AppendDirty( const char a ) {
-	EnsureAlloced( len + 2, true );
-// RAVEN BEGIN
-// jscott: I hate slashes nearly as much as KRABS
-	if( a == '\\' ) {
+ID_INLINE void idToken::AppendDirty(const char a) {
+	EnsureAlloced(len + 2, true);
+	// RAVEN BEGIN
+	// jscott: I hate slashes nearly as much as KRABS
+	if (a == '\\') {
 		data[len++] = '/';
-	} else {
+	}
+	else {
 		data[len++] = a;
 	}
-// RAVEN END
+	// RAVEN END
 }
 
 #endif /* !__TOKEN_H__ */

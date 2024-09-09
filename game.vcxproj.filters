@@ -545,9 +545,6 @@
     <ClInclude Include="game\FreeView.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="game\Fx.h">
-      <Filter>Game</Filter>
-    </ClInclude>
     <ClInclude Include="game\Game.h">
       <Filter>Game</Filter>
     </ClInclude>

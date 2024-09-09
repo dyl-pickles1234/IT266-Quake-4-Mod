@@ -22,24 +22,24 @@ static unsigned short crctable[256];
    x^16 + x^12 + x^5 + x^0
 */
 
-void make_crc_table( void ) {
+void make_crc_table(void) {
 	int i, j;
 	unsigned long poly, c;
 	/* terms of polynomial defining this crc (except x^16): */
-	static const byte p[] = {0,5,12};
+	static const byte p[] = { 0,5,12 };
 
 	/* make exclusive-or pattern from polynomial (0x1021) */
 	poly = 0L;
-	for ( i = 0; i < sizeof( p ) / sizeof( byte ); i++ ) {
+	for (i = 0; i < sizeof(p) / sizeof(byte); i++) {
 		poly |= 1L << p[i];
 	}
 
-	for ( i = 0; i < 256; i++ ) {
+	for (i = 0; i < 256; i++) {
 		c = i << 8;
-		for ( j = 0; j < 8; j++ ) {
-			c = ( c & 0x8000 ) ? poly ^ ( c << 1 ) : ( c << 1 );
+		for (j = 0; j < 8; j++) {
+			c = (c & 0x8000) ? poly ^ (c << 1) : (c << 1);
 		}
-		crctable[i] = (unsigned short) c;
+		crctable[i] = (unsigned short)c;
 	}
 }
 
@@ -85,34 +85,34 @@ static unsigned short crctable[256] = {
 
 #endif
 
-void CRC16_InitChecksum( unsigned short &crcvalue ) {
+void CRC16_InitChecksum(unsigned short& crcvalue) {
 	crcvalue = CRC16_INIT_VALUE;
 }
 
-void CRC16_Update( unsigned short &crcvalue, const byte data ) {
-	crcvalue = ( crcvalue << 8 ) ^ crctable[ ( crcvalue >> 8 ) ^ data ];
+void CRC16_Update(unsigned short& crcvalue, const byte data) {
+	crcvalue = (crcvalue << 8) ^ crctable[(crcvalue >> 8) ^ data];
 }
 
-void CRC16_UpdateChecksum( unsigned short &crcvalue, const void *data, int length ) {
+void CRC16_UpdateChecksum(unsigned short& crcvalue, const void* data, int length) {
 	unsigned short crc;
-	const unsigned char *buf = (const unsigned char *) data;
+	const unsigned char* buf = (const unsigned char*)data;
 
 	crc = crcvalue;
-	while( length-- ) {
-		crc = ( crc << 8 ) ^ crctable[ ( crc >> 8 ) ^ *buf++ ];
+	while (length--) {
+		crc = (crc << 8) ^ crctable[(crc >> 8) ^ *buf++];
 	}
 	crcvalue = crc;
 }
 
-void CRC16_FinishChecksum( unsigned short &crcvalue ) {
+void CRC16_FinishChecksum(unsigned short& crcvalue) {
 	crcvalue ^= CRC16_XOR_VALUE;
 }
 
-unsigned short CRC16_BlockChecksum( const void *data, int length ) {
+unsigned short CRC16_BlockChecksum(const void* data, int length) {
 	unsigned short crc;
 
-	CRC16_InitChecksum( crc );
-	CRC16_UpdateChecksum( crc, data, length );
-	CRC16_FinishChecksum( crc );
+	CRC16_InitChecksum(crc);
+	CRC16_UpdateChecksum(crc, data, length);
+	CRC16_FinishChecksum(crc);
 	return crc;
 }

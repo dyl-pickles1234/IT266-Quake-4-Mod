@@ -24,6 +24,7 @@
     <SccLocalPath>..</SccLocalPath>
     <SccProvider>MSSCCI:NXN alienbrain</SccProvider>
     <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -73,10 +74,11 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>../$(Platform)/$(Configuration)\</OutDir>
-    <IntDir>$(OutDir)</IntDir>
+    <OutDir>..\..\..\Program Files %28x86%29\Steam\steamapps\common\Quake 4\mod\</OutDir>
+    <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>$(ProjectName)x86</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -192,7 +194,7 @@
     <Link>
       <AdditionalOptions>/MACHINE:I386 /fixed:no %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>$(IntDir)idLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(IntDir)$(ProjectName)x86.dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName)x86.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ModuleDefinitionFile>.\game\game.def</ModuleDefinitionFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>

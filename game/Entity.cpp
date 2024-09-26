@@ -3184,6 +3184,7 @@ bool idEntity::RunPhysics(void) {
 		// RAVEN END
 		return false;
 	}
+	//common->Printf(spawnArgs.FindKey("id_className")->GetValue());
 
 	// if this entity is a team slave don't do anything because the team master will handle everything
 	if (teamMaster && teamMaster != this) {

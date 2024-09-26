@@ -538,6 +538,7 @@ void idProjectile::Think(void) {
 		}
 
 		RunPhysics();
+		DrawDebugEntityInfo();
 
 		// If we werent at rest and are now then start the atrest fuse
 		if (physicsObj.IsAtRest()) {
@@ -830,14 +831,27 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 				}
 			}
 			else {
-				// FIXME: clean up
-				idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
-				axis[0].ProjectOntoPlane(collision.c.normal);
-				axis[0].Normalize();
-				axis[2] = collision.c.normal;
-				axis[1] = axis[2].Cross(axis[0]).ToNormal();
+				if (idStr::Cmp(spawnArgs.GetString("classname"), "projectile_rocket") == 0) {
+					//bouce haha
+					idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
+					axis[2].x *= -1;
+					axis[0] = axis[1].Cross(axis[2]).ToNormal();
+					SetAxis(axis);
+					SetOrigin(collision.endpos);
+					physicsObj.SetLinearVelocity(axis[0] * velocity.LengthFast());
+					DrawDebugEntityInfo();
+				}
+				else {
 
-				rotation.Init(gameLocal.GetTime(), SEC2MS(spawnArgs.GetFloat("settle_duration")), rotation.GetCurrentValue(gameLocal.GetTime()), axis.ToQuat());
+					// FIXME: clean up
+					idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
+					axis[0].ProjectOntoPlane(collision.c.normal);
+					axis[0].Normalize();
+					axis[2] = collision.c.normal;
+					axis[1] = axis[2].Cross(axis[0]).ToNormal();
+
+					rotation.Init(gameLocal.GetTime(), SEC2MS(spawnArgs.GetFloat("settle_duration")), rotation.GetCurrentValue(gameLocal.GetTime()), axis.ToQuat());
+				}
 			}
 			if (actualHitEnt
 				&& actualHitEnt != ent
@@ -853,11 +867,11 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 		}
 	}
 
-	SetOrigin(collision.endpos);
+	//SetOrigin(collision.endpos);
 	//	SetAxis( collision.endAxis );
 
-		// unlink the clip model because we no longer need it
-	GetPhysics()->UnlinkClip();
+	// unlink the clip model because we no longer need it
+	//GetPhysics()->UnlinkClip();
 
 	ignore = NULL;
 
@@ -946,7 +960,23 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 		return true;
 	}
 
-	Explode(&collision, false, ignore);
+	if (idStr::Cmp(spawnArgs.GetString("classname"), "projectile_rocket") == 0) {
+		//bouce haha
+		common->Printf("%s\n", velocity.ToString());
+
+		idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
+		axis[0].ProjectOntoPlane(collision.c.normal);
+		axis[0].Normalize();
+		axis[2] = collision.c.normal;
+		axis[1] = axis[2].Cross(axis[0]).ToNormal();
+
+		rotation.Init(gameLocal.GetTime(), 10, rotation.GetCurrentValue(gameLocal.GetTime()), axis.ToQuat());
+		SetAxis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
+		
+		common->Printf("%s\n\n", velocity.ToString());
+		return false;
+	}
+	else Explode(&collision, false, ignore);
 
 	return true;
 }

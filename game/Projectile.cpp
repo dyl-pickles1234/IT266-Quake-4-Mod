@@ -831,27 +831,14 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 				}
 			}
 			else {
-				if (idStr::Cmp(spawnArgs.GetString("classname"), "projectile_rocket") == 0) {
-					//bouce haha
-					idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
-					axis[2].x *= -1;
-					axis[0] = axis[1].Cross(axis[2]).ToNormal();
-					SetAxis(axis);
-					SetOrigin(collision.endpos);
-					physicsObj.SetLinearVelocity(axis[0] * velocity.LengthFast());
-					DrawDebugEntityInfo();
-				}
-				else {
+				// FIXME: clean up
+				idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
+				axis[0].ProjectOntoPlane(collision.c.normal);
+				axis[0].Normalize();
+				axis[2] = collision.c.normal;
+				axis[1] = axis[2].Cross(axis[0]).ToNormal();
 
-					// FIXME: clean up
-					idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
-					axis[0].ProjectOntoPlane(collision.c.normal);
-					axis[0].Normalize();
-					axis[2] = collision.c.normal;
-					axis[1] = axis[2].Cross(axis[0]).ToNormal();
-
-					rotation.Init(gameLocal.GetTime(), SEC2MS(spawnArgs.GetFloat("settle_duration")), rotation.GetCurrentValue(gameLocal.GetTime()), axis.ToQuat());
-				}
+				rotation.Init(gameLocal.GetTime(), SEC2MS(spawnArgs.GetFloat("settle_duration")), rotation.GetCurrentValue(gameLocal.GetTime()), axis.ToQuat());
 			}
 			if (actualHitEnt
 				&& actualHitEnt != ent
@@ -931,13 +918,13 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 	ignore = ent;
 
 	// TODO: fixme
-	ent->AddDamageEffect(collision, velocity, damageDefName, owner);
+	//ent->AddDamageEffect(collision, velocity, damageDefName, owner); // get rid of blast debug
 
 	// RAVEN BEGIN
 	// jshepard: Single Player- if the the player is the attacker and the victim is teammate, don't play any effects.
 	// this should make sure that only explosion effects play when the player shoots his comrades. 
 	if (willPlayDamageEffect || spawnArgs.GetBool("friendly_impact")) {
-		DefaultDamageEffect(collision, velocity, damageDefName);
+		//DefaultDamageEffect(collision, velocity, damageDefName); // get rid of blast debug
 	}
 	// RAVEN END
 
@@ -962,18 +949,22 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 
 	if (idStr::Cmp(spawnArgs.GetString("classname"), "projectile_rocket") == 0) {
 		//bouce haha
-		common->Printf("%s\n", velocity.ToString());
-
 		idMat3 axis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
-		axis[0].ProjectOntoPlane(collision.c.normal);
-		axis[0].Normalize();
-		axis[2] = collision.c.normal;
-		axis[1] = axis[2].Cross(axis[0]).ToNormal();
-
-		rotation.Init(gameLocal.GetTime(), 10, rotation.GetCurrentValue(gameLocal.GetTime()), axis.ToQuat());
-		SetAxis(rotation.GetCurrentValue(gameLocal.GetTime()).ToMat3());
-		
-		common->Printf("%s\n\n", velocity.ToString());
+		//axis[2].x *= -1;
+		//axis[2].y *= -1;
+		//axis[0] = axis[1].Cross(axis[2]).ToNormal();
+		rvAngles normalRad = collision.c.normal.ToRadians();
+		rvAngles upRad = axis[2].ToRadians();
+		rvAngles diff = upRad - normalRad;
+		upRad -= 2 * diff;
+		upRad.ToVectors(&axis[2], &axis[1], &axis[0]); // why am i using the up vector? why not just use forward dumbass
+		//axis[1] *= -1;
+		//axis[0] *= -1;
+		//rotation.GetCurrentValue(gameLocal.time).ToAngles().ToMat3();
+		SetAxis(axis);
+		SetOrigin(collision.endpos);
+		physicsObj.SetLinearVelocity(axis[0] * velocity.LengthFast());
+		DrawDebugEntityInfo();
 		return false;
 	}
 	else Explode(&collision, false, ignore);

@@ -918,13 +918,15 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 	ignore = ent;
 
 	// TODO: fixme
-	//ent->AddDamageEffect(collision, velocity, damageDefName, owner); // get rid of blast debug
+	// todo get rid of blast
+	ent->AddDamageEffect(collision, velocity, damageDefName, owner);
 
 	// RAVEN BEGIN
 	// jshepard: Single Player- if the the player is the attacker and the victim is teammate, don't play any effects.
 	// this should make sure that only explosion effects play when the player shoots his comrades. 
 	if (willPlayDamageEffect || spawnArgs.GetBool("friendly_impact")) {
-		//DefaultDamageEffect(collision, velocity, damageDefName); // get rid of blast debug
+		// todo get rid of blast
+		DefaultDamageEffect(collision, velocity, damageDefName);
 	}
 	// RAVEN END
 
@@ -972,8 +974,11 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 		common->Printf("Up      ang %f, %f, %f\n", upRad.pitch * idMath::M_RAD2DEG, upRad.yaw * idMath::M_RAD2DEG, upRad.roll * idMath::M_RAD2DEG);
 		common->Printf("Normal  ang %f, %f, %f\n\n", normalRad.pitch * idMath::M_RAD2DEG, normalRad.yaw * idMath::M_RAD2DEG, normalRad.roll * idMath::M_RAD2DEG);
 
-		forwardRad = 2 * normalRad - idVec3(idMath::PI, 0, 0) - forwardRad;
-		forwardRad.yaw *= -1;
+		//forwardRad = idVec3(-forwardRad.pitch, forwardRad.yaw, forwardRad.roll); // works for ground/ceiling
+		//forwardRad = idVec3(forwardRad.pitch, -forwardRad.yaw, forwardRad.roll); // works for left/right walls
+		//forwardRad = idVec3(forwardRad.pitch, forwardRad.yaw - 2 * (forwardRad.yaw - idMath::HALF_PI), forwardRad.roll); // works for back/front walls
+		forwardRad = idVec3(forwardRad.pitch - 2 * idMath::Fabs(idMath::Sin(normalRad.pitch)) * forwardRad.pitch, forwardRad.yaw - 2 * idMath::Fabs(idMath::Cos(normalRad.pitch)) * (forwardRad.yaw - idMath::HALF_PI + normalRad.yaw), forwardRad.roll);
+		// TODO probably have to do some dot product stuff see how similar it is to up or down
 		forwardRad.ToVectors(&axis[0], &axis[1], &axis[2]);
 		//axis[1] *= -1;
 

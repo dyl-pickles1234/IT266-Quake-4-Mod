@@ -953,11 +953,33 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 		//axis[2].x *= -1;
 		//axis[2].y *= -1;
 		//axis[0] = axis[1].Cross(axis[2]).ToNormal();
+
+		//rvAngles normalRad = collision.c.normal.ToRadians();
+		//rvAngles upRad = axis[2].ToRadians();
+		//rvAngles diff = upRad - normalRad;
+		//upRad -= 2 * diff;
+		//upRad.ToVectors(&axis[2], &axis[1], &axis[0]); // why am i using the up vector? why not just use forward dumbass
+
 		rvAngles normalRad = collision.c.normal.ToRadians();
+		rvAngles forwardRad = axis[0].ToRadians();
+		rvAngles rightRad = axis[1].ToRadians();
 		rvAngles upRad = axis[2].ToRadians();
-		rvAngles diff = upRad - normalRad;
-		upRad -= 2 * diff;
-		upRad.ToVectors(&axis[2], &axis[1], &axis[0]); // why am i using the up vector? why not just use forward dumbass
+		rvAngles diff = forwardRad - normalRad;
+
+		common->Printf("Forward vec %f, %f, %f\n\n", axis[0].x, axis[0].y, axis[0].z);
+		common->Printf("Forward ang %f, %f, %f\n", forwardRad.pitch * idMath::M_RAD2DEG, forwardRad.yaw * idMath::M_RAD2DEG, forwardRad.roll * idMath::M_RAD2DEG);
+		common->Printf("Right   ang %f, %f, %f\n", rightRad.pitch * idMath::M_RAD2DEG, rightRad.yaw * idMath::M_RAD2DEG, rightRad.roll * idMath::M_RAD2DEG);
+		common->Printf("Up      ang %f, %f, %f\n", upRad.pitch * idMath::M_RAD2DEG, upRad.yaw * idMath::M_RAD2DEG, upRad.roll * idMath::M_RAD2DEG);
+		common->Printf("Normal  ang %f, %f, %f\n\n", normalRad.pitch * idMath::M_RAD2DEG, normalRad.yaw * idMath::M_RAD2DEG, normalRad.roll * idMath::M_RAD2DEG);
+
+		forwardRad = 2 * normalRad - idVec3(idMath::PI, 0, 0) - forwardRad;
+		forwardRad.yaw *= -1;
+		forwardRad.ToVectors(&axis[0], &axis[1], &axis[2]);
+		//axis[1] *= -1;
+
+		common->Printf("New forward %f, %f, %f\n", axis[0].x, axis[0].y, axis[0].z);
+		common->Printf("New for ang %f, %f, %f\n--------\n", forwardRad.pitch * idMath::M_RAD2DEG, forwardRad.yaw * idMath::M_RAD2DEG, forwardRad.roll * idMath::M_RAD2DEG);
+
 		//axis[1] *= -1;
 		//axis[0] *= -1;
 		//rotation.GetCurrentValue(gameLocal.time).ToAngles().ToMat3();

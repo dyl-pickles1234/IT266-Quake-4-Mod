@@ -2977,6 +2977,36 @@ void Cmd_Locate_f(const idCmdArgs& args) {
 	common->Printf("Player is at (%f %f %f)\n", pos.x, pos.y, pos.z);
 }
 
+void Cmd_ChangeClass_f(const idCmdArgs& args) {
+	idPlayer* player = gameLocal.GetLocalPlayer();
+	if (!player) return;
+
+	if (args.Argc() == 1) {
+		common->Printf("uh oh 1 arg: %s\n", args.Argv(0));
+		return;
+	}
+
+	char* classStr;
+
+	if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
+		classStr = "Pyro";
+	}
+	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
+		classStr = "Pyro";
+	}
+	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
+		classStr = "Pyro";
+	}
+	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
+		classStr = "Pyro";
+	}
+	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
+		classStr = "Pyro";
+	}
+
+	common->Printf("Player class changed to %s\n", classStr);
+}
+
 void Cmd_PlayerEmote_f(const idCmdArgs& args) {
 	if (gameLocal.GetLocalPlayer() == NULL) {
 		gameLocal.Warning("Cmd_Emote_f() - local player is NULL");
@@ -3272,9 +3302,10 @@ void idGameLocal::InitConsoleCommands(void) {
 	// squirrel: Mode-agnostic buymenus
 	cmdSystem->AddCommand("buyMenu", Cmd_ToggleBuyMenu_f, CMD_FL_GAME, "Toggle buy menu (if in a buy zone and the game type supports it)");
 	cmdSystem->AddCommand("buy", Cmd_BuyItem_f, CMD_FL_GAME, "Buy an item (if in a buy zone and the game type supports it)");
-	cmdSystem->AddCommand("locate", Cmd_Locate_f, CMD_FL_GAME, "Find out where we are");
 	// RITUAL END
 
+	cmdSystem->AddCommand("locate", Cmd_Locate_f, CMD_FL_GAME, "Find out where we are");
+	cmdSystem->AddCommand("class", Cmd_ChangeClass_f, CMD_FL_GAME, "Change tf2 class yippee!!");
 }
 
 /*

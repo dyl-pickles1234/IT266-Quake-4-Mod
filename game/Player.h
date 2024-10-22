@@ -267,9 +267,35 @@ public:
 	int						secretAreasDiscovered;
 };
 
+enum TF2ClassType {
+	NONE,
+	PYRO,
+	DEMO,
+	HEAVY,
+	SNIPER,
+	SPY
+};
+
+class TF2Class {
+public:
+	TF2ClassType type;
+private:
+	rvWeapon* primary;
+	rvWeapon* secondary;
+	rvWeapon* melee;
+
+public:
+	TF2Class(TF2ClassType type) {
+		this->type = type;
+	}
+
+	TF2Class() {
+		this->type = NONE;
+	}
+};
+
 class idPlayer : public idActor {
 public:
-
 	enum {
 		EVENT_IMPULSE = idEntity::EVENT_MAXEVENTS,
 		EVENT_EXIT_TELEPORTER,
@@ -424,6 +450,8 @@ public:
 	// squirrel: Mode-agnostic buymenus
 	float					buyMenuCash;
 	// RITUAL END
+
+	TF2Class moddedClass;
 
 public:
 	CLASS_PROTOTYPE(idPlayer);

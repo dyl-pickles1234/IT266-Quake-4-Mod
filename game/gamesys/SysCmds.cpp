@@ -2987,22 +2987,30 @@ void Cmd_ChangeClass_f(const idCmdArgs& args) {
 	}
 
 	char* classStr;
+	TF2ClassType classType;
 
 	if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
 		classStr = "Pyro";
+		classType = PYRO;
 	}
-	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
-		classStr = "Pyro";
+	else if (idStr::Icmp(args.Argv(1), "demo") == 0) {
+		classStr = "Demoman";
+		classType = DEMO;
 	}
-	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
-		classStr = "Pyro";
+	else if (idStr::Icmp(args.Argv(1), "heavy") == 0) {
+		classStr = "Heavy";
+		classType = HEAVY;
 	}
-	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
-		classStr = "Pyro";
+	else if (idStr::Icmp(args.Argv(1), "sniper") == 0) {
+		classStr = "Sniper";
+		classType = SNIPER;
 	}
-	else if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
-		classStr = "Pyro";
+	else if (idStr::Icmp(args.Argv(1), "spy") == 0) {
+		classStr = "Spy";
+		classType = SPY;
 	}
+
+	player->tf2Class.type = classType;
 
 	common->Printf("Player class changed to %s\n", classStr);
 }

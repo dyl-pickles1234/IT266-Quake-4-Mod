@@ -8803,7 +8803,7 @@ void idPlayer::PerformImpulse(int impulse) {
 	}
 #endif
 	//RAVEN END
-	}
+}
 
 /*
 ==============
@@ -10384,29 +10384,24 @@ void idPlayer::Damage(idEntity * inflictor, idEntity * attacker, const idVec3 & 
 	knockback *= damageScale;
 
 	if (knockback != 0 && !fl.noknockback) {
-		if (!gameLocal.isMultiplayer && attacker == this) {
-			//In SP, no knockback from your own stuff
-			knockback = 0;
+
+		if (attacker != this) {
+			attackerPushScale = 1.0f;
 		}
 		else {
-			if (attacker != this) {
-				attackerPushScale = 1.0f;
-			}
-			else {
-				// since default attackerDamageScale is 0.5, default attackerPushScale should be 2
-				damageDef->dict.GetFloat("attackerPushScale", "2", attackerPushScale);
-			}
-
-			kick = dir;
-
-			kick.Normalize();
-			kick *= g_knockback.GetFloat() * knockback * attackerPushScale / 200.0f;
-
-			physicsObj.SetLinearVelocity(physicsObj.GetLinearVelocity() + kick);
-
-			// set the timer so that the player can't cancel out the movement immediately
-			physicsObj.SetKnockBack(idMath::ClampInt(50, 200, knockback * 2));
+			// since default attackerDamageScale is 0.5, default attackerPushScale should be 2
+			damageDef->dict.GetFloat("attackerPushScale", "2", attackerPushScale);
 		}
+
+		kick = dir;
+
+		kick.Normalize();
+		kick *= g_knockback.GetFloat() * knockback * attackerPushScale / 200.0f;
+
+		physicsObj.SetLinearVelocity(physicsObj.GetLinearVelocity() + kick);
+
+		// set the timer so that the player can't cancel out the movement immediately
+		physicsObj.SetKnockBack(idMath::ClampInt(50, 200, knockback * 2));
 	}
 
 	if (damageDef->dict.GetBool("burn")) {
@@ -12300,7 +12295,7 @@ void idPlayer::NonLocalClientPredictionThink(void) {
 		}
 
 		return;
-	}
+}
 #endif
 
 	AdjustSpeed();

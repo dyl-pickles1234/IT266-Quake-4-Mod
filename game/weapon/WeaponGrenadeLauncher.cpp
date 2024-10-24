@@ -79,10 +79,9 @@ void rvWeaponGrenadeLauncher::Think(void) {
 	rvWeapon::Think();
 
 	if (wsfl.zoom) {
-		for (int i = 0; i < grenades.Size(); i++) {
-			idVec3 o;
-			o.Zero();
-			grenades[i]->Killed(grenades[i], grenades[i], 100, o, 0);
+		for (int i = 0; i < grenades.Num(); i++) {
+			grenades[i]->Explode(NULL, true);
+			grenades.Remove(grenades[i]);
 		}
 	}
 }

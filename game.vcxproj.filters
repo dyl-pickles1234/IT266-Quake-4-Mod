@@ -830,5 +830,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="game\Game.def" />
+    <None Include="def\weapons\grenadelauncher.def" />
+    <None Include="def\weapons\lightninggun.def" />
+    <None Include="def\weapons\rocketlauncher.def" />
+    <None Include="def\player.def" />
   </ItemGroup>
 </Project>

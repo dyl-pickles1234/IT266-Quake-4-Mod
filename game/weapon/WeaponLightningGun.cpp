@@ -301,7 +301,7 @@ void rvWeaponLightningGun::Think(void) {
 	currentPath.normal = tr.c.normal;
 	currentPath.target = gameLocal.entities[tr.c.entityNum];
 
-	UpdateChainLightning();
+	//UpdateChainLightning();
 
 	UpdateEffects(origin);
 
@@ -512,7 +512,7 @@ void rvWeaponLightningGun::UpdateEffects(const idVec3& origin) {
 	if (!trailEffectView) {
 		trailEffectView = gameLocal.PlayEffect(gameLocal.GetEffect(weaponDef->dict, "fx_trail"), origin, dir.ToMat3(), true, currentPath.origin);
 	}
-	else {
+	else { 
 		trailEffectView->SetOrigin(origin);
 		trailEffectView->SetAxis(dir.ToMat3());
 		trailEffectView->SetEndOrigin(currentPath.origin);

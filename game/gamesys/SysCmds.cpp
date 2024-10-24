@@ -2977,40 +2977,78 @@ void Cmd_Locate_f(const idCmdArgs& args) {
 	common->Printf("Player is at (%f %f %f)\n", pos.x, pos.y, pos.z);
 }
 
+enum {
+	BLASTER,
+	MACHINEGUN,
+	SHOTGUN,
+	HYPERBLASTER,
+	GRENADELAUNCHER,
+	NAILGUN,
+	ROCKETLAUNCHER,
+	RAILGUN,
+	LIGHTNINGGUN,
+	DARKMATTERGUN,
+	NAPALMLAUNCHER
+};
+
 void Cmd_ChangeClass_f(const idCmdArgs& args) {
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (!player) return;
 
 	if (args.Argc() == 1) {
-		common->Printf("uh oh 1 arg: %s\n", args.Argv(0));
+		common->Printf("missing class argument: {pyro, demo, heavy, sniper, spy}");
 		return;
 	}
 
 	char* classStr;
 	TF2ClassType classType;
+	int weaponsBackup = player->inventory.weapons;
+
+	player->inventory.weapons = 0;
+	gameLocal.world->spawnArgs.SetBool("no_Weapons", false);
 
 	if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
 		classStr = "Pyro";
 		classType = PYRO;
+		player->inventory.weapons |= BIT(LIGHTNINGGUN);
+		player->inventory.weapons |= BIT(NAPALMLAUNCHER);
+		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", LIGHTNINGGUN)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "demo") == 0) {
 		classStr = "Demoman";
 		classType = DEMO;
+		player->inventory.weapons |= BIT(GRENADELAUNCHER);
+		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", GRENADELAUNCHER)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "heavy") == 0) {
 		classStr = "Heavy";
 		classType = HEAVY;
+		player->inventory.weapons |= BIT(HYPERBLASTER);
+		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", HYPERBLASTER)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "sniper") == 0) {
 		classStr = "Sniper";
 		classType = SNIPER;
+		player->inventory.weapons |= BIT(RAILGUN);
+		player->inventory.weapons |= BIT(MACHINEGUN);
+		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", RAILGUN)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "spy") == 0) {
 		classStr = "Spy";
 		classType = SPY;
+		player->inventory.weapons |= BIT(BLASTER);
+		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", BLASTER)));
+	}
+	else {
+		common->Printf("Unable to change class: %s is unknown", args.Argv(1));
+		player->inventory.weapons = weaponsBackup;
+		return;
 	}
 
-	player->tf2Class.type = classType;
+	GiveStuffToPlayer(player, "ammo", "");
+	player->CacheWeapons();
+
+	//player->moddedClass.type = classType;
 
 	common->Printf("Player class changed to %s\n", classStr);
 }

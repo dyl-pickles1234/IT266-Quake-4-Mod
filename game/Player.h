@@ -3,6 +3,7 @@
 //
 // MERGE_DATE 07/07/2004
 
+//#include <unordered_map>
 #ifndef __GAME_PLAYER_H__
 #define __GAME_PLAYER_H__
 
@@ -276,23 +277,23 @@ enum TF2ClassType {
 	SPY
 };
 
-class TF2Class {
-public:
-	TF2ClassType type;
-private:
-	rvWeapon* primary;
-	rvWeapon* secondary;
-	rvWeapon* melee;
-
-public:
-	TF2Class(TF2ClassType type) {
-		this->type = type;
-	}
-
-	TF2Class() {
-		this->type = NONE;
-	}
-};
+//class TF2Class {
+//public:
+//	TF2ClassType type;
+//private:
+//	rvWeapon* primary;
+//	rvWeapon* secondary;
+//	rvWeapon* melee;
+//
+//public:
+//	TF2Class(TF2ClassType type) {
+//		this->type = type;
+//	}
+//
+//	TF2Class() {
+//		this->type = NONE;
+//	}
+//};
 
 class idPlayer : public idActor {
 public:
@@ -451,7 +452,7 @@ public:
 	float					buyMenuCash;
 	// RITUAL END
 
-	TF2Class moddedClass;
+	//TF2Class moddedClass;
 
 public:
 	CLASS_PROTOTYPE(idPlayer);

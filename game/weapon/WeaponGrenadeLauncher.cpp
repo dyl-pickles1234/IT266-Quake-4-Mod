@@ -3,6 +3,7 @@
 
 #include "../Game_local.h"
 #include "../Weapon.h"
+#include "../Projectile.h"
 
 class rvWeaponGrenadeLauncher : public rvWeapon {
 public:
@@ -14,6 +15,9 @@ public:
 	virtual void			Spawn(void);
 	void					PreSave(void);
 	void					PostSave(void);
+	void					Think(void);
+
+	void					OnLaunchProjectile(idProjectile* proj);
 
 #ifdef _XENON
 	virtual bool		AllowAutoAim(void) const { return false; }
@@ -27,6 +31,8 @@ private:
 
 	const char* GetFireAnim() const { return (!AmmoInClip()) ? "fire_empty" : "fire"; }
 	const char* GetIdleAnim() const { return (!AmmoInClip()) ? "idle_empty" : "idle"; }
+
+	idList<idProjectile*> grenades;
 
 	CLASS_STATES_PROTOTYPE(rvWeaponGrenadeLauncher);
 };
@@ -65,6 +71,24 @@ rvWeaponGrenadeLauncher::PostSave
 ================
 */
 void rvWeaponGrenadeLauncher::PostSave(void) {
+}
+
+void rvWeaponGrenadeLauncher::Think(void) {
+
+	// Let the real weapon think first
+	rvWeapon::Think();
+
+	if (wsfl.zoom) {
+		for (int i = 0; i < grenades.Size(); i++) {
+			idVec3 o;
+			o.Zero();
+			grenades[i]->Killed(grenades[i], grenades[i], 100, o, 0);
+		}
+	}
+}
+
+void rvWeaponGrenadeLauncher::OnLaunchProjectile(idProjectile* proj) {
+	grenades.Append(proj);
 }
 
 /*

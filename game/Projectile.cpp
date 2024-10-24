@@ -649,6 +649,11 @@ bool idProjectile::Collide(const trace_t& collision, const idVec3& velocity, boo
 		return true;
 	}
 
+	if (idStr::Cmp(spawnArgs.GetString("classname"), "projectile_grenade") == 0) {
+		physicsObj.PutToRest();
+		return false;
+	}
+
 	// allow projectiles to hit triggers (teleports)
 	// predict this on a client
 	if (collision.c.contents & CONTENTS_TRIGGER) {

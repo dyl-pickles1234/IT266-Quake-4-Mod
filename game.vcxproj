@@ -483,6 +483,10 @@
     <ClInclude Include="game\WorldSpawn.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="def\player.def" />
+    <None Include="def\weapons\grenadelauncher.def" />
+    <None Include="def\weapons\lightninggun.def" />
+    <None Include="def\weapons\rocketlauncher.def" />
     <None Include="game\Game.def" />
   </ItemGroup>
   <ItemGroup>

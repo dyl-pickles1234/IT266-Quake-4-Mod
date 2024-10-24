@@ -3005,7 +3005,7 @@ void Cmd_ChangeClass_f(const idCmdArgs& args) {
 	int weaponsBackup = player->inventory.weapons;
 
 	player->inventory.weapons = 0;
-	gameLocal.world->spawnArgs.SetBool("no_Weapons", false);
+	GiveStuffToPlayer(player, "ammo", "");
 
 	if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
 		classStr = "Pyro";
@@ -3045,7 +3045,6 @@ void Cmd_ChangeClass_f(const idCmdArgs& args) {
 		return;
 	}
 
-	GiveStuffToPlayer(player, "ammo", "");
 	player->CacheWeapons();
 
 	//player->moddedClass.type = classType;

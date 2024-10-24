@@ -740,7 +740,7 @@ entityDef player_marine
 	"ammo_lightninggun"					"0"
 	"ammo_none"						"-1"
 
-	"max_ammo_blaster"					"-1"
+	"max_ammo_blaster"					"60"
 	"max_ammo_railgun"					"50"
 	"max_ammo_machinegun"					"300"
 	"max_ammo_nailgun"					"300"

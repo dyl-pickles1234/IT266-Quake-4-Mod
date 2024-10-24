@@ -32,6 +32,7 @@ private:
 	idVec2				chargeGlow;
 	bool				fireForced;
 	int					fireHeldTime;
+	float				reloadRate;
 
 	stateResult_t		State_Raise(const stateParms_t& parms);
 	stateResult_t		State_Lower(const stateParms_t& parms);
@@ -40,6 +41,7 @@ private:
 	stateResult_t		State_Charged(const stateParms_t& parms);
 	stateResult_t		State_Fire(const stateParms_t& parms);
 	stateResult_t		State_Flashlight(const stateParms_t& parms);
+	stateResult_t		State_Blaster_Reload(const stateParms_t& parms);
 
 	CLASS_STATES_PROTOTYPE(rvWeaponBlaster);
 };
@@ -155,6 +157,7 @@ void rvWeaponBlaster::Spawn(void) {
 	chargeGlow = spawnArgs.GetVec2("chargeGlow");
 	chargeTime = SEC2MS(spawnArgs.GetFloat("chargeTime"));
 	chargeDelay = SEC2MS(spawnArgs.GetFloat("chargeDelay"));
+	reloadRate = SEC2MS(spawnArgs.GetFloat("reloadRate", ".8"));
 
 	fireHeldTime = 0;
 	fireForced = false;
@@ -224,8 +227,8 @@ CLASS_STATES_DECLARATION(rvWeaponBlaster)
 STATE("Raise", rvWeaponBlaster::State_Raise)
 STATE("Lower", rvWeaponBlaster::State_Lower)
 STATE("Idle", rvWeaponBlaster::State_Idle)
-STATE("Charge", rvWeaponBlaster::State_Charge)
-STATE("Charged", rvWeaponBlaster::State_Charged)
+//STATE("Charge", rvWeaponBlaster::State_Charge)
+//STATE("Charged", rvWeaponBlaster::State_Charged)
 STATE("Fire", rvWeaponBlaster::State_Fire)
 STATE("Flashlight", rvWeaponBlaster::State_Flashlight)
 END_CLASS_STATES
@@ -427,16 +430,14 @@ stateResult_t rvWeaponBlaster::State_Fire(const stateParms_t& parms) {
 			return SRESULT_DONE;
 		}
 
-
-
 		if (gameLocal.time - fireHeldTime > chargeTime) {
 			Attack(true, 1, spread, 0, 1.0f);
 			PlayEffect("fx_chargedflash", barrelJointView, false);
 			PlayAnim(ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames);
 		}
 		else {
-			Attack(false, 10, 10, 0, 0.5f); // funny blaster pewpew (in class test demo)
-			//Attack ( false, 1, spread, 0, 1.0f ); // original blaster behavior
+			//Attack(false, 10, 10, 0, 0.5f); // funny blaster pewpew (in class test demo)
+			Attack(false, 1, spread, 0, 1.0f); // original blaster behavior
 			PlayEffect("fx_normalflash", barrelJointView, false);
 			PlayAnim(ANIMCHANNEL_ALL, "fire", parms.blendFrames);
 		}

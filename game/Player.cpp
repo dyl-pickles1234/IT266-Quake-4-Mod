@@ -8924,6 +8924,8 @@ void idPlayer::AdjustSpeed(void) {
 	else if (!physicsObj.OnLadder() && (usercmd.buttons & BUTTON_RUN) && (usercmd.forwardmove || usercmd.rightmove) && (usercmd.upmove >= 0)) {
 		bobFrac = 1.0f;
 		speed = pm_speed.GetFloat();
+		if (usingMinigun) speed *= 0.5f;
+		else if (weapon && weapon->GetClassname() == "rvWeaponNailgun") speed *= 0.8f;
 	}
 	else {
 		speed = pm_walkspeed.GetFloat();
@@ -8936,7 +8938,11 @@ void idPlayer::AdjustSpeed(void) {
 		speed *= 0.33f;
 	}
 
-	physicsObj.SetSpeed(speed, pm_crouchspeed.GetFloat());
+	float crouchSpeed = pm_crouchspeed.GetFloat();
+	if (usingMinigun) crouchSpeed *= 0;
+	else if (weapon && weapon->GetClassname() == "rvWeaponNailgun") crouchSpeed *= 0.75f;
+
+	physicsObj.SetSpeed(speed, crouchSpeed);
 }
 
 /*

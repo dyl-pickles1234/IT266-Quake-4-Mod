@@ -2991,6 +2991,10 @@ enum {
 	NAPALMLAUNCHER
 };
 
+void Cmd_WhatWeapon_f(const idCmdArgs& args) {
+	common->Printf("Weapon classname: %s\n", gameLocal.GetLocalPlayer()->weapon->GetClassname());
+}
+
 void Cmd_ChangeClass_f(const idCmdArgs& args) {
 	idPlayer* player = gameLocal.GetLocalPlayer();
 	if (!player) return;
@@ -3023,7 +3027,7 @@ void Cmd_ChangeClass_f(const idCmdArgs& args) {
 	else if (idStr::Icmp(args.Argv(1), "heavy") == 0) {
 		classStr = "Heavy";
 		classType = HEAVY;
-		player->inventory.weapons |= BIT(HYPERBLASTER);
+		player->inventory.weapons |= BIT(NAILGUN);
 		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", HYPERBLASTER)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "sniper") == 0) {
@@ -3351,6 +3355,7 @@ void idGameLocal::InitConsoleCommands(void) {
 
 	cmdSystem->AddCommand("locate", Cmd_Locate_f, CMD_FL_GAME, "Find out where we are");
 	cmdSystem->AddCommand("class", Cmd_ChangeClass_f, CMD_FL_GAME, "Change tf2 class yippee!!");
+	cmdSystem->AddCommand("whatweapon", Cmd_WhatWeapon_f, CMD_FL_GAME, "What weapon am I holding?");
 }
 
 /*

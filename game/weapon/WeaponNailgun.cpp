@@ -452,6 +452,7 @@ bool rvWeaponNailgun::DrumSpin(int speed, int blendFrames) {
 		// Spin the barrel down if we were spinning fast
 		if (drumSpeed == NAILGUN_DRUMSPEED_FAST) {
 			PostState("DrumSpinDown", blendFrames);
+			owner->usingMinigun = false;
 			return true;
 		}
 		break;
@@ -465,6 +466,7 @@ bool rvWeaponNailgun::DrumSpin(int speed, int blendFrames) {
 		// Spin the barrel down if we were spinning fast		
 		if (drumSpeed == NAILGUN_DRUMSPEED_FAST) {
 			PostState("DrumSpinDown", blendFrames);
+			owner->usingMinigun = false;
 			return true;
 		}
 		break;
@@ -475,6 +477,7 @@ bool rvWeaponNailgun::DrumSpin(int speed, int blendFrames) {
 		viewAnimator->SetJointAngularVelocity(jointPinsView, idAngles(0, 0, -300.0f * drumMultiplier), gameLocal.time, NAILGUN_SPINUP_TIME);
 
 		PostState("DrumSpinUp", blendFrames);
+		owner->usingMinigun = true;
 		return true;
 	}
 
@@ -612,6 +615,13 @@ stateResult_t rvWeaponNailgun::State_Idle(const stateParms_t& parms) {
 			return SRESULT_DONE;
 		}
 
+		if (wsfl.zoom) {
+			DrumSpin(NAILGUN_DRUMSPEED_FAST, 2);
+		}
+		else DrumSpin(NAILGUN_DRUMSPEED_SLOW, 2);
+
+		owner->usingMinigun = wsfl.zoom;
+
 		if (!clipSize) {
 			if (gameLocal.time > nextAttackTime && wsfl.attack && AmmoAvailable()) {
 				SetState("Fire", 0);
@@ -662,7 +672,13 @@ stateResult_t rvWeaponNailgun::State_Fire(const stateParms_t& parms) {
 			PostState("Fire", 2);
 			return SRESULT_DONE;
 		}
-		nextAttackTime = gameLocal.time;
+
+		if (parms.blendFrames != 2) {
+			nextAttackTime = gameLocal.time;
+		}
+		else {
+			nextAttackTime = gameLocal.time + 1000;
+		}
 
 		return SRESULT_STAGE(STAGE_FIRE);
 
@@ -677,21 +693,26 @@ stateResult_t rvWeaponNailgun::State_Fire(const stateParms_t& parms) {
 			PlayCycle(ANIMCHANNEL_LEGS, "fire_slow", 4);
 		}
 
-		if (wsfl.zoom) {
+		/*if (wsfl.zoom) {
 			Attack(true, 1, spread, 0.0f, 1.0f);
 			nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+			// Play the exhaust effects
+			viewModel->PlayEffect("fx_exhaust", jointSteamRightView, false);
+			viewModel->PlayEffect("fx_exhaust", jointSteamLeftView, false);
+
+			viewModel->StartSound("snd_fire", SND_CHANNEL_WEAPON, 0, false, NULL);
+			viewModel->StartSound("snd_fireStereo", SND_CHANNEL_ITEM, 0, false, NULL);
 		}
-		else {
+		else */if (gameLocal.time >= nextAttackTime) {
 			Attack(false, 1, spread, 0.0f, 1.0f);
 			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier(PMOD_FIRERATE));
+			// Play the exhaust effects
+			viewModel->PlayEffect("fx_exhaust", jointSteamRightView, false);
+			viewModel->PlayEffect("fx_exhaust", jointSteamLeftView, false);
+
+			viewModel->StartSound("snd_fire", SND_CHANNEL_WEAPON, 0, false, NULL);
+			viewModel->StartSound("snd_fireStereo", SND_CHANNEL_ITEM, 0, false, NULL);
 		}
-
-		// Play the exhaust effects
-		viewModel->PlayEffect("fx_exhaust", jointSteamRightView, false);
-		viewModel->PlayEffect("fx_exhaust", jointSteamLeftView, false);
-
-		viewModel->StartSound("snd_fire", SND_CHANNEL_WEAPON, 0, false, NULL);
-		viewModel->StartSound("snd_fireStereo", SND_CHANNEL_ITEM, 0, false, NULL);
 
 		return SRESULT_STAGE(STAGE_FIREWAIT);
 

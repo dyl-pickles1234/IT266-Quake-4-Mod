@@ -1056,7 +1056,9 @@ private:
 	void					CrashLand(const idVec3& oldOrigin, const idVec3& oldVelocity);
 	void					BobCycle(const idVec3& pushVelocity);
 	void					EvaluateControls(void);
+public:
 	void					AdjustSpeed(void);
+private:
 	void					AdjustBodyAngles(void);
 	void					Move(void);
 	void					SetSpectateOrigin(void);
@@ -1183,6 +1185,9 @@ private:
 	stateResult_t			State_Legs_Land(const stateParms_t& parms);
 	stateResult_t			State_Legs_Dead(const stateParms_t& parms);
 
+public:
+	bool usingMinigun = false;
+private:
 	CLASS_STATES_PROTOTYPE(idPlayer);
 };
 

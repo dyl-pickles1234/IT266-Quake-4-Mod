@@ -16,8 +16,14 @@ This mod consists of multiple custom and modified weapons, 5 player classes from
     - Rocket Launcher
     - Stickybomb Launcher
   - Heavy
+    - Minigun
+    - Shotgun
   - Sniper
+    - Sniper Rifle
+    - SMG
   - Spy
+    - Revolver
+    - ~~Sapper~~
 - Functional Abilities
   - Heavy can ground pound
   - Sniper can double jump

@@ -409,7 +409,7 @@ model model_player_marine
 	anim blaster_idle				models/characters/player/pistol_aim_down.md5anim, models/characters/player/pistol_aim.md5anim, models/characters/player/pistol_aim_up.md5anim
 	anim blaster_aim				models/characters/player/pistol_aim_down.md5anim, models/characters/player/pistol_aim.md5anim, models/characters/player/pistol_aim_up.md5anim
 	anim blaster_fire1				models/characters/player/pistol_fire_down.md5anim, models/characters/player/pistol_fire.md5anim, models/characters/player/pistol_fire_up.md5anim
-//	anim blaster_reload				models/characters/player/shotgun_reload.md5anim
+	anim blaster_reload				models/characters/player/shotgun_reload.md5anim
 	anim blaster_lower				models/characters/player/machinegun_lower.md5anim
 		{
 	rate 1.3

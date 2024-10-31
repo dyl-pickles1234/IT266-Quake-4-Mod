@@ -81,9 +81,9 @@ entityDef weapon_blaster
 	"chargeTime"				"99"
 	"chargeDelay"				"99"
 	"chargeGlow"				"0 1"
-	"fireRate"					"1.5"
-	"reloadRate"				".8"
-	"spread"					"0"
+	"fireRate"					".8"
+	"reloadRate"				"3"
+	"spread"					"3"
 
 //	"def_projectile"			"projectile_blaster"
 	"def_hitscan"				"hitscan_blaster"

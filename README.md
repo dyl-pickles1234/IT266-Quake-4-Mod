@@ -12,7 +12,6 @@ This mod consists of multiple custom and modified weapons, 5 player classes from
   - Pyro
     - _Flamethrower_
     - Shotgun
-    - ~~Gas Passer~~
   - Demoman
     - Rocket Launcher
     - _Stickybomb Launcher_
@@ -24,11 +23,8 @@ This mod consists of multiple custom and modified weapons, 5 player classes from
     - SMG
   - Spy
     - _Revolver_
-    - ~~Sapper~~
 - Functional Abilities
-  - ~~Heavy can ground pound~~
-  - ~~Sniper can double jump~~
-  - ~~Spy can turn invisible~~
+  - Spy can turn invisible
 
 ## How To Play
 Run Quake 4. If using my shortcut, skip to the next step. On the main menu, find the Mods button and select the 'mod' option. Allow the game to restart.

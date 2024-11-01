@@ -92,6 +92,7 @@ entityDef weapon_blaster
 	"clipSize"					"6"
 	"ammoRequired"				"1"
 //	"launchFromBarrel"			"1"
+	"zoomFov"					"90"
 
 	"inv_weapon"				"weapon_blaster"
 	"inv_item"					"5"

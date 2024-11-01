@@ -2991,6 +2991,49 @@ enum {
 	NAPALMLAUNCHER
 };
 
+
+void Cmd_Tf2Help_f(const idCmdArgs& args) {
+	if (args.Argc() == 1) {
+		common->Printf("--Welcome to the help page for this TF2 Quake 4 mod!--\nTry `tf2help <class>` for more specific help on each class.\n\n");
+		common->Printf("This mod consists of multiple custom and modified weapons, 5 player classes from the original TF2 and their default loadouts, and some unique abilities.\n");
+		common->Printf("To change your class, type the `class` command followed by the class you would like to choose (pyro, demo, heavy, sniper, spy)\n");
+		return;
+	}
+
+	if (idStr::Icmp(args.Argv(1), "pyro") == 0) {
+		common->Printf("--Pyro Class--\nPyro starts out with a flamethrower as his primary weapon and a shotgun as a secondary.\n");
+		common->Printf("Custom flamethrower: hold your weapon fire keybind (probably left click) to douse enemies in flames.\n");
+		common->Printf("This weapon deals big damage but has limited range. When an enemy is set on fire, they will continue to take burning damage for a short time.\n");
+	}
+	else if (idStr::Icmp(args.Argv(1), "demo") == 0) {
+		common->Printf("--Demoman Class--\nDemoman begins with a rocket launcher as his primary weapon and a stickybomb launcher as a secondary.\n");
+		common->Printf("Custom stickybombs: press your weapon fire keybind (probably left click) to shoot a kind of grenade that sticks to any surface it touches.\n");
+		common->Printf("You can then press your zoom keybind (probably right click) to activate all armed stickybombs simultaneously.\n");
+		common->Printf("These stickybombs deal less damage than normal grenades, but provide a large boost to the player, with a \"small\" penalty of taking damage yourself.\n");
+	}
+	else if (idStr::Icmp(args.Argv(1), "heavy") == 0) {
+		common->Printf("--Heavy Class--\nHeavy starts out with a minigun as his primary weapon and a shotgun as a secondary. He is slower than other classes.\n");
+		common->Printf("Custom minigun: hold your weapon fire keybind (probably left click) to spin up the drum. When it gets up to speed, the gun will shoot quickly.\n");
+		common->Printf("You can also hold your zoom keybind to just spin up the drum without shooting any bullets. This prevents the long delay in firing, but will slow you down the whole time.\n");
+		common->Printf("This weapon deals big damage but has poor accuracy and slows down the player significantly while the drum is spinning.\n");
+	}
+	else if (idStr::Icmp(args.Argv(1), "sniper") == 0) {
+		common->Printf("--Sniper Class--\nSniper starts out with a sniper rifle as his primary weapon and an SMG as a secondary.\n");
+		//common->Printf("Custom ability: Sniper is able to double jump to get to higher vantage points, get away from close combat situations, and navigate stealthily.\n");
+		common->Printf("The rifle deals lots of damage when aimed well, and is intended for use at long range. Unfortunately, even the SMG isn't great for short range fighting.\n");
+	}
+	else if (idStr::Icmp(args.Argv(1), "spy") == 0) {
+		common->Printf("--Spy Class--\nSpy starts out with a revolver as his primary weapon and can turn invisible.\n");
+		common->Printf("Custom revolver: This gun only has 6 shots before needing to reload, but is perfectly accurate when shooting at slower intervals.\n");
+		common->Printf("If spamming the weapon fire key, shots will scatter much more inaccurately. Wait for a bit longer than 1 second between shots to guarantee accuracy.\n");
+		common->Printf("This weapon deals good damage and perfect accuracy when shots are carefully chosen.\n");
+		common->Printf("Custom ability: Spy is able to turn invisible for a short time by pressing your zoom keybind (probably right click). Enemies will not be able to see you.\n");
+	}
+	else {
+		common->Printf("Unable to find help page: %s is unknown", args.Argv(1));
+	}
+}
+
 void Cmd_WhatWeapon_f(const idCmdArgs& args) {
 	common->Printf("Weapon classname: %s\n", gameLocal.GetLocalPlayer()->weapon->GetClassname());
 }
@@ -3015,19 +3058,21 @@ void Cmd_ChangeClass_f(const idCmdArgs& args) {
 		classStr = "Pyro";
 		classType = PYRO;
 		player->inventory.weapons |= BIT(LIGHTNINGGUN);
-		player->inventory.weapons |= BIT(NAPALMLAUNCHER);
+		player->inventory.weapons |= BIT(SHOTGUN);
 		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", LIGHTNINGGUN)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "demo") == 0) {
 		classStr = "Demoman";
 		classType = DEMO;
+		player->inventory.weapons |= BIT(ROCKETLAUNCHER);
 		player->inventory.weapons |= BIT(GRENADELAUNCHER);
-		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", GRENADELAUNCHER)));
+		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", ROCKETLAUNCHER)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "heavy") == 0) {
 		classStr = "Heavy";
 		classType = HEAVY;
 		player->inventory.weapons |= BIT(NAILGUN);
+		player->inventory.weapons |= BIT(SHOTGUN);
 		player->PostEventSec(&EV_Player_SelectWeapon, 0.25f, player->spawnArgs.GetString(va("def_weapon%i", HYPERBLASTER)));
 	}
 	else if (idStr::Icmp(args.Argv(1), "sniper") == 0) {
@@ -3054,6 +3099,7 @@ void Cmd_ChangeClass_f(const idCmdArgs& args) {
 	//player->moddedClass.type = classType;
 
 	common->Printf("Player class changed to %s\n", classStr);
+	player->hud->SetStateString("player_class", classStr);
 }
 
 void Cmd_PlayerEmote_f(const idCmdArgs& args) {
@@ -3356,6 +3402,7 @@ void idGameLocal::InitConsoleCommands(void) {
 	cmdSystem->AddCommand("locate", Cmd_Locate_f, CMD_FL_GAME, "Find out where we are");
 	cmdSystem->AddCommand("class", Cmd_ChangeClass_f, CMD_FL_GAME, "Change tf2 class yippee!!");
 	cmdSystem->AddCommand("whatweapon", Cmd_WhatWeapon_f, CMD_FL_GAME, "What weapon am I holding?");
+	cmdSystem->AddCommand("tf2help", Cmd_Tf2Help_f, CMD_FL_GAME, "Offers help for TF2 mod features");
 }
 
 /*

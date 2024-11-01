@@ -170,6 +170,9 @@ void rvWeaponBlaster::Spawn(void) {
 void rvWeaponBlaster::Think(void) {
 	// Let the real weapon think first
 	rvWeapon::Think();
+
+	owner->fl.notarget = wsfl.zoom;
+	owner->hiddenWeapon = wsfl.zoom;
 }
 
 /*
